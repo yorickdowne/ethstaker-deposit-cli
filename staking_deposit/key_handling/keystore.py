@@ -37,6 +37,7 @@ def encode_bytes(obj: Union[str, Dict[str, Any]]) -> Union[bytes, str, Dict[str,
     return obj
 
 
+@dataclass
 class BytesDataclass:
     """
     BytesDataClasses are DataClass objects that automatically encode hexstrings into bytes,
