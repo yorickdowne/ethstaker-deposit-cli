@@ -64,7 +64,7 @@ def load_text(params: List[str], file_path: str='', func: str='', lang: str='') 
 
     try:
         # browse json until text is found
-        with open(json_path) as f:
+        with open(json_path, encoding='utf-8') as f:
             text_dict = json.load(f)
             return _get_from_dict(text_dict, [func] + params)
     except (KeyError, FileNotFoundError):
