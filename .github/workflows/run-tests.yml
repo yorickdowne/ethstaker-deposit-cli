@@ -1,6 +1,6 @@
 name: run-tests
 run-name: ${{ github.actor }} is running tests
-on: [push]
+on: [push, pull_request]
 jobs:
   tests:
 
@@ -17,6 +17,7 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+        cache: 'pip'
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
