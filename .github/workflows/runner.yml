@@ -4,7 +4,8 @@ on: [push, pull_request]
 jobs:
   ci-runner:
     runs-on: ${{ matrix.os }}
-    fail-fast: false
+    strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.9", "3.10", "3.11", "3.12"]
