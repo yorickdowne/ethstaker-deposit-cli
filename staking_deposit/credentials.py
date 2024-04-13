@@ -115,7 +115,7 @@ class Credential:
     def deposit_message(self) -> DepositMessage:
         if not MIN_DEPOSIT_AMOUNT <= self.amount <= MAX_DEPOSIT_AMOUNT:
             raise ValidationError(f"{self.amount / ETH2GWEI} ETH deposits are not within the bounds of this cli.")
-        return DepositMessage(
+        return DepositMessage( # type: ignore[no-untyped-call]
             pubkey=self.signing_pk,
             withdrawal_credentials=self.withdrawal_credentials,
             amount=self.amount,
@@ -125,8 +125,8 @@ class Credential:
     def signed_deposit(self) -> DepositData:
         domain = compute_deposit_domain(fork_version=self.chain_setting.GENESIS_FORK_VERSION)
         signing_root = compute_signing_root(self.deposit_message, domain)
-        signed_deposit = DepositData(
-            **self.deposit_message.as_dict(),
+        signed_deposit = DepositData( # type: ignore[no-untyped-call]
+            **self.deposit_message.as_dict(), # type: ignore[no-untyped-call]
             signature=bls.Sign(self.signing_sk, signing_root)
         )
         return signed_deposit
@@ -138,7 +138,7 @@ class Credential:
         the information needed to verify and process the deposit.
         """
         signed_deposit_datum = self.signed_deposit
-        datum_dict = signed_deposit_datum.as_dict()
+        datum_dict = signed_deposit_datum.as_dict() # type: ignore[no-untyped-call]
         datum_dict.update({'deposit_message_root': self.deposit_message.hash_tree_root})
         datum_dict.update({'deposit_data_root': signed_deposit_datum.hash_tree_root})
         datum_dict.update({'fork_version': self.chain_setting.GENESIS_FORK_VERSION})
@@ -165,7 +165,7 @@ class Credential:
         if self.eth1_withdrawal_address is None:
             raise ValueError("The execution address should NOT be empty.")
 
-        message = BLSToExecutionChange(
+        message = BLSToExecutionChange( # type: ignore[no-untyped-call]
             validator_index=validator_index,
             from_bls_pubkey=self.withdrawal_pk,
             to_execution_address=self.eth1_withdrawal_address,
@@ -177,7 +177,7 @@ class Credential:
         signing_root = compute_signing_root(message, domain)
         signature = bls.Sign(self.withdrawal_sk, signing_root)
 
-        return SignedBLSToExecutionChange(
+        return SignedBLSToExecutionChange( # type: ignore[no-untyped-call]
             message=message,
             signature=signature,
         )
@@ -186,12 +186,12 @@ class Credential:
         result_dict: Dict[str, Any] = {}
         signed_bls_to_execution_change = self.get_bls_to_execution_change(validator_index)
         message = {
-            'validator_index': str(signed_bls_to_execution_change.message.validator_index),
-            'from_bls_pubkey': '0x' + signed_bls_to_execution_change.message.from_bls_pubkey.hex(),
-            'to_execution_address': '0x' + signed_bls_to_execution_change.message.to_execution_address.hex(),
+            'validator_index': str(signed_bls_to_execution_change.message.validator_index), # type: ignore[attr-defined]
+            'from_bls_pubkey': '0x' + signed_bls_to_execution_change.message.from_bls_pubkey.hex(), # type: ignore[attr-defined]
+            'to_execution_address': '0x' + signed_bls_to_execution_change.message.to_execution_address.hex(), # type: ignore[attr-defined]
         }
         result_dict.update({'message': message})
-        result_dict.update({'signature': '0x' + signed_bls_to_execution_change.signature.hex()})
+        result_dict.update({'signature': '0x' + signed_bls_to_execution_change.signature.hex()}) # type: ignore[attr-defined]
 
         # metadata
         metadata: Dict[str, Any] = {
