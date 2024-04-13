@@ -38,8 +38,8 @@ def languages_to_check(root_dir: str) -> List[str]:
     ]
 )
 def test_language_schemas(lang: str, schema_path: str) -> None:
-    with open(os.path.join(TEST_SCHEMAS_FOLDER, schema_path)) as schema_file:
+    with open(os.path.join(TEST_SCHEMAS_FOLDER, schema_path), encoding='utf-8') as schema_file:
         schema = json.load(schema_file)
-        with open(os.path.join(INTL_CONTENT_PATH, lang, schema_path)) as lang_file:
+        with open(os.path.join(INTL_CONTENT_PATH, lang, schema_path), encoding='utf-8') as lang_file:
             lang_json = json.load(lang_file)
             jsonschema.validate(lang_json, schema)
