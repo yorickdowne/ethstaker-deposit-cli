@@ -23,5 +23,5 @@ jobs:
           pip install -r requirements_test.txt
       - name: Run tests
         run: pytest tests
-      - name: Run linter
+      - name: Run type checker
         run: python -m mypy --config-file mypy.ini -p staking_deposit
