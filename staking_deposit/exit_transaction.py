@@ -19,7 +19,7 @@ def exit_transaction_generation(
         signing_key: int,
         validator_index: int,
         epoch: int) -> SignedVoluntaryExit:
-    message = VoluntaryExit(
+    message = VoluntaryExit( # type: ignore[no-untyped-call]
         epoch=epoch,
         validator_index=validator_index
     )
@@ -32,7 +32,7 @@ def exit_transaction_generation(
     signing_root = compute_signing_root(message, domain)
     signature = bls.Sign(signing_key, signing_root)
 
-    signed_exit = SignedVoluntaryExit(
+    signed_exit = SignedVoluntaryExit( # type: ignore[no-untyped-call]
         message=message,
         signature=signature,
     )
@@ -43,11 +43,11 @@ def exit_transaction_generation(
 def export_exit_transaction_json(folder: str, signed_exit: SignedVoluntaryExit) -> str:
     signed_exit_json: Dict[str, Any] = {}
     message = {
-        'epoch': str(signed_exit.message.epoch),
-        'validator_index': str(signed_exit.message.validator_index),
+        'epoch': str(signed_exit.message.epoch), # type: ignore[attr-defined]
+        'validator_index': str(signed_exit.message.validator_index), # type: ignore[attr-defined]
     }
     signed_exit_json.update({'message': message})
-    signed_exit_json.update({'signature': '0x' + signed_exit.signature.hex()})
+    signed_exit_json.update({'signature': '0x' + signed_exit.signature.hex()}) # type: ignore[attr-defined]
 
     output_folder = os.path.join(
         folder,
@@ -58,7 +58,7 @@ def export_exit_transaction_json(folder: str, signed_exit: SignedVoluntaryExit) 
 
     filefolder = os.path.join(
         output_folder,
-        'signed_exit_transaction-%s-%i.json' % (signed_exit.message.validator_index, time.time())
+        'signed_exit_transaction-%s-%i.json' % (signed_exit.message.validator_index, time.time()) # type: ignore[attr-defined]
     )
 
     with open(filefolder, 'w') as f:
