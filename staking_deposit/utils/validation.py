@@ -12,6 +12,7 @@ from eth_utils import is_hex_address, is_checksum_address, to_normalized_address
 from py_ecc.bls import G2ProofOfPossession as bls
 
 from staking_deposit.exceptions import ValidationError
+from staking_deposit.key_handling.keystore import Keystore
 from staking_deposit.utils.intl import load_text
 from staking_deposit.utils.ssz import (
     BLSToExecutionChange,
@@ -135,6 +136,7 @@ def validate_eth1_withdrawal_address(cts: click.Context, param: Any, address: st
     normalized_address = to_normalized_address(address)
     click.echo('\n%s\n' % load_text(['msg_ECDSA_hex_addr_withdrawal']))
     return normalized_address
+
 
 #
 # BLSToExecutionChange
@@ -264,3 +266,19 @@ def validate_validator_indices(input_validator_indices: str) -> Sequence[int]:
 def validate_bls_withdrawal_credentials_matching(bls_withdrawal_credentials: bytes, credential: Credential) -> None:
     if bls_withdrawal_credentials[1:] != SHA256(credential.withdrawal_pk)[1:]:
         raise ValidationError(load_text(['err_not_matching']) + '\n')
+
+
+#
+# Exit Message Generation
+#
+
+
+def validate_keystore_file(file_path: str) -> Keystore:
+    try:
+        saved_keystore = Keystore.from_file(file_path)
+    except FileNotFoundError:
+        # Required as captive_prompt_callback does not utilize click type argument for validation
+        raise ValidationError(load_text(['err_file_not_found']) + '\n')
+    except Exception:
+        raise ValidationError(load_text(['err_invalid_keystore_file']) + '\n')
+    return saved_keystore

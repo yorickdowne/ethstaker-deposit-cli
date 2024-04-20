@@ -5,7 +5,11 @@ from typing import Any, Sequence
 from staking_deposit.cli.existing_mnemonic import load_mnemonic_arguments_decorator
 from staking_deposit.credentials import Credential
 from staking_deposit.exit_transaction import exit_transaction_generation, export_exit_transaction_json
-from staking_deposit.settings import ALL_CHAINS, MAINNET, PRATER, get_chain_setting
+from staking_deposit.settings import (
+    MAINNET,
+    NON_PRATER_CHAIN_KEYS,
+    get_chain_setting,
+)
 from staking_deposit.utils.click import (
     captive_prompt_callback,
     choice_prompt_func,
@@ -26,10 +30,10 @@ FUNC_NAME = 'exit_transaction_mnemonic'
 )
 @jit_option(
     callback=captive_prompt_callback(
-        lambda x: closest_match(x, list(ALL_CHAINS.keys())),
+        lambda x: closest_match(x, NON_PRATER_CHAIN_KEYS),
         choice_prompt_func(
             lambda: load_text(['arg_exit_transaction_mnemonic_chain', 'prompt'], func=FUNC_NAME),
-            list(ALL_CHAINS.keys())
+            NON_PRATER_CHAIN_KEYS
         ),
     ),
     default=MAINNET,
@@ -37,8 +41,7 @@ FUNC_NAME = 'exit_transaction_mnemonic'
     param_decls='--chain',
     prompt=choice_prompt_func(
         lambda: load_text(['arg_exit_transaction_mnemonic_chain', 'prompt'], func=FUNC_NAME),
-        # Since `prater` is alias of `goerli`, do not show `prater` in the prompt message.
-        list(key for key in ALL_CHAINS.keys() if key != PRATER)
+        NON_PRATER_CHAIN_KEYS
     ),
 )
 @load_mnemonic_arguments_decorator

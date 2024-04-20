@@ -59,6 +59,8 @@ ALL_CHAINS: Dict[str, BaseChainSetting] = {
     HOLESKY: HoleskySetting,
 }
 
+NON_PRATER_CHAIN_KEYS: list[str] = list(key for key in ALL_CHAINS.keys() if key != PRATER)
+
 
 def get_chain_setting(chain_name: str = MAINNET) -> BaseChainSetting:
     return ALL_CHAINS[chain_name]
