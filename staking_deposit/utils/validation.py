@@ -300,13 +300,11 @@ def validate_signed_exit(validator_index: str,
                          signature: str,
                          pubkey: str,
                          chain_settings: BaseChainSetting) -> bool:
-    validator_index = int(validator_index)
-    epoch = int(epoch)
-    pubkey = BLSPubkey(bytes.fromhex(pubkey))
-    signature = BLSSignature(decode_hex(signature))
+    bls_pubkey = BLSPubkey(bytes.fromhex(pubkey))
+    bls_signature = BLSSignature(decode_hex(signature))
     message = VoluntaryExit(  # type: ignore[no-untyped-call]
-        epoch=epoch,
-        validator_index=validator_index
+        epoch=int(epoch),
+        validator_index=int(validator_index)
     )
 
     domain = compute_voluntary_exit_domain(
@@ -315,4 +313,4 @@ def validate_signed_exit(validator_index: str,
     )
 
     signing_root = compute_signing_root(message, domain)
-    return bls.Verify(pubkey, signing_root, signature)
+    return bls.Verify(bls_pubkey, signing_root, bls_signature)
