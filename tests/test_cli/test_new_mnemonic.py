@@ -91,7 +91,7 @@ def test_new_mnemonic_eth1_address_withdrawal(monkeypatch) -> None:
     _, _, key_files = next(os.walk(validator_keys_folder_path))
 
     deposit_file = [key_file for key_file in key_files if key_file.startswith('deposit_data')][0]
-    with open(validator_keys_folder_path + '/' + deposit_file, 'r') as f:
+    with open(validator_keys_folder_path + '/' + deposit_file, 'r', encoding='utf-8') as f:
         deposits_dict = json.load(f)
     for deposit in deposits_dict:
         withdrawal_credentials = bytes.fromhex(deposit['withdrawal_credentials'])
@@ -152,7 +152,7 @@ def test_new_mnemonic_eth1_address_withdrawal_bad_checksum(monkeypatch) -> None:
     _, _, key_files = next(os.walk(validator_keys_folder_path))
 
     deposit_file = [key_file for key_file in key_files if key_file.startswith('deposit_data')][0]
-    with open(validator_keys_folder_path + '/' + deposit_file, 'r') as f:
+    with open(validator_keys_folder_path + '/' + deposit_file, 'r', encoding='utf-8') as f:
         deposits_dict = json.load(f)
     for deposit in deposits_dict:
         withdrawal_credentials = bytes.fromhex(deposit['withdrawal_credentials'])
@@ -208,7 +208,7 @@ def test_new_mnemonic_eth1_address_withdrawal_alias(monkeypatch) -> None:
     _, _, key_files = next(os.walk(validator_keys_folder_path))
 
     deposit_file = [key_file for key_file in key_files if key_file.startswith('deposit_data')][0]
-    with open(validator_keys_folder_path + '/' + deposit_file, 'r') as f:
+    with open(validator_keys_folder_path + '/' + deposit_file, 'r', encoding='utf-8') as f:
         deposits_dict = json.load(f)
     for deposit in deposits_dict:
         withdrawal_credentials = bytes.fromhex(deposit['withdrawal_credentials'])
@@ -322,7 +322,7 @@ async def test_script_bls_withdrawal() -> None:
     _, _, key_files = next(os.walk(validator_keys_folder_path))
 
     deposit_file = [key_file for key_file in key_files if key_file.startswith('deposit_data')][0]
-    with open(validator_keys_folder_path + '/' + deposit_file, 'r') as f:
+    with open(validator_keys_folder_path + '/' + deposit_file, 'r', encoding='utf-8') as f:
         deposits_dict = json.load(f)
     for deposit in deposits_dict:
         withdrawal_credentials = bytes.fromhex(deposit['withdrawal_credentials'])

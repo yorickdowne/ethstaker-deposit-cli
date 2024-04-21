@@ -46,7 +46,7 @@ def verify_deposit_data_json(filefolder: str, credentials: Sequence[Credential])
     """
     Validate every deposit found in the deposit-data JSON file folder.
     """
-    with open(filefolder, 'r') as f:
+    with open(filefolder, 'r', encoding='utf-8') as f:
         deposit_json = json.load(f)
         with click.progressbar(deposit_json, label=load_text(['msg_deposit_verification']),
                                show_percent=False, show_pos=True) as deposits:
@@ -155,7 +155,7 @@ def verify_bls_to_execution_change_json(filefolder: str,
     """
     Validate every BLSToExecutionChange found in the bls_to_execution_change JSON file folder.
     """
-    with open(filefolder, 'r') as f:
+    with open(filefolder, 'r', encoding='utf-8') as f:
         btec_json = json.load(f)
         with click.progressbar(btec_json, label=load_text(['msg_bls_to_execution_change_verification']),
                                show_percent=False, show_pos=True) as btecs:
@@ -288,7 +288,7 @@ def validate_keystore_file(file_path: str) -> Keystore:
 
 
 def verify_signed_exit_json(file_folder: str, pubkey: str, chain_settings: BaseChainSetting) -> bool:
-    with open(file_folder, 'r') as f:
+    with open(file_folder, 'r', encoding='utf-8') as f:
         deposit_json: SignedVoluntaryExit = json.load(f)
         signature = deposit_json["signature"]
         message = deposit_json["message"]
