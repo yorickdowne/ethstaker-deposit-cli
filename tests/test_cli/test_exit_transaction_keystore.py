@@ -6,7 +6,9 @@ from staking_deposit.credentials import Credential
 from staking_deposit.deposit import cli
 from staking_deposit.settings import get_chain_setting
 from staking_deposit.utils.constants import DEFAULT_EXIT_TRANSACTION_FOLDER_NAME
-
+from staking_deposit.utils.intl import (
+    load_text,
+)
 from tests.test_cli.helpers import (
     clean_exit_transaction_folder,
     read_json_file,
@@ -14,7 +16,7 @@ from tests.test_cli.helpers import (
 )
 
 
-def test_exit_transaction_menmonic() -> None:
+def test_exit_transaction_keystore() -> None:
     # Prepare folder
     my_folder_path = os.path.join(os.getcwd(), 'TESTING_TEMP_FOLDER')
     exit_transaction_folder_path = os.path.join(my_folder_path, DEFAULT_EXIT_TRANSACTION_FOLDER_NAME)
@@ -78,4 +80,77 @@ def test_exit_transaction_menmonic() -> None:
     verify_file_permission(os, folder_path=exit_transaction_folder_path, files=exit_transaction_file)
 
     # Clean up
+    clean_exit_transaction_folder(my_folder_path)
+
+
+def test_invalid_keystore_path() -> None:
+    my_folder_path = os.path.join(os.getcwd(), 'TESTING_TEMP_FOLDER')
+    clean_exit_transaction_folder(my_folder_path)
+
+    runner = CliRunner()
+    inputs = []
+    data = '\n'.join(inputs)
+    arguments = [
+        '--language', 'english',
+        '--non_interactive',
+        'exit-transaction-keystore',
+        '--output_folder', my_folder_path,
+        '--chain', "mainnet",
+        '--keystore', "invalid_keystore_path",
+        '--keystore_password', "password",
+        '--validator_index', '1',
+        '--epoch', '1234',
+    ]
+    result = runner.invoke(cli, arguments, input=data)
+
+    assert result.exit_code == 2
+
+
+def test_invalid_keystore_password() -> None:
+    # Prepare folder
+    my_folder_path = os.path.join(os.getcwd(), 'TESTING_TEMP_FOLDER')
+    exit_transaction_folder_path = os.path.join(my_folder_path, DEFAULT_EXIT_TRANSACTION_FOLDER_NAME)
+    clean_exit_transaction_folder(my_folder_path)
+    if not os.path.exists(my_folder_path):
+        os.mkdir(my_folder_path)
+    if not os.path.exists(exit_transaction_folder_path):
+        os.mkdir(exit_transaction_folder_path)
+
+    # Shared parameters
+    chain = 'mainnet'
+    keystore_password = 'solo-stakers'
+
+    # Prepare credential
+    credential = Credential(
+        mnemonic='aban aban aban aban aban aban aban aban aban aban aban abou',
+        mnemonic_password='',
+        index=0,
+        amount=0,
+        chain_setting=get_chain_setting(chain),
+        hex_eth1_withdrawal_address=None
+    )
+
+    # Save keystore file
+    keystore_filepath = credential.save_signing_keystore(keystore_password, exit_transaction_folder_path)
+    runner = CliRunner()
+    inputs = []
+    data = '\n'.join(inputs)
+    arguments = [
+        '--language', 'english',
+        '--non_interactive',
+        'exit-transaction-keystore',
+        '--output_folder', my_folder_path,
+        '--chain', chain,
+        '--keystore', keystore_filepath,
+        '--keystore_password', "incorrect_password",
+        '--validator_index', '1',
+        '--epoch', '1234',
+    ]
+    result = runner.invoke(cli, arguments, input=data)
+
+    assert result.exit_code == 1
+
+    mnemonic_json_file = os.path.join(os.getcwd(), 'staking_deposit/cli/', 'exit_transaction_keystore.json')
+    assert load_text(['arg_exit_transaction_keystore_keystore_password', 'mismatch'], mnemonic_json_file, 'exit_transaction_keystore') in result.output
+
     clean_exit_transaction_folder(my_folder_path)
