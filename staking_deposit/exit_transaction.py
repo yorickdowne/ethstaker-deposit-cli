@@ -5,7 +5,6 @@ from typing import Any, Dict
 from py_ecc.bls import G2ProofOfPossession as bls
 
 from staking_deposit.settings import BaseChainSetting
-from staking_deposit.utils.constants import DEFAULT_EXIT_TRANSACTION_FOLDER_NAME
 from staking_deposit.utils.ssz import (
     SignedVoluntaryExit,
     VoluntaryExit,
@@ -19,7 +18,7 @@ def exit_transaction_generation(
         signing_key: int,
         validator_index: int,
         epoch: int) -> SignedVoluntaryExit:
-    message = VoluntaryExit( # type: ignore[no-untyped-call]
+    message = VoluntaryExit(  # type: ignore[no-untyped-call]
         epoch=epoch,
         validator_index=validator_index
     )
@@ -32,7 +31,7 @@ def exit_transaction_generation(
     signing_root = compute_signing_root(message, domain)
     signature = bls.Sign(signing_key, signing_root)
 
-    signed_exit = SignedVoluntaryExit( # type: ignore[no-untyped-call]
+    signed_exit = SignedVoluntaryExit(  # type: ignore[no-untyped-call]
         message=message,
         signature=signature,
     )
@@ -43,22 +42,20 @@ def exit_transaction_generation(
 def export_exit_transaction_json(folder: str, signed_exit: SignedVoluntaryExit) -> str:
     signed_exit_json: Dict[str, Any] = {}
     message = {
-        'epoch': str(signed_exit.message.epoch), # type: ignore[attr-defined]
-        'validator_index': str(signed_exit.message.validator_index), # type: ignore[attr-defined]
+        'epoch': str(signed_exit.message.epoch),  # type: ignore[attr-defined]
+        'validator_index': str(signed_exit.message.validator_index),  # type: ignore[attr-defined]
     }
     signed_exit_json.update({'message': message})
-    signed_exit_json.update({'signature': '0x' + signed_exit.signature.hex()}) # type: ignore[attr-defined]
+    signed_exit_json.update({'signature': '0x' + signed_exit.signature.hex()})  # type: ignore[attr-defined]
 
-    output_folder = os.path.join(
-        folder,
-        DEFAULT_EXIT_TRANSACTION_FOLDER_NAME,
-    )
-    if not os.path.exists(output_folder):
-        os.mkdir(output_folder)
+    if not os.path.exists(folder):
+        os.mkdir(folder)
 
     filefolder = os.path.join(
-        output_folder,
-        'signed_exit_transaction-%s-%i.json' % (signed_exit.message.validator_index, time.time()) # type: ignore[attr-defined]
+        folder,
+        'signed_exit_transaction-%s-%i.json' % (
+            signed_exit.message.validator_index, time.time()  # type: ignore[attr-defined]
+        )
     )
 
     with open(filefolder, 'w') as f:

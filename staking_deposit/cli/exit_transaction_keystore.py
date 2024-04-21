@@ -14,11 +14,12 @@ from staking_deposit.utils.click import (
     choice_prompt_func,
     jit_option,
 )
+from staking_deposit.utils.constants import DEFAULT_EXIT_TRANSACTION_FOLDER_NAME
 from staking_deposit.utils.intl import (
     closest_match,
     load_text,
 )
-from staking_deposit.utils.validation import validate_int_range, validate_keystore_file
+from staking_deposit.utils.validation import validate_int_range, validate_keystore_file, verify_signed_exit_json
 
 
 FUNC_NAME = 'exit_transaction_keystore'
@@ -112,7 +113,14 @@ def exit_transaction_keystore(
         epoch=epoch,
     )
 
-    saved_folder = export_exit_transaction_json(folder=output_folder, signed_exit=signed_exit)
+    folder = os.path.join(output_folder, DEFAULT_EXIT_TRANSACTION_FOLDER_NAME)
+
+    click.echo(load_text(['msg_exit_transaction_creation']))
+    saved_folder = export_exit_transaction_json(folder=folder, signed_exit=signed_exit)
+
+    click.echo(load_text(['msg_verify_exit_transaction']))
+    if (not verify_signed_exit_json(saved_folder, keystore.pubkey, chain_settings)):
+        click.echo(['err_verify_exit_transaction'])
 
     click.echo(load_text(['msg_creation_success']) + saved_folder)
     click.pause(load_text(['msg_pause']))

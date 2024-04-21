@@ -4,7 +4,7 @@ import os
 from typing import Any, Sequence
 from staking_deposit.cli.existing_mnemonic import load_mnemonic_arguments_decorator
 from staking_deposit.credentials import Credential
-from staking_deposit.exit_transaction import exit_transaction_generation, export_exit_transaction_json
+from staking_deposit.exceptions import ValidationError
 from staking_deposit.settings import (
     MAINNET,
     NON_PRATER_CHAIN_KEYS,
@@ -15,11 +15,12 @@ from staking_deposit.utils.click import (
     choice_prompt_func,
     jit_option,
 )
+from staking_deposit.utils.constants import DEFAULT_EXIT_TRANSACTION_FOLDER_NAME
 from staking_deposit.utils.intl import (
     closest_match,
     load_text,
 )
-from staking_deposit.utils.validation import validate_int_range, validate_validator_indices
+from staking_deposit.utils.validation import validate_int_range, validate_validator_indices, verify_signed_exit_json
 
 
 FUNC_NAME = 'exit_transaction_mnemonic'
@@ -87,32 +88,46 @@ def exit_transaction_mnemonic(
         output_folder: str,
         **kwargs: Any) -> None:
 
+    folder = os.path.join(output_folder, DEFAULT_EXIT_TRANSACTION_FOLDER_NAME)
     chain_settings = get_chain_setting(chain)
     num_keys = len(validator_indices)
     key_indices = range(validator_start_index, validator_start_index + num_keys)
 
-    click.echo(load_text(['msg_creation_start']))
-    # We assume that the list of validator indices are in order and increment the start index
-    for key_index, validator_index in zip(key_indices, validator_indices):
-        credential = Credential(
+    # We are not using CredentialList because from_mnemonic assumes key generation flow
+    credentials = [
+        Credential(
             mnemonic=mnemonic,
             mnemonic_password=mnemonic_password,
             index=key_index,
             amount=0,  # Unneeded for this purpose
             chain_setting=chain_settings,
             hex_eth1_withdrawal_address=None
-        )
+        ) for key_index in key_indices
+    ]
 
-        signing_key = credential.signing_sk
+    with click.progressbar(zip(credentials, validator_indices),
+                           label=load_text(['msg_exit_transaction_creation']),
+                           show_percent=False,
+                           length=num_keys,
+                           show_pos=True) as items:
+        transaction_filefolders = [
+            credential.save_exit_transaction(validator_index=validator_index, epoch=epoch, folder=folder)
+            for credential, validator_index in items
+        ]
 
-        signed_voluntary_exit = exit_transaction_generation(
-            chain_settings=chain_settings,
-            signing_key=signing_key,
-            validator_index=validator_index,
-            epoch=epoch
-        )
+    with click.progressbar(zip(transaction_filefolders, credentials),
+                           label=load_text(['msg_verify_exit_transaction']),
+                           show_percent=False,
+                           length=num_keys,
+                           show_pos=True) as items:
+        if not all(
+            verify_signed_exit_json(file_folder=file,
+                                    pubkey=credential.signing_pk.hex(),
+                                    chain_settings=credential.chain_setting)
+            for file, credential in items
+        ):
+            raise ValidationError(load_text(['err_verify_exit_transactions']))
 
-        saved_folder = export_exit_transaction_json(folder=output_folder, signed_exit=signed_voluntary_exit)
-        click.echo(load_text(['msg_creation_success']) + saved_folder)
-
+    click.echo(load_text(['msg_creation_success']) + folder)
     click.pause(load_text(['msg_pause']))
+

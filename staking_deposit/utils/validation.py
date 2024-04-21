@@ -18,9 +18,12 @@ from staking_deposit.utils.ssz import (
     BLSToExecutionChange,
     DepositData,
     DepositMessage,
+    SignedVoluntaryExit,
+    VoluntaryExit,
     compute_bls_to_execution_change_domain,
     compute_deposit_domain,
     compute_signing_root,
+    compute_voluntary_exit_domain,
 )
 from staking_deposit.credentials import (
     Credential,
@@ -282,3 +285,34 @@ def validate_keystore_file(file_path: str) -> Keystore:
     except Exception:
         raise ValidationError(load_text(['err_invalid_keystore_file']) + '\n')
     return saved_keystore
+
+
+def verify_signed_exit_json(file_folder: str, pubkey: str, chain_settings: BaseChainSetting) -> bool:
+    with open(file_folder, 'r') as f:
+        deposit_json: SignedVoluntaryExit = json.load(f)
+        signature = deposit_json["signature"]
+        message = deposit_json["message"]
+        return validate_signed_exit(message["validator_index"], message["epoch"], signature, pubkey, chain_settings)
+
+
+def validate_signed_exit(validator_index: str,
+                         epoch: str,
+                         signature: str,
+                         pubkey: str,
+                         chain_settings: BaseChainSetting) -> bool:
+    validator_index = int(validator_index)
+    epoch = int(epoch)
+    pubkey = BLSPubkey(bytes.fromhex(pubkey))
+    signature = BLSSignature(decode_hex(signature))
+    message = VoluntaryExit(  # type: ignore[no-untyped-call]
+        epoch=epoch,
+        validator_index=validator_index
+    )
+
+    domain = compute_voluntary_exit_domain(
+        fork_version=chain_settings.EXIT_FORK_VERSION,
+        genesis_validators_root=chain_settings.GENESIS_VALIDATORS_ROOT
+    )
+
+    signing_root = compute_signing_root(message, domain)
+    return bls.Verify(pubkey, signing_root, signature)
