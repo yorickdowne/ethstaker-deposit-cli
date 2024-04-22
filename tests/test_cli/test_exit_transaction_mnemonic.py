@@ -1,4 +1,5 @@
 import os
+import pytest
 
 from click.testing import CliRunner
 
@@ -99,7 +100,18 @@ def test_exit_transaction_menmonic_multiple() -> None:
     clean_exit_transaction_folder(my_folder_path)
 
 
-def test_invalid_mnemonic_should_fail() -> None:
+@pytest.mark.parametrize(
+    'chain, mnemonic, start_index, indices, epoch, assertion',
+    [
+        ('asdf', "aban aban aban aban aban aban aban aban aban aban aban abou", 0, 0, 0, 1),
+        ('holesky', "this is not valid", 0, 0, 0, 1),
+        # 2 exit code due to thrown ValidationError
+        ('holesky', "aban aban aban aban aban aban aban aban aban aban aban abou", "a", 0, 0, 2),
+        ('holesky', "aban aban aban aban aban aban aban aban aban aban aban abou", 0, "b", 0, 1),
+        ('holesky', "aban aban aban aban aban aban aban aban aban aban aban abou", 0, 0, "c", 1),
+    ]
+)
+def test_exit_mnemonic_invalid_params(chain, mnemonic, start_index, indices, epoch, assertion) -> None:
     my_folder_path = os.path.join(os.getcwd(), 'TESTING_TEMP_FOLDER')
     clean_exit_transaction_folder(my_folder_path)
     if not os.path.exists(my_folder_path):
@@ -113,12 +125,12 @@ def test_invalid_mnemonic_should_fail() -> None:
         '--non_interactive',
         'exit-transaction-mnemonic',
         '--output_folder', my_folder_path,
-        '--chain', 'mainnet',
-        '--mnemonic', 'this is not a mnemonic',
-        '--validator_start_index', '0',
-        '--validator_indices', '0',
-        '--epoch', '1234',
+        '--chain', chain,
+        '--mnemonic', mnemonic,
+        '--validator_start_index', start_index,
+        '--validator_indices', indices,
+        '--epoch', epoch,
     ]
     result = runner.invoke(cli, arguments, input=data)
 
-    assert result.exit_code == 1
+    assert result.exit_code == assertion

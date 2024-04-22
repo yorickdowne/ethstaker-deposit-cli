@@ -261,9 +261,8 @@ def validate_bls_withdrawal_credentials_list(input_bls_withdrawal_credentials_li
 
 
 def validate_validator_indices(input_validator_indices: str) -> Sequence[int]:
-
     normalized_list = normalize_input_list(input_validator_indices)
-    return [validate_int_range(int(index), 0, 2**32) for index in normalized_list]
+    return [validate_int_range(index, 0, 2**32) for index in normalized_list]
 
 
 def validate_bls_withdrawal_credentials_matching(bls_withdrawal_credentials: bytes, credential: Credential) -> None:
