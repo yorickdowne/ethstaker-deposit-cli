@@ -97,3 +97,28 @@ def test_exit_transaction_menmonic_multiple() -> None:
 
     # Clean up
     clean_exit_transaction_folder(my_folder_path)
+
+
+def test_invalid_mnemonic_should_fail() -> None:
+    my_folder_path = os.path.join(os.getcwd(), 'TESTING_TEMP_FOLDER')
+    clean_exit_transaction_folder(my_folder_path)
+    if not os.path.exists(my_folder_path):
+        os.mkdir(my_folder_path)
+
+    runner = CliRunner()
+    inputs = []
+    data = '\n'.join(inputs)
+    arguments = [
+        '--language', 'english',
+        '--non_interactive',
+        'exit-transaction-mnemonic',
+        '--output_folder', my_folder_path,
+        '--chain', 'mainnet',
+        '--mnemonic', 'this is not a mnemonic',
+        '--validator_start_index', '0',
+        '--validator_indices', '0',
+        '--epoch', '1234',
+    ]
+    result = runner.invoke(cli, arguments, input=data)
+
+    assert result.exit_code == 1

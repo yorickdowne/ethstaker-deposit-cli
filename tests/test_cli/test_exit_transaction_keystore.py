@@ -105,6 +105,8 @@ def test_invalid_keystore_path() -> None:
 
     assert result.exit_code == 2
 
+    clean_exit_transaction_folder(my_folder_path)
+
 
 def test_invalid_keystore_password() -> None:
     # Prepare folder
@@ -151,6 +153,10 @@ def test_invalid_keystore_password() -> None:
     assert result.exit_code == 1
 
     mnemonic_json_file = os.path.join(os.getcwd(), 'staking_deposit/cli/', 'exit_transaction_keystore.json')
-    assert load_text(['arg_exit_transaction_keystore_keystore_password', 'mismatch'], mnemonic_json_file, 'exit_transaction_keystore') in result.output
+    assert load_text(
+        ['arg_exit_transaction_keystore_keystore_password', 'mismatch'],
+        mnemonic_json_file,
+        'exit_transaction_keystore'
+    ) in result.output
 
     clean_exit_transaction_folder(my_folder_path)
