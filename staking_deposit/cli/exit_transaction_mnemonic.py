@@ -130,4 +130,3 @@ def exit_transaction_mnemonic(
 
     click.echo(load_text(['msg_creation_success']) + folder)
     click.pause(load_text(['msg_pause']))
-
