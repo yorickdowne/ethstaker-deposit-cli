@@ -87,6 +87,33 @@ def test_invalid_keystore_path() -> None:
     my_folder_path = os.path.join(os.getcwd(), 'TESTING_TEMP_FOLDER')
     clean_exit_transaction_folder(my_folder_path)
 
+    invalid_keystore_file = os.path.join(os.getcwd(), 'README.md')
+
+    runner = CliRunner()
+    inputs = []
+    data = '\n'.join(inputs)
+    arguments = [
+        '--language', 'english',
+        '--non_interactive',
+        'exit-transaction-keystore',
+        '--output_folder', my_folder_path,
+        '--chain', "mainnet",
+        '--keystore', invalid_keystore_file,
+        '--keystore_password', "password",
+        '--validator_index', '1',
+        '--epoch', '1234',
+    ]
+    result = runner.invoke(cli, arguments, input=data)
+
+    assert result.exit_code == 2
+
+    clean_exit_transaction_folder(my_folder_path)
+
+
+def test_invalid_keystore_file() -> None:
+    my_folder_path = os.path.join(os.getcwd(), 'TESTING_TEMP_FOLDER')
+    clean_exit_transaction_folder(my_folder_path)
+
     runner = CliRunner()
     inputs = []
     data = '\n'.join(inputs)
