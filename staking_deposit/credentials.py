@@ -164,6 +164,9 @@ class Credential:
     def get_bls_to_execution_change(self, validator_index: int) -> SignedBLSToExecutionChange:
         if self.eth1_withdrawal_address is None:
             raise ValueError("The execution address should NOT be empty.")
+        if self.chain_setting.GENESIS_VALIDATORS_ROOT is None:
+            raise ValidationError("The genesis validators root should NOT be empty "
+                "for this chain to obtain the BLS to execution change.")
 
         message = BLSToExecutionChange(  # type: ignore[no-untyped-call]
             validator_index=validator_index,
