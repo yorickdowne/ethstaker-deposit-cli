@@ -39,7 +39,7 @@ def compute_fork_data_root(current_version: bytes, genesis_validators_root: byte
     """
     if len(current_version) != 4:
         raise ValueError(f"Fork version should be in 4 bytes. Got {len(current_version)}.")
-    return ForkData( # type: ignore[no-untyped-call]
+    return ForkData(  # type: ignore[no-untyped-call]
         current_version=current_version,
         genesis_validators_root=genesis_validators_root,
     ).hash_tree_root
@@ -83,7 +83,7 @@ def compute_signing_root(ssz_object: Serializable, domain: bytes) -> bytes:
     """
     if len(domain) != 32:
         raise ValueError(f"Domain should be in 32 bytes. Got {len(domain)}.")
-    domain_wrapped_object = SigningData( # type: ignore[no-untyped-call]
+    domain_wrapped_object = SigningData(  # type: ignore[no-untyped-call]
         object_root=ssz_object.hash_tree_root,
         domain=domain,
     )

@@ -89,14 +89,18 @@ def validate_deposit(deposit_data_dict: Dict[str, Any], credential: Credential) 
         return False
 
     # Verify deposit signature && pubkey
-    deposit_message = DepositMessage(pubkey=pubkey, withdrawal_credentials=withdrawal_credentials, amount=amount) # type: ignore[no-untyped-call]
+    deposit_message = DepositMessage(  # type: ignore[no-untyped-call]
+        pubkey=pubkey,
+        withdrawal_credentials=withdrawal_credentials,
+        amount=amount
+    )
     domain = compute_deposit_domain(fork_version)
     signing_root = compute_signing_root(deposit_message, domain)
     if not bls.Verify(pubkey, signing_root, signature):
         return False
 
     # Verify Deposit Root
-    signed_deposit = DepositData( # type: ignore[no-untyped-call]
+    signed_deposit = DepositData(  # type: ignore[no-untyped-call]
         pubkey=pubkey,
         withdrawal_credentials=withdrawal_credentials,
         amount=amount,
@@ -189,7 +193,7 @@ def validate_bls_to_execution_change(btec_dict: Dict[str, Any],
     if genesis_validators_root != chain_setting.GENESIS_VALIDATORS_ROOT:
         return False
 
-    message = BLSToExecutionChange( # type: ignore[no-untyped-call]
+    message = BLSToExecutionChange(  # type: ignore[no-untyped-call]
         validator_index=validator_index,
         from_bls_pubkey=from_bls_pubkey,
         to_execution_address=to_execution_address,
