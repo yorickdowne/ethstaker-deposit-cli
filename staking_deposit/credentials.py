@@ -166,7 +166,7 @@ class Credential:
             raise ValueError("The execution address should NOT be empty.")
         if self.chain_setting.GENESIS_VALIDATORS_ROOT is None:
             raise ValidationError("The genesis validators root should NOT be empty "
-                "for this chain to obtain the BLS to execution change.")
+                                  "for this chain to obtain the BLS to execution change.")
 
         message = BLSToExecutionChange(  # type: ignore[no-untyped-call]
             validator_index=validator_index,

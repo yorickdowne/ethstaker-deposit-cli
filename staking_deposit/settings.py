@@ -42,7 +42,7 @@ HoleskySetting = BaseChainSetting(
 # Upcoming EXIT_FORK_VERSION=bytes.fromhex('4000101b'), # for Ephemery
 # From https://github.com/ephemery-testnet/ephemery-genesis/blob/master/values.env
 # There is no builtin GENESIS_VALIDATORS_ROOT since the root changes with each reset.
-# You can manually obtain the GENESIS_VALIDATORS_ROOT with each reset on 
+# You can manually obtain the GENESIS_VALIDATORS_ROOT with each reset on
 # https://github.com/ephemery-testnet/ephemery-genesis/releases
 EphemerySetting = BaseChainSetting(
     NETWORK_NAME=EPHEMERY, GENESIS_FORK_VERSION=bytes.fromhex('1000101b'))
