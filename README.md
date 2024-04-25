@@ -543,7 +543,6 @@ See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-exe
 
 ```sh
 python3 -m pip install -r requirements.txt
-python3 setup.py install
 ```
 
 ### Install testing requirements
@@ -555,7 +554,13 @@ python3 -m pip install -r requirements_test.txt
 ### Run tests
 
 ```sh
-python3 -m pytest .
+python3 -m pytest tests
+```
+
+### Run the app
+
+```sh
+python3 -m staking_deposit [OPTIONS] COMMAND [ARGS]
 ```
 
 ### Building Binaries
