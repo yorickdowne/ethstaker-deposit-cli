@@ -62,5 +62,6 @@ def run() -> None:
     print('\n***Using the tool on an offline and secure device is highly recommended to keep your mnemonic safe.***\n')
     cli()
 
+
 if __name__ == '__main__':
     run()
