@@ -1,5 +1,5 @@
 name: ci-runner
-run-name: ${{ github.actor }} is running ci
+run-name: ${{ github.actor }} is running ci-runner
 on: [push, pull_request]
 jobs:
   ci-runner:
