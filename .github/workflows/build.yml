@@ -2,7 +2,7 @@ name: ci-build
 run-name: ${{ github.actor }} is running ci-build
 on: [workflow_dispatch]
 jobs:
-  ci-runner:
+  ci-build:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -16,6 +16,12 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: 'pip'
+      - name: Setup variables (Linux & macOS)
+        if: ${{ startsWith(matrix.os, 'ubuntu-') || startsWith(matrix.os, 'macos-') }}
+        run: |
+          echo "PYTHONHASHSEED=42" >> "$GITHUB_ENV"
+          export SHORT_SHA=$(eval echo ${{ github.sha }} | cut -c -7)
+          echo "SHORT_SHA=${SHORT_SHA}" >> "$GITHUB_ENV"
       - name: Install Linux build dependencies
         if: ${{ startsWith(matrix.os, 'ubuntu-') }}
         run: |
@@ -31,3 +37,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r build_configs/windows/requirements.txt
+      - name: Build with build.spec (Linux amd64)
+        if: ${{ startsWith(matrix.os, 'ubuntu-') }}
+        run: |
+          export BUILD_FILE_NAME=staking_deposit-cli-${SHORT_SHA}-linux-amd64
+          echo "BUILD_FILE_NAME=${BUILD_FILE_NAME}" >> "$GITHUB_ENV"
+          mkdir ${BUILD_FILE_NAME}
+          pyinstaller --distpath ./${BUILD_FILE_NAME} ./build_configs/linux/build.spec
