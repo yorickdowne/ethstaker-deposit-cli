@@ -44,3 +44,16 @@ jobs:
           echo "BUILD_FILE_NAME=${BUILD_FILE_NAME}" >> "$GITHUB_ENV"
           mkdir ${BUILD_FILE_NAME}
           pyinstaller --distpath ./${BUILD_FILE_NAME} ./build_configs/linux/build.spec
+      - name: Compress the file (Linux & macOS)
+        if: ${{ startsWith(matrix.os, 'ubuntu-') || startsWith(matrix.os, 'macos-') }}
+        run: |
+          tar -zcvf ${BUILD_FILE_NAME}.tar.gz ./${BUILD_FILE_NAME}
+          mkdir -p output/artifacts
+          cp ${BUILD_FILE_NAME}.tar.gz output/artifacts
+          sha256sum ${BUILD_FILE_NAME}.tar.gz | head -c 64 > output/artifacts/${BUILD_FILE_NAME}.sha256
+      - name: Archive production artifacts (Linux & macOS)
+        if: ${{ startsWith(matrix.os, 'ubuntu-') || startsWith(matrix.os, 'macos-') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: binary-${{ matrix.os }}
+          path: output/artifacts
