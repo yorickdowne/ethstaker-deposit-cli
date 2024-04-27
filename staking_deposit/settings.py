@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple
+from typing import Dict, NamedTuple, Optional
 from eth_utils import decode_hex
 
 DEPOSIT_CLI_VERSION = '2.7.0'
@@ -8,7 +8,7 @@ class BaseChainSetting(NamedTuple):
     NETWORK_NAME: str
     GENESIS_FORK_VERSION: bytes
     EXIT_FORK_VERSION: bytes  # capella fork version for voluntary exits (EIP-7044)
-    GENESIS_VALIDATORS_ROOT: bytes
+    GENESIS_VALIDATORS_ROOT: Optional[bytes] = None
 
 
 MAINNET = 'mainnet'
@@ -17,6 +17,7 @@ PRATER = 'prater'
 SEPOLIA = 'sepolia'
 ZHEJIANG = 'zhejiang'
 HOLESKY = 'holesky'
+EPHEMERY = 'ephemery'
 
 # Mainnet setting
 MainnetSetting = BaseChainSetting(
@@ -48,6 +49,16 @@ HoleskySetting = BaseChainSetting(
     GENESIS_FORK_VERSION=bytes.fromhex('01017000'),
     EXIT_FORK_VERSION=bytes.fromhex('04017000'),
     GENESIS_VALIDATORS_ROOT=bytes.fromhex('9143aa7c615a7f7115e2b6aac319c03529df8242ae705fba9df39b79c59fa8b1'))
+# Ephemery setting
+# From https://github.com/ephemery-testnet/ephemery-genesis/blob/master/values.env
+EphemerySetting = BaseChainSetting(
+    NETWORK_NAME=EPHEMERY,
+    EXIT_FORK_VERSION=bytes.fromhex('4000101b'),
+    GENESIS_FORK_VERSION=bytes.fromhex('1000101b'),
+    # There is no builtin GENESIS_VALIDATORS_ROOT since the root changes with each reset.
+    # You can manually obtain the GENESIS_VALIDATORS_ROOT with each reset on
+    # https://github.com/ephemery-testnet/ephemery-genesis/releases
+    GENESIS_VALIDATORS_ROOT=None)
 
 
 ALL_CHAINS: Dict[str, BaseChainSetting] = {
@@ -57,6 +68,7 @@ ALL_CHAINS: Dict[str, BaseChainSetting] = {
     SEPOLIA: SepoliaSetting,
     ZHEJIANG: ZhejiangSetting,
     HOLESKY: HoleskySetting,
+    EPHEMERY: EphemerySetting,
 }
 
 NON_PRATER_CHAIN_KEYS: list[str] = list(key for key in ALL_CHAINS.keys() if key != PRATER)
