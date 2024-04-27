@@ -36,7 +36,12 @@ def test_new_mnemonic_bls_withdrawal(monkeypatch) -> None:
     inputs = ['english', 'english', '1', 'mainnet', 'MyPassword', 'MyPassword',
               'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about']
     data = '\n'.join(inputs)
-    result = runner.invoke(cli, ['new-mnemonic', '--folder', my_folder_path], input=data)
+    arguments = [
+        'new-mnemonic',
+        '--folder', my_folder_path,
+        '--eth1_withdrawal_address=""',
+    ]
+    result = runner.invoke(cli, arguments, input=data)
     assert result.exit_code == 0
 
     # Check files
@@ -291,6 +296,7 @@ async def test_script_bls_withdrawal() -> None:
         '--mnemonic_language', 'english',
         '--chain', 'mainnet',
         '--keystore_password', 'MyPassword',
+        '--eth1_withdrawal_address', '""',
         '--folder', my_folder_path,
     ]
     proc = await asyncio.create_subprocess_shell(
@@ -375,6 +381,7 @@ async def test_script_abbreviated_mnemonic() -> None:
         '--mnemonic_language', 'english',
         '--chain', 'mainnet',
         '--keystore_password', 'MyPassword',
+        '--eth1_withdrawal_address', '""',
         '--folder', my_folder_path,
     ]
     proc = await asyncio.create_subprocess_shell(

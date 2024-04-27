@@ -129,7 +129,7 @@ def validate_int_range(num: Any, low: int, high: int) -> int:
 
 
 def validate_eth1_withdrawal_address(cts: click.Context, param: Any, address: str) -> HexAddress:
-    if address is None:
+    if address in ("", None):
         return None
     if not is_hex_address(address):
         raise ValidationError(load_text(['err_invalid_ECDSA_hex_addr']))

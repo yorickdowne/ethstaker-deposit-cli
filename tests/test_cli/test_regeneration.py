@@ -35,7 +35,12 @@ def test_regeneration(monkeypatch) -> None:
     my_password = "MyPassword"
     inputs = ['english', 'english', '2', 'mainnet', my_password, my_password, mock_mnemonic]
     data = '\n'.join(inputs)
-    result = runner.invoke(cli, ['new-mnemonic', '--folder', folder_path_1], input=data)
+    arguments = [
+        'new-mnemonic',
+        '--folder', folder_path_1,
+        '--eth1_withdrawal_address=""',
+    ]
+    result = runner.invoke(cli, arguments, input=data)
     assert result.exit_code == 0
 
     # Check files
@@ -60,7 +65,11 @@ def test_regeneration(monkeypatch) -> None:
         mock_mnemonic,
         '1', '1', '2', 'mainnet', 'MyPassword', 'MyPassword']
     data = '\n'.join(inputs)
-    arguments = ['existing-mnemonic', '--folder', folder_path_2]
+    arguments = [
+        'existing-mnemonic',
+        '--folder', folder_path_2,
+        '--eth1_withdrawal_address=""',
+    ]
     result = runner.invoke(cli, arguments, input=data)
 
     assert result.exit_code == 0

@@ -195,6 +195,7 @@ async def test_script() -> None:
         '--validator_start_index', '1',
         '--chain', 'mainnet',
         '--keystore_password', 'MyPassword',
+        '--eth1_withdrawal_address', '""',
         '--folder', my_folder_path,
     ]
     proc = await asyncio.create_subprocess_shell(
@@ -242,6 +243,7 @@ async def test_script_abbreviated_mnemonic() -> None:
         '--validator_start_index', '1',
         '--chain', 'mainnet',
         '--keystore_password', 'MyPassword',
+        '--eth1_withdrawal_address', '""',
         '--folder', my_folder_path,
     ]
     proc = await asyncio.create_subprocess_shell(
