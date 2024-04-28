@@ -38,8 +38,8 @@ def test_new_mnemonic_bls_withdrawal(monkeypatch) -> None:
     data = '\n'.join(inputs)
     arguments = [
         'new-mnemonic',
+        '--eth1_withdrawal_address', '',
         '--folder', my_folder_path,
-        '--eth1_withdrawal_address=""',
     ]
     result = runner.invoke(cli, arguments, input=data)
     assert result.exit_code == 0

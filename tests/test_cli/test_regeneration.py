@@ -37,8 +37,8 @@ def test_regeneration(monkeypatch) -> None:
     data = '\n'.join(inputs)
     arguments = [
         'new-mnemonic',
+        '--eth1_withdrawal_address', '',
         '--folder', folder_path_1,
-        '--eth1_withdrawal_address=""',
     ]
     result = runner.invoke(cli, arguments, input=data)
     assert result.exit_code == 0
@@ -67,8 +67,8 @@ def test_regeneration(monkeypatch) -> None:
     data = '\n'.join(inputs)
     arguments = [
         'existing-mnemonic',
+        '--eth1_withdrawal_address', '',
         '--folder', folder_path_2,
-        '--eth1_withdrawal_address=""',
     ]
     result = runner.invoke(cli, arguments, input=data)
 
