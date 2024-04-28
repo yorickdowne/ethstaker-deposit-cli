@@ -28,6 +28,7 @@ def test_existing_mnemonic_bls_withdrawal() -> None:
     arguments = [
         '--language', 'english',
         'existing-mnemonic',
+        '--eth1_withdrawal_address', '',
         '--folder', my_folder_path,
         '--mnemonic-password', 'TREZOR',
     ]
@@ -65,16 +66,14 @@ def test_existing_mnemonic_eth1_address_withdrawal() -> None:
     eth1_withdrawal_address = '0x00000000219ab540356cBB839Cbe05303d7705Fa'
     inputs = [
         'TREZOR',
-        eth1_withdrawal_address,
         'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about',
-        '2', '2', '5', 'mainnet', 'MyPassword', 'MyPassword']
+        '2', '2', '5', 'mainnet', 'MyPassword', 'MyPassword', eth1_withdrawal_address, eth1_withdrawal_address]
     data = '\n'.join(inputs)
     arguments = [
         '--language', 'english',
         'existing-mnemonic',
         '--folder', my_folder_path,
         '--mnemonic-password', 'TREZOR',
-        '--eth1_withdrawal_address', eth1_withdrawal_address,
     ]
     result = runner.invoke(cli, arguments, input=data)
 
@@ -123,9 +122,9 @@ def test_existing_mnemonic_eth1_address_withdrawal_bad_checksum() -> None:
 
     inputs = [
         'TREZOR',
-        correct_eth1_withdrawal_address, correct_eth1_withdrawal_address,
         'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about',
-        '2', '2', '5', 'mainnet', 'MyPassword', 'MyPassword'
+        '2', '2', '5', 'mainnet', 'MyPassword', 'MyPassword',
+        wrong_eth1_withdrawal_address, correct_eth1_withdrawal_address, correct_eth1_withdrawal_address
     ]
     data = '\n'.join(inputs)
     arguments = [
@@ -133,7 +132,6 @@ def test_existing_mnemonic_eth1_address_withdrawal_bad_checksum() -> None:
         'existing-mnemonic',
         '--folder', my_folder_path,
         '--mnemonic-password', 'TREZOR',
-        '--eth1_withdrawal_address', wrong_eth1_withdrawal_address,
     ]
     result = runner.invoke(cli, arguments, input=data)
 

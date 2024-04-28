@@ -79,14 +79,13 @@ def test_new_mnemonic_eth1_address_withdrawal(monkeypatch) -> None:
 
     runner = CliRunner()
     eth1_withdrawal_address = '0x00000000219ab540356cBB839Cbe05303d7705Fa'
-    inputs = [eth1_withdrawal_address, 'english', '1', 'mainnet', 'MyPassword', 'MyPassword',
+    inputs = ['english', '1', 'mainnet', 'MyPassword', 'MyPassword', eth1_withdrawal_address, eth1_withdrawal_address,
               'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about']
     data = '\n'.join(inputs)
     arguments = [
         '--language', 'english',
         'new-mnemonic',
         '--folder', my_folder_path,
-        '--eth1_withdrawal_address', eth1_withdrawal_address,
     ]
     result = runner.invoke(cli, arguments, input=data)
     assert result.exit_code == 0
@@ -139,15 +138,14 @@ def test_new_mnemonic_eth1_address_withdrawal_bad_checksum(monkeypatch) -> None:
     wrong_eth1_withdrawal_address = '0x00000000219ab540356cBB839Cbe05303d7705FA'
     correct_eth1_withdrawal_address = '0x00000000219ab540356cBB839Cbe05303d7705Fa'
 
-    inputs = [correct_eth1_withdrawal_address, correct_eth1_withdrawal_address,
-              'english', '1', 'mainnet', 'MyPassword', 'MyPassword',
+    inputs = ['english', '1', 'mainnet', 'MyPassword', 'MyPassword',
+              wrong_eth1_withdrawal_address, correct_eth1_withdrawal_address, correct_eth1_withdrawal_address,
               'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about']
     data = '\n'.join(inputs)
     arguments = [
         '--language', 'english',
         'new-mnemonic',
         '--folder', my_folder_path,
-        '--eth1_withdrawal_address', wrong_eth1_withdrawal_address,
     ]
     result = runner.invoke(cli, arguments, input=data)
     assert result.exit_code == 0
