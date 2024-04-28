@@ -1,5 +1,6 @@
 import click
 import sys
+from urllib.request import urlopen
 
 from staking_deposit.cli.existing_mnemonic import existing_mnemonic
 from staking_deposit.cli.exit_transaction_keystore import exit_transaction_keystore
@@ -29,6 +30,17 @@ def check_python_version() -> None:
         sys.exit()
 
 
+def check_connectivity() -> None:
+    '''
+    Checks if there is an internet connection and warns the user if so.
+    '''
+    try:
+        urlopen('https://www.google.com/', timeout=2)
+        click.pause(load_text(['connectivity_warning']))
+    except:  # noqa: E722
+        return None
+
+
 @click.group()
 @click.pass_context
 @jit_option(
@@ -50,7 +62,16 @@ def check_python_version() -> None:
     help='Disables interactive prompts. Warning: with this flag, there will be no confirmation step(s) to verify the input value(s). Please use it carefully.',  # noqa: E501
     hidden=False,
 )
-def cli(ctx: click.Context, language: str, non_interactive: bool) -> None:
+@click.option(
+    '--ignore_connectivity',
+    default=False,
+    is_flag=True,
+    help='Disables internet connectivity check.',
+    hidden=False,
+)
+def cli(ctx: click.Context, language: str, non_interactive: bool, ignore_connectivity: bool) -> None:
+    if not ignore_connectivity:
+        check_connectivity()
     config.language = language
     config.non_interactive = non_interactive  # Remove interactive commands
 
@@ -64,7 +85,6 @@ cli.add_command(exit_transaction_mnemonic)
 
 def run() -> None:
     check_python_version()
-    print('\n***Using the tool on an offline and secure device is highly recommended to keep your mnemonic safe.***\n')
     cli()
 
 

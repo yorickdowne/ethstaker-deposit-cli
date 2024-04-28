@@ -27,6 +27,7 @@ def test_existing_mnemonic_bls_withdrawal() -> None:
     data = '\n'.join(inputs)
     arguments = [
         '--language', 'english',
+        '--ignore_connectivity',
         'existing-mnemonic',
         '--eth1_withdrawal_address', '',
         '--folder', my_folder_path,
@@ -71,6 +72,7 @@ def test_existing_mnemonic_eth1_address_withdrawal() -> None:
     data = '\n'.join(inputs)
     arguments = [
         '--language', 'english',
+        '--ignore_connectivity',
         'existing-mnemonic',
         '--folder', my_folder_path,
         '--mnemonic_password', 'TREZOR',
@@ -129,6 +131,7 @@ def test_existing_mnemonic_eth1_address_withdrawal_bad_checksum() -> None:
     data = '\n'.join(inputs)
     arguments = [
         '--language', 'english',
+        '--ignore_connectivity',
         'existing-mnemonic',
         '--folder', my_folder_path,
         '--mnemonic_password', 'TREZOR',
@@ -186,6 +189,7 @@ async def test_script() -> None:
         run_script_cmd,
         '--language', 'english',
         '--non_interactive',
+        '--ignore_connectivity',
         'existing-mnemonic',
         '--num_validators', '1',
         '--mnemonic="abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"',
@@ -234,6 +238,7 @@ async def test_script_abbreviated_mnemonic() -> None:
         run_script_cmd,
         '--language', 'english',
         '--non_interactive',
+        '--ignore_connectivity',
         'existing-mnemonic',
         '--num_validators', '1',
         '--mnemonic="aban aban aban aban aban aban aban aban aban aban aban abou"',

@@ -37,6 +37,7 @@ def test_new_mnemonic_bls_withdrawal(monkeypatch) -> None:
               'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about']
     data = '\n'.join(inputs)
     arguments = [
+        '--ignore_connectivity',
         'new-mnemonic',
         '--eth1_withdrawal_address', '',
         '--folder', my_folder_path,
@@ -84,6 +85,7 @@ def test_new_mnemonic_eth1_address_withdrawal(monkeypatch) -> None:
     data = '\n'.join(inputs)
     arguments = [
         '--language', 'english',
+        '--ignore_connectivity',
         'new-mnemonic',
         '--folder', my_folder_path,
     ]
@@ -144,6 +146,7 @@ def test_new_mnemonic_eth1_address_withdrawal_bad_checksum(monkeypatch) -> None:
     data = '\n'.join(inputs)
     arguments = [
         '--language', 'english',
+        '--ignore_connectivity',
         'new-mnemonic',
         '--folder', my_folder_path,
     ]
@@ -199,6 +202,7 @@ def test_new_mnemonic_eth1_address_withdrawal_alias(monkeypatch) -> None:
     data = '\n'.join(inputs)
     arguments = [
         '--language', 'english',
+        '--ignore_connectivity',
         'new-mnemonic',
         '--folder', my_folder_path,
         '--execution_address', execution_address,  # execution_address and eth1_withdrawal_address are aliases
@@ -255,6 +259,7 @@ def test_new_mnemonic_eth1_address_withdrawal_double_params(monkeypatch) -> None
     data = '\n'.join(inputs)
     arguments = [
         '--language', 'english',
+        '--ignore_connectivity',
         'new-mnemonic',
         '--folder', my_folder_path,
         '--execution_address', execution_address,
@@ -289,6 +294,7 @@ async def test_script_bls_withdrawal() -> None:
         run_script_cmd,
         '--language', 'english',
         '--non_interactive',
+        '--ignore_connectivity',
         'new-mnemonic',
         '--num_validators', '5',
         '--mnemonic_language', 'english',
@@ -374,6 +380,7 @@ async def test_script_abbreviated_mnemonic() -> None:
         run_script_cmd,
         '--language', 'english',
         '--non_interactive',
+        '--ignore_connectivity',
         'new-mnemonic',
         '--num_validators', '5',
         '--mnemonic_language', 'english',
