@@ -1,0 +1,59 @@
+name: ci-build
+run-name: ${{ github.actor }} is running ci-build
+on: [workflow_dispatch]
+jobs:
+  ci-build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-12, macos-latest, windows-latest]
+        python-version: ["3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+      - name: Setup variables (Linux & macOS)
+        if: ${{ startsWith(matrix.os, 'ubuntu-') || startsWith(matrix.os, 'macos-') }}
+        run: |
+          echo "PYTHONHASHSEED=42" >> "$GITHUB_ENV"
+          export SHORT_SHA=$(eval echo ${{ github.sha }} | cut -c -7)
+          echo "SHORT_SHA=${SHORT_SHA}" >> "$GITHUB_ENV"
+      - name: Install Linux build dependencies
+        if: ${{ startsWith(matrix.os, 'ubuntu-') }}
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r build_configs/linux/requirements.txt
+      - name: Install macOS build dependencies
+        if: ${{ startsWith(matrix.os, 'macos-') }}
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r build_configs/linux/requirements.txt
+      - name: Install Windows build dependencies
+        if: ${{ startsWith(matrix.os, 'windows-') }}
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r build_configs/windows/requirements.txt
+      - name: Build with build.spec (Linux amd64)
+        if: ${{ startsWith(matrix.os, 'ubuntu-') }}
+        run: |
+          export BUILD_FILE_NAME=staking_deposit-cli-${SHORT_SHA}-linux-amd64
+          echo "BUILD_FILE_NAME=${BUILD_FILE_NAME}" >> "$GITHUB_ENV"
+          mkdir ${BUILD_FILE_NAME}
+          pyinstaller --distpath ./${BUILD_FILE_NAME} ./build_configs/linux/build.spec
+      - name: Compress the file (Linux & macOS)
+        if: ${{ startsWith(matrix.os, 'ubuntu-') || startsWith(matrix.os, 'macos-') }}
+        run: |
+          tar -zcvf ${BUILD_FILE_NAME}.tar.gz ./${BUILD_FILE_NAME}
+          mkdir -p output/artifacts
+          cp ${BUILD_FILE_NAME}.tar.gz output/artifacts
+          sha256sum ${BUILD_FILE_NAME}.tar.gz | head -c 64 > output/artifacts/${BUILD_FILE_NAME}.sha256
+      - name: Archive production artifacts (Linux & macOS)
+        if: ${{ startsWith(matrix.os, 'ubuntu-') || startsWith(matrix.os, 'macos-') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: binary-${{ matrix.os }}-${{ github.sha }}-${{ github.run_id }}
+          path: output/artifacts
