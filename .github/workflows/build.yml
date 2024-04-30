@@ -44,6 +44,20 @@ jobs:
           echo "BUILD_FILE_NAME=${BUILD_FILE_NAME}" >> "$GITHUB_ENV"
           mkdir ${BUILD_FILE_NAME}
           pyinstaller --distpath ./${BUILD_FILE_NAME} ./build_configs/linux/build.spec
+      - name: Build with build.spec (macOS amd64)
+        if: ${{ matrix.os == 'macos-12' }}
+        run: |
+          export BUILD_FILE_NAME=staking_deposit-cli-${SHORT_SHA}-darwin-amd64
+          echo "BUILD_FILE_NAME=${BUILD_FILE_NAME}" >> "$GITHUB_ENV"
+          mkdir ${BUILD_FILE_NAME}
+          pyinstaller --distpath ./${BUILD_FILE_NAME} ./build_configs/macos/build.spec
+      - name: Build with build.spec (macOS arm64)
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: |
+          export BUILD_FILE_NAME=staking_deposit-cli-${SHORT_SHA}-darwin-arm64
+          echo "BUILD_FILE_NAME=${BUILD_FILE_NAME}" >> "$GITHUB_ENV"
+          mkdir ${BUILD_FILE_NAME}
+          pyinstaller --distpath ./${BUILD_FILE_NAME} ./build_configs/macos/build.spec
       - name: Compress the file (Linux & macOS)
         if: ${{ startsWith(matrix.os, 'ubuntu-') || startsWith(matrix.os, 'macos-') }}
         run: |
