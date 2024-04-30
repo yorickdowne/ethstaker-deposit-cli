@@ -26,7 +26,6 @@ $(VENV_NAME)/bin/activate: requirements.txt
 	@test -d $(VENV_NAME) || python3 -m venv --clear $(VENV_NAME)
 	${VENV_NAME}/bin/python -m pip install -r requirements.txt
 	${VENV_NAME}/bin/python -m pip install -r requirements_test.txt
-	${VENV_NAME}/bin/python setup.py install
 	@touch $(VENV_NAME)/bin/activate
 
 venv_build: $(VENV_NAME)/bin/activate
@@ -41,7 +40,7 @@ venv_lint: venv_build_test
 	$(VENV_ACTIVATE) && flake8 --config=flake8.ini ./staking_deposit ./tests && mypy --config-file mypy.ini -p staking_deposit
 
 venv_deposit: venv_build
-	$(VENV_ACTIVATE) && python ./staking_deposit/deposit.py $(filter-out $@,$(MAKECMDGOALS))
+	$(VENV_ACTIVATE) && python -m staking_deposit $(filter-out $@,$(MAKECMDGOALS))
 
 build_macos: venv_build
 	${VENV_NAME}/bin/python -m pip install -r ./build_configs/macos/requirements.txt
