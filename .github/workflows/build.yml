@@ -27,7 +27,7 @@ jobs:
         run: |
           echo "PYTHONHASHSEED=42" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           $env:SHORT_SHA = "${{ github.sha }}".Substring(0, 7)
-          echo "SHORT_SHA=" + $env:SHORT_SHA | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo ("SHORT_SHA=" + $env:SHORT_SHA) | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - name: Install Linux build dependencies
         if: ${{ startsWith(matrix.os, 'ubuntu-') }}
         run: |
@@ -68,10 +68,10 @@ jobs:
         if: ${{ startsWith(matrix.os, 'windows-') }}
         run: |
           $env:BUILD_FILE_NAME = "staking_deposit-cli-" + $env:SHORT_SHA + "-windows-amd64"
-          echo "BUILD_FILE_NAME=" + $env:BUILD_FILE_NAME | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo ("BUILD_FILE_NAME=" + $env:BUILD_FILE_NAME) | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           mkdir $env:BUILD_FILE_NAME
           $env:BUILD_FILE_NAME_PATH = ".\" + $BUILD_FILE_NAME
-          echo "BUILD_FILE_NAME_PATH=" + $env:BUILD_FILE_NAME_PATH | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo ("BUILD_FILE_NAME_PATH=" + $env:BUILD_FILE_NAME_PATH) | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           pyinstaller --distpath $env:BUILD_FILE_NAME .\build_configs\windows\build.spec
       - name: Install coreutils (macOS)
         if: ${{ startsWith(matrix.os, 'macos-') }}
@@ -88,11 +88,11 @@ jobs:
         if: ${{ startsWith(matrix.os, 'windows-') }}
         run: |
           $env:ZIP_FILE_NAME = $env:BUILD_FILE_NAME + ".zip"
-          echo "ZIP_FILE_NAME=" + $env:ZIP_FILE_NAME | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          echo ("ZIP_FILE_NAME=" + $env:ZIP_FILE_NAME) | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           Compress-Archive -Path $env:BUILD_FILE_NAME_PATH -DestinationPath $env:ZIP_FILE_NAME
           mkdir output\artifacts
           copy $env:ZIP_FILE_NAME output\artifacts
-          $env:CHECKSUM_FILE_NAME_PATH = "output\artifacts\"  + $env:BUILD_FILE_NAME + ".sha256"
+          $env:CHECKSUM_FILE_NAME_PATH = ("output\artifacts\" + $env:BUILD_FILE_NAME + ".sha256")
           certUtil -hashfile $env:ZIP_FILE_NAME SHA256 | findstr /i /v "SHA256" | findstr /i /v "CertUtil" > $env:CHECKSUM_FILE_NAME_PATH
       - name: Archive production artifacts (Linux & macOS)
         if: ${{ startsWith(matrix.os, 'ubuntu-') || startsWith(matrix.os, 'macos-') }}
