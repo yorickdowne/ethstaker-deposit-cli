@@ -1,4 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
+from PyInstaller.utils.hooks import copy_metadata
 
 block_cipher = None
 
@@ -7,7 +8,7 @@ a = Analysis(['../../staking_deposit/deposit.py'],
              binaries=None,
              datas=[
                  ('../../staking_deposit/key_handling/key_derivation/word_lists/*.txt', './staking_deposit/key_handling/key_derivation/word_lists/'),
-                 ('../../staking_deposit/intl', './staking_deposit/intl'),
+                 ('../../staking_deposit/intl', './staking_deposit/intl'), copy_metadata('py_ecc'),
              ],
              hiddenimports=[],
              hookspath=[],
