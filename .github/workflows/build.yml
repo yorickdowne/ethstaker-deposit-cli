@@ -70,7 +70,7 @@ jobs:
           $env:BUILD_FILE_NAME = "staking_deposit-cli-" + $env:SHORT_SHA + "-windows-amd64"
           echo ("BUILD_FILE_NAME=" + $env:BUILD_FILE_NAME) | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           mkdir $env:BUILD_FILE_NAME
-          $env:BUILD_FILE_NAME_PATH = ".\" + $BUILD_FILE_NAME
+          $env:BUILD_FILE_NAME_PATH = (".\" + $BUILD_FILE_NAME)
           echo ("BUILD_FILE_NAME_PATH=" + $env:BUILD_FILE_NAME_PATH) | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           pyinstaller --distpath $env:BUILD_FILE_NAME .\build_configs\windows\build.spec
       - name: Install coreutils (macOS)
