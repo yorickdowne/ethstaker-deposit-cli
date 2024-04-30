@@ -85,6 +85,7 @@ def captive_prompt_callback(
     confirmation_prompt: Optional[Callable[[], str]]=None,
     confirmation_mismatch_msg: Callable[[], str]=lambda: '',
     hide_input: bool=False,
+    default: Any=None,
 ) -> Callable[[click.Context, str, str], Any]:
     '''
     Traps the user in a prompt until the value chosen is acceptable
@@ -109,7 +110,7 @@ def captive_prompt_callback(
                 return processed_input
             except ValidationError as e:
                 click.echo('\n[Error] ' + str(e))
-                user_input = click.prompt(prompt(), hide_input=hide_input)
+                user_input = click.prompt(prompt(), hide_input=hide_input, default=default)
     return callback
 
 
