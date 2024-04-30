@@ -6,6 +6,7 @@ datas = [
     ('../../staking_deposit/intl', './staking_deposit/intl'),
 ]
 datas += copy_metadata('py_ecc')
+datas += copy_metadata('ssz')
 
 block_cipher = None
 
