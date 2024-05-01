@@ -1,0 +1,108 @@
+name: ci-build
+run-name: ${{ github.actor }} is running ci-build
+on: [workflow_dispatch]
+jobs:
+  ci-build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-12, macos-latest, windows-latest]
+        python-version: ["3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+      - name: Setup variables (Linux & macOS)
+        if: ${{ startsWith(matrix.os, 'ubuntu-') || startsWith(matrix.os, 'macos-') }}
+        run: |
+          echo "PYTHONHASHSEED=42" >> "$GITHUB_ENV"
+          export SHORT_SHA=$(eval echo ${{ github.sha }} | cut -c -7)
+          echo "SHORT_SHA=${SHORT_SHA}" >> "$GITHUB_ENV"
+      - name: Setup variables (Windows)
+        if: ${{ startsWith(matrix.os, 'windows-') }}
+        run: |
+          echo "PYTHONHASHSEED=42" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          $env:SHORT_SHA = "${{ github.sha }}".Substring(0, 7)
+          echo ("SHORT_SHA=" + $env:SHORT_SHA) | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      - name: Install Linux build dependencies
+        if: ${{ startsWith(matrix.os, 'ubuntu-') }}
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r build_configs/linux/requirements.txt
+      - name: Install macOS build dependencies
+        if: ${{ startsWith(matrix.os, 'macos-') }}
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r build_configs/linux/requirements.txt
+      - name: Install Windows build dependencies
+        if: ${{ startsWith(matrix.os, 'windows-') }}
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r build_configs/windows/requirements.txt
+      - name: Build with build.spec (Linux amd64)
+        if: ${{ startsWith(matrix.os, 'ubuntu-') }}
+        run: |
+          export BUILD_FILE_NAME=staking_deposit-cli-${SHORT_SHA}-linux-amd64
+          echo "BUILD_FILE_NAME=${BUILD_FILE_NAME}" >> "$GITHUB_ENV"
+          mkdir ${BUILD_FILE_NAME}
+          pyinstaller --distpath ./${BUILD_FILE_NAME} ./build_configs/linux/build.spec
+      - name: Build with build.spec (macOS amd64)
+        if: ${{ matrix.os == 'macos-12' }}
+        run: |
+          export BUILD_FILE_NAME=staking_deposit-cli-${SHORT_SHA}-darwin-amd64
+          echo "BUILD_FILE_NAME=${BUILD_FILE_NAME}" >> "$GITHUB_ENV"
+          mkdir ${BUILD_FILE_NAME}
+          pyinstaller --distpath ./${BUILD_FILE_NAME} ./build_configs/macos/build.spec
+      - name: Build with build.spec (macOS arm64)
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: |
+          export BUILD_FILE_NAME=staking_deposit-cli-${SHORT_SHA}-darwin-arm64
+          echo "BUILD_FILE_NAME=${BUILD_FILE_NAME}" >> "$GITHUB_ENV"
+          mkdir ${BUILD_FILE_NAME}
+          pyinstaller --distpath ./${BUILD_FILE_NAME} ./build_configs/macos/build.spec
+      - name: Build with build.spec (Windows amd64)
+        if: ${{ startsWith(matrix.os, 'windows-') }}
+        run: |
+          $env:BUILD_FILE_NAME = ("staking_deposit-cli-" + $env:SHORT_SHA + "-windows-amd64")
+          echo ("BUILD_FILE_NAME=" + $env:BUILD_FILE_NAME) | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          mkdir $env:BUILD_FILE_NAME
+          $env:BUILD_FILE_NAME_PATH = (".\" + $env:BUILD_FILE_NAME)
+          echo ("BUILD_FILE_NAME_PATH=" + $env:BUILD_FILE_NAME_PATH) | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          pyinstaller --distpath $env:BUILD_FILE_NAME .\build_configs\windows\build.spec
+      - name: Install coreutils (macOS)
+        if: ${{ startsWith(matrix.os, 'macos-') }}
+        run: |
+          brew install coreutils
+      - name: Compress the file (Linux & macOS)
+        if: ${{ startsWith(matrix.os, 'ubuntu-') || startsWith(matrix.os, 'macos-') }}
+        run: |
+          tar -zcvf ${BUILD_FILE_NAME}.tar.gz ./${BUILD_FILE_NAME}
+          mkdir -p output/artifacts
+          cp ${BUILD_FILE_NAME}.tar.gz output/artifacts
+          sha256sum ${BUILD_FILE_NAME}.tar.gz | head -c 64 > output/artifacts/${BUILD_FILE_NAME}.sha256
+      - name: Compress the file (Windows)
+        if: ${{ startsWith(matrix.os, 'windows-') }}
+        run: |
+          $env:ZIP_FILE_NAME = ($env:BUILD_FILE_NAME + ".zip")
+          echo ("ZIP_FILE_NAME=" + $env:ZIP_FILE_NAME) | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Compress-Archive -Path $env:BUILD_FILE_NAME_PATH -DestinationPath $env:ZIP_FILE_NAME
+          mkdir output\artifacts
+          copy $env:ZIP_FILE_NAME output\artifacts
+          $env:CHECKSUM_FILE_NAME_PATH = ("output\artifacts\" + $env:BUILD_FILE_NAME + ".sha256")
+          certUtil -hashfile $env:ZIP_FILE_NAME SHA256 | findstr /i /v "SHA256" | findstr /i /v "CertUtil" > $env:CHECKSUM_FILE_NAME_PATH
+      - name: Archive production artifacts (Linux & macOS)
+        if: ${{ startsWith(matrix.os, 'ubuntu-') || startsWith(matrix.os, 'macos-') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: binary-${{ matrix.os }}-${{ github.sha }}-${{ github.run_id }}
+          path: output/artifacts
+      - name: Archive production artifacts (Windows)
+        if: ${{ startsWith(matrix.os, 'windows-') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: binary-${{ matrix.os }}-${{ github.sha }}-${{ github.run_id }}
+          path: output\artifacts

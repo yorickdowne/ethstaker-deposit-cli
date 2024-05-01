@@ -1,14 +1,19 @@
 # -*- mode: python ; coding: utf-8 -*-
+from PyInstaller.utils.hooks import copy_metadata
+
+datas = [
+    ('../../staking_deposit/key_handling/key_derivation/word_lists/*.txt', './staking_deposit/key_handling/key_derivation/word_lists/'),
+    ('../../staking_deposit/intl', './staking_deposit/intl'),
+]
+datas += copy_metadata('py_ecc')
+datas += copy_metadata('ssz')
 
 block_cipher = None
 
 
 a = Analysis(['../../staking_deposit/deposit.py'],
-             binaries=None,
-             datas=[
-                 ('../../staking_deposit/key_handling/key_derivation/word_lists/*.txt', './staking_deposit/key_handling/key_derivation/word_lists/'),
-                 ('../../staking_deposit/intl', './staking_deposit/intl'),
-             ],
+             binaries=[],
+             datas=datas,
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],

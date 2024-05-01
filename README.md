@@ -211,7 +211,6 @@ Install the dependencies:
 
 ```sh
 pip3 install -r requirements.txt
-python3 setup.py install
 ```
 
 Or use the helper script:
@@ -283,7 +282,6 @@ source venv/bin/activate
 and install the dependencies:
 
 ```sh
-python3 setup.py install
 pip3 install -r requirements.txt
 ```
 
@@ -292,23 +290,23 @@ pip3 install -r requirements.txt
 Run one of the following command to enter the interactive CLI:
 
 ```sh
-python3 ./staking_deposit/deposit.py new-mnemonic
+python3 -m staking_deposit new-mnemonic
 ```
 
 or
 
 ```sh
-python3 ./staking_deposit/deposit.py existing-mnemonic
+python3 -m staking_deposit existing-mnemonic
 ```
 
 You can also run the tool with optional arguments:
 
 ```sh
-python3 ./staking_deposit/deposit.py new-mnemonic --num_validators=<NUM_VALIDATORS> --mnemonic_language=english --chain=<CHAIN_NAME> --folder=<YOUR_FOLDER_PATH>
+python3 -m staking_deposit new-mnemonic --num_validators=<NUM_VALIDATORS> --mnemonic_language=english --chain=<CHAIN_NAME> --folder=<YOUR_FOLDER_PATH>
 ```
 
 ```sh
-python3 ./staking_deposit/deposit.py existing-mnemonic --num_validators=<NUM_VALIDATORS> --validator_start_index=<START_INDEX> --chain=<CHAIN_NAME> --folder=<YOUR_FOLDER_PATH>
+python3 -m staking_deposit existing-mnemonic --num_validators=<NUM_VALIDATORS> --validator_start_index=<START_INDEX> --chain=<CHAIN_NAME> --folder=<YOUR_FOLDER_PATH>
 ```
 
 ###### Language Argument
@@ -425,7 +423,6 @@ Install the dependencies:
 
 ```sh
 pip3 install -r requirements.txt
-python setup.py install
 ```
 
 Or use the helper script:
@@ -495,7 +492,6 @@ virtualenv venv
 and install the dependencies:
 
 ```cmd
-python setup.py install
 pip3 install -r requirements.txt
 ```
 
@@ -504,23 +500,23 @@ pip3 install -r requirements.txt
 Run one of the following command to enter the interactive CLI:
 
 ```cmd
-python .\staking_deposit\deposit.py new-mnemonic
+python -m staking_deposit new-mnemonic
 ```
 
 or
 
 ```cmd
-python .\staking_deposit\deposit.py existing-mnemonic
+python -m staking_deposit existing-mnemonic
 ```
 
 You can also run the tool with optional arguments:
 
 ```cmd
-python .\staking_deposit\deposit.py new-mnemonic --num_validators=<NUM_VALIDATORS> --mnemonic_language=english --chain=<CHAIN_NAME> --folder=<YOUR_FOLDER_PATH>
+python -m staking_deposit new-mnemonic --num_validators=<NUM_VALIDATORS> --mnemonic_language=english --chain=<CHAIN_NAME> --folder=<YOUR_FOLDER_PATH>
 ```
 
 ```cmd
-python .\staking_deposit\deposit.pyexisting-mnemonic --num_validators=<NUM_VALIDATORS> --validator_start_index=<START_INDEX> --chain=<CHAIN_NAME> --folder=<YOUR_FOLDER_PATH>
+python -m staking_deposit existing-mnemonic --num_validators=<NUM_VALIDATORS> --validator_start_index=<START_INDEX> --chain=<CHAIN_NAME> --folder=<YOUR_FOLDER_PATH>
 ```
 
 ###### Language Argument
@@ -543,7 +539,6 @@ See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-exe
 
 ```sh
 python3 -m pip install -r requirements.txt
-python3 setup.py install
 ```
 
 ### Install testing requirements
@@ -555,7 +550,13 @@ python3 -m pip install -r requirements_test.txt
 ### Run tests
 
 ```sh
-python3 -m pytest .
+python3 -m pytest tests
+```
+
+### Run the app
+
+```sh
+python3 -m staking_deposit [OPTIONS] COMMAND [ARGS]
 ```
 
 ### Building Binaries
