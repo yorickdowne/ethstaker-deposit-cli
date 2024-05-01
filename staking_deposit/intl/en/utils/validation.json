@@ -17,7 +17,7 @@
         "msg_ECDSA_hex_addr_withdrawal": "**[Warning] you are setting an Eth1 address as your withdrawal address. Please ensure that you have control over this address.**"
     },
     "validate_bls_withdrawal_credentials": {
-        "err_is_already_eth1_form": "The given withdrawal credentials is already in ETH1_ADDRESS_WITHDRAWAL_PREFIX form. Have you already set the EL (eth1) withdrawal addresss?",
+        "err_is_already_eth1_form": "The given withdrawal credentials is already in ETH1_ADDRESS_WITHDRAWAL_PREFIX form. Have you already set the EL (eth1) withdrawal address?",
         "err_not_bls_form": "The given withdrawal credentials is not in BLS_WITHDRAWAL_PREFIX form."
     },
     "validate_bls_withdrawal_credentials_matching": {
@@ -28,9 +28,12 @@
     },
     "normalize_bls_withdrawal_credentials_to_bytes" :{
         "err_incorrect_hex_form": "The given input is not in hexadecimal encoded form."
-
     },
     "normalize_input_list": {
         "err_incorrect_list": "The given input should be a list of the old BLS withdrawal credentials of your validator(s). Split multiple items with whitespaces or commas."
+    },
+    "validate_keystore_file": {
+        "err_file_not_found": "No file was found. Please verify the provided path and try again.",
+        "err_invalid_keystore_file": "The discovered file is not the correct keystore file format. Please verify the provided path is to a keystore file and try again."
     }
 }

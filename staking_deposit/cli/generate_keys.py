@@ -31,9 +31,8 @@ from staking_deposit.utils.intl import (
     load_text,
 )
 from staking_deposit.settings import (
-    ALL_CHAINS,
     MAINNET,
-    PRATER,
+    NON_PRATER_CHAIN_KEYS,
     get_chain_setting,
 )
 
@@ -65,10 +64,10 @@ def generate_keys_arguments_decorator(function: Callable[..., Any]) -> Callable[
         ),
         jit_option(
             callback=captive_prompt_callback(
-                lambda x: closest_match(x, list(ALL_CHAINS.keys())),
+                lambda x: closest_match(x, NON_PRATER_CHAIN_KEYS),
                 choice_prompt_func(
                     lambda: load_text(['chain', 'prompt'], func='generate_keys_arguments_decorator'),
-                    list(ALL_CHAINS.keys())
+                    NON_PRATER_CHAIN_KEYS
                 ),
                 default=MAINNET,
             ),
@@ -77,8 +76,7 @@ def generate_keys_arguments_decorator(function: Callable[..., Any]) -> Callable[
             param_decls='--chain',
             prompt=choice_prompt_func(
                 lambda: load_text(['chain', 'prompt'], func='generate_keys_arguments_decorator'),
-                # Since `prater` is alias of `goerli`, do not show `prater` in the prompt message.
-                list(key for key in ALL_CHAINS.keys() if key != PRATER)
+                NON_PRATER_CHAIN_KEYS
             ),
         ),
         jit_option(

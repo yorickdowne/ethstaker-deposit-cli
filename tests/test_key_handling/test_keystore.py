@@ -19,7 +19,7 @@ test_vector_keystores = [Keystore.from_file(os.path.join(test_vector_folder, f))
 def test_json_serialization() -> None:
     for keystore, keystore_json_file in zip(test_vector_keystores, test_vector_files):
         keystore_json_path = os.path.join(test_vector_folder, keystore_json_file)
-        with open(keystore_json_path) as f:
+        with open(keystore_json_path, encoding='utf-8') as f:
             assert json.loads(keystore.as_json()) == json.load(f)
 
 

@@ -12,14 +12,18 @@ from eth_utils import is_hex_address, is_checksum_address, to_normalized_address
 from py_ecc.bls import G2ProofOfPossession as bls
 
 from staking_deposit.exceptions import ValidationError
+from staking_deposit.key_handling.keystore import Keystore
 from staking_deposit.utils.intl import load_text
 from staking_deposit.utils.ssz import (
     BLSToExecutionChange,
     DepositData,
     DepositMessage,
+    SignedVoluntaryExit,
+    VoluntaryExit,
     compute_bls_to_execution_change_domain,
     compute_deposit_domain,
     compute_signing_root,
+    compute_voluntary_exit_domain,
 )
 from staking_deposit.credentials import (
     Credential,
@@ -42,7 +46,7 @@ def verify_deposit_data_json(filefolder: str, credentials: Sequence[Credential])
     """
     Validate every deposit found in the deposit-data JSON file folder.
     """
-    with open(filefolder, 'r') as f:
+    with open(filefolder, 'r', encoding='utf-8') as f:
         deposit_json = json.load(f)
         with click.progressbar(deposit_json, label=load_text(['msg_deposit_verification']),
                                show_percent=False, show_pos=True) as deposits:
@@ -140,6 +144,7 @@ def validate_eth1_withdrawal_address(cts: click.Context, param: Any, address: st
     click.echo('\n%s\n' % load_text(['msg_ECDSA_hex_addr_withdrawal']))
     return normalized_address
 
+
 #
 # BLSToExecutionChange
 #
@@ -154,7 +159,7 @@ def verify_bls_to_execution_change_json(filefolder: str,
     """
     Validate every BLSToExecutionChange found in the bls_to_execution_change JSON file folder.
     """
-    with open(filefolder, 'r') as f:
+    with open(filefolder, 'r', encoding='utf-8') as f:
         btec_json = json.load(f)
         with click.progressbar(btec_json, label=load_text(['msg_bls_to_execution_change_verification']),
                                show_percent=False, show_pos=True) as btecs:
@@ -260,11 +265,55 @@ def validate_bls_withdrawal_credentials_list(input_bls_withdrawal_credentials_li
 
 
 def validate_validator_indices(input_validator_indices: str) -> Sequence[int]:
-
     normalized_list = normalize_input_list(input_validator_indices)
-    return [validate_int_range(int(index), 0, 2**32) for index in normalized_list]
+    return [validate_int_range(index, 0, 2**32) for index in normalized_list]
 
 
 def validate_bls_withdrawal_credentials_matching(bls_withdrawal_credentials: bytes, credential: Credential) -> None:
     if bls_withdrawal_credentials[1:] != SHA256(credential.withdrawal_pk)[1:]:
         raise ValidationError(load_text(['err_not_matching']) + '\n')
+
+
+#
+# Exit Message Generation
+#
+
+
+def validate_keystore_file(file_path: str) -> Keystore:
+    try:
+        saved_keystore = Keystore.from_file(file_path)
+    except FileNotFoundError:
+        # Required as captive_prompt_callback does not utilize click type argument for validation
+        raise ValidationError(load_text(['err_file_not_found']) + '\n')
+    except Exception:
+        raise ValidationError(load_text(['err_invalid_keystore_file']) + '\n')
+    return saved_keystore
+
+
+def verify_signed_exit_json(file_folder: str, pubkey: str, chain_settings: BaseChainSetting) -> bool:
+    with open(file_folder, 'r', encoding='utf-8') as f:
+        deposit_json: SignedVoluntaryExit = json.load(f)
+        signature = deposit_json["signature"]
+        message = deposit_json["message"]
+        return validate_signed_exit(message["validator_index"], message["epoch"], signature, pubkey, chain_settings)
+
+
+def validate_signed_exit(validator_index: str,
+                         epoch: str,
+                         signature: str,
+                         pubkey: str,
+                         chain_settings: BaseChainSetting) -> bool:
+    bls_pubkey = BLSPubkey(bytes.fromhex(pubkey))
+    bls_signature = BLSSignature(decode_hex(signature))
+    message = VoluntaryExit(  # type: ignore[no-untyped-call]
+        epoch=int(epoch),
+        validator_index=int(validator_index)
+    )
+
+    domain = compute_voluntary_exit_domain(
+        fork_version=chain_settings.EXIT_FORK_VERSION,
+        genesis_validators_root=chain_settings.GENESIS_VALIDATORS_ROOT
+    )
+
+    signing_root = compute_signing_root(message, domain)
+    return bls.Verify(bls_pubkey, signing_root, bls_signature)

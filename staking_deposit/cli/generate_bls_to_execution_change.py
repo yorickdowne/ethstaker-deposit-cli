@@ -34,9 +34,8 @@ from staking_deposit.utils.intl import (
     load_text,
 )
 from staking_deposit.settings import (
-    ALL_CHAINS,
     MAINNET,
-    PRATER,
+    NON_PRATER_CHAIN_KEYS,
     get_chain_setting,
     get_devnet_chain_setting,
 )
@@ -63,10 +62,10 @@ FUNC_NAME = 'generate_bls_to_execution_change'
 )
 @jit_option(
     callback=captive_prompt_callback(
-        lambda x: closest_match(x, list(ALL_CHAINS.keys())),
+        lambda x: closest_match(x, NON_PRATER_CHAIN_KEYS),
         choice_prompt_func(
             lambda: load_text(['arg_chain', 'prompt'], func=FUNC_NAME),
-            list(ALL_CHAINS.keys())
+            NON_PRATER_CHAIN_KEYS
         ),
     ),
     default=MAINNET,
@@ -74,8 +73,7 @@ FUNC_NAME = 'generate_bls_to_execution_change'
     param_decls='--chain',
     prompt=choice_prompt_func(
         lambda: load_text(['arg_chain', 'prompt'], func=FUNC_NAME),
-        # Since `prater` is alias of `goerli`, do not show `prater` in the prompt message.
-        list(key for key in ALL_CHAINS.keys() if key != PRATER)
+        NON_PRATER_CHAIN_KEYS
     ),
 )
 @load_mnemonic_arguments_decorator
@@ -155,6 +153,7 @@ def generate_bls_to_execution_change(
         chain_setting = get_devnet_chain_setting(
             network_name=devnet_chain_setting_dict['network_name'],
             genesis_fork_version=devnet_chain_setting_dict['genesis_fork_version'],
+            exit_fork_version=devnet_chain_setting_dict['exit_fork_version'],
             genesis_validator_root=devnet_chain_setting_dict['genesis_validator_root'],
         )
 

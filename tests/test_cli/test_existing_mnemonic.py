@@ -30,7 +30,7 @@ def test_existing_mnemonic_bls_withdrawal() -> None:
         'existing-mnemonic',
         '--eth1_withdrawal_address', '',
         '--folder', my_folder_path,
-        '--mnemonic-password', 'TREZOR',
+        '--mnemonic_password', 'TREZOR',
     ]
     result = runner.invoke(cli, arguments, input=data)
 
@@ -73,7 +73,7 @@ def test_existing_mnemonic_eth1_address_withdrawal() -> None:
         '--language', 'english',
         'existing-mnemonic',
         '--folder', my_folder_path,
-        '--mnemonic-password', 'TREZOR',
+        '--mnemonic_password', 'TREZOR',
     ]
     result = runner.invoke(cli, arguments, input=data)
 
@@ -84,7 +84,7 @@ def test_existing_mnemonic_eth1_address_withdrawal() -> None:
     _, _, key_files = next(os.walk(validator_keys_folder_path))
 
     deposit_file = [key_file for key_file in key_files if key_file.startswith('deposit_data')][0]
-    with open(validator_keys_folder_path + '/' + deposit_file, 'r') as f:
+    with open(validator_keys_folder_path + '/' + deposit_file, 'r', encoding='utf-8') as f:
         deposits_dict = json.load(f)
     for deposit in deposits_dict:
         withdrawal_credentials = bytes.fromhex(deposit['withdrawal_credentials'])
@@ -131,7 +131,7 @@ def test_existing_mnemonic_eth1_address_withdrawal_bad_checksum() -> None:
         '--language', 'english',
         'existing-mnemonic',
         '--folder', my_folder_path,
-        '--mnemonic-password', 'TREZOR',
+        '--mnemonic_password', 'TREZOR',
     ]
     result = runner.invoke(cli, arguments, input=data)
 
@@ -142,7 +142,7 @@ def test_existing_mnemonic_eth1_address_withdrawal_bad_checksum() -> None:
     _, _, key_files = next(os.walk(validator_keys_folder_path))
 
     deposit_file = [key_file for key_file in key_files if key_file.startswith('deposit_data')][0]
-    with open(validator_keys_folder_path + '/' + deposit_file, 'r') as f:
+    with open(validator_keys_folder_path + '/' + deposit_file, 'r', encoding='utf-8') as f:
         deposits_dict = json.load(f)
     for deposit in deposits_dict:
         withdrawal_credentials = bytes.fromhex(deposit['withdrawal_credentials'])
@@ -189,7 +189,7 @@ async def test_script() -> None:
         'existing-mnemonic',
         '--num_validators', '1',
         '--mnemonic="abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"',
-        '--mnemonic-password', 'TREZOR',
+        '--mnemonic_password', 'TREZOR',
         '--validator_start_index', '1',
         '--chain', 'mainnet',
         '--keystore_password', 'MyPassword',
@@ -237,7 +237,7 @@ async def test_script_abbreviated_mnemonic() -> None:
         'existing-mnemonic',
         '--num_validators', '1',
         '--mnemonic="aban aban aban aban aban aban aban aban aban aban aban abou"',
-        '--mnemonic-password', 'TREZOR',
+        '--mnemonic_password', 'TREZOR',
         '--validator_start_index', '1',
         '--chain', 'mainnet',
         '--keystore_password', 'MyPassword',

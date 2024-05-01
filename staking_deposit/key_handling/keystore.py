@@ -113,7 +113,7 @@ class Keystore(BytesDataclass):
 
     @classmethod
     def from_file(cls, path: str) -> 'Keystore':
-        with open(path, 'r') as f:
+        with open(path, 'r', encoding='utf-8') as f:
             return cls.from_json(json.load(f))
 
     @staticmethod

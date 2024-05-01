@@ -10,6 +10,7 @@ from eth_utils import to_canonical_address
 from py_ecc.bls import G2ProofOfPossession as bls
 
 from staking_deposit.exceptions import ValidationError
+from staking_deposit.exit_transaction import exit_transaction_generation, export_exit_transaction_json
 from staking_deposit.key_handling.key_derivation.path import mnemonic_and_path_to_key
 from staking_deposit.key_handling.keystore import (
     Keystore,
@@ -209,6 +210,18 @@ class Credential:
 
         result_dict.update({'metadata': metadata})
         return result_dict
+
+    def save_exit_transaction(self, validator_index: int, epoch: int, folder: str) -> str:
+        signing_key = self.signing_sk
+
+        signed_voluntary_exit = exit_transaction_generation(
+            chain_settings=self.chain_setting,
+            signing_key=signing_key,
+            validator_index=validator_index,
+            epoch=epoch
+        )
+
+        return export_exit_transaction_json(folder=folder, signed_exit=signed_voluntary_exit)
 
 
 class CredentialList:

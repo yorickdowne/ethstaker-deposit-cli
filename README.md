@@ -5,75 +5,76 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [staking-deposit-cli](#staking-deposit-cli)
-  - [Introduction](#introduction)
-  - [Tutorial for users](#tutorial-for-users)
-    - [Build requirements](#build-requirements)
-    - [For Linux or MacOS users](#for-linux-or-macos-users)
-      - [File Permissions](#file-permissions)
-      - [Option 1. Download binary executable file](#option-1-download-binary-executable-file)
-        - [Step 1. Installation](#step-1-installation)
-        - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json)
-          - [`language` Argument](#language-argument)
-          - [`--non_interactive` flag](#--non_interactive-flag)
-          - [Commands](#commands)
-          - [`new-mnemonic` Arguments](#new-mnemonic-arguments)
-          - [`existing-mnemonic` Arguments](#existing-mnemonic-arguments)
-          - [Successful message](#successful-message)
-          - [`generate-bls-to-execution-change` Arguments](#generate-bls-to-execution-change-arguments)
-      - [Option 2. Build `deposit-cli` with native Python](#option-2-build-deposit-cli-with-native-python)
-        - [Step 0. Python version checking](#step-0-python-version-checking)
-        - [Step 1. Installation](#step-1-installation-1)
-        - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-1)
-          - [Language Argument](#language-argument-1)
-          - [Commands](#commands-1)
-          - [Arguments](#arguments)
-          - [Successful message](#successful-message-1)
-      - [Option 3. Build `deposit-cli` with `virtualenv`](#option-3-build-deposit-cli-with-virtualenv)
-        - [Step 0. Python version checking](#step-0-python-version-checking-1)
-        - [Step 1. Installation](#step-1-installation-2)
-        - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-2)
-          - [Language Argument](#language-argument-2)
-          - [Commands](#commands-2)
-          - [Arguments](#arguments-1)
-      - [Option 4. Use Docker image](#option-4-use-docker-image)
-        - [Step 1. Build the docker image](#step-1-build-the-docker-image)
-        - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-3)
-          - [Arguments](#arguments-2)
-          - [Successful message](#successful-message-2)
-    - [For Windows users](#for-windows-users)
-      - [Option 1. Download binary executable file](#option-1-download-binary-executable-file-1)
-        - [Step 1. Installation](#step-1-installation-3)
-        - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-4)
-          - [Language Argument](#language-argument-3)
-          - [Commands](#commands-3)
-          - [Arguments](#arguments-3)
-      - [Option 2. Build `deposit-cli` with native Python](#option-2-build-deposit-cli-with-native-python-1)
-        - [Step 0. Python version checking](#step-0-python-version-checking-2)
-        - [Step 1. Installation](#step-1-installation-4)
-        - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-5)
-          - [Language Argument](#language-argument-4)
-          - [Commands](#commands-4)
-          - [Arguments](#arguments-4)
-      - [Option 3. Build `deposit-cli` with `virtualenv`](#option-3-build-deposit-cli-with-virtualenv-1)
-        - [Step 0. Python version checking](#step-0-python-version-checking-3)
-        - [Step 1. Installation](#step-1-installation-5)
-        - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-6)
-          - [Language Argument](#language-argument-5)
-          - [Commands](#commands-5)
-          - [Arguments](#arguments-5)
-  - [Development](#development)
-    - [Install basic requirements](#install-basic-requirements)
-    - [Install testing requirements](#install-testing-requirements)
-    - [Run tests](#run-tests)
-    - [Building Binaries](#building-binaries)
-        - [Mac M1 Binaries](#mac-m1-binaries)
+- [Introduction](#introduction)
+- [Tutorial for users](#tutorial-for-users)
+  - [Build requirements](#build-requirements)
+  - [For Linux or MacOS users](#for-linux-or-macos-users)
+    - [File Permissions](#file-permissions)
+    - [Option 1. Download binary executable file](#option-1-download-binary-executable-file)
+      - [Step 1. Installation](#step-1-installation)
+      - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json)
+        - [`language` Argument](#language-argument)
+        - [`--non_interactive` flag](#--non_interactive-flag)
+        - [Commands](#commands)
+        - [`new-mnemonic` Arguments](#new-mnemonic-arguments)
+        - [`existing-mnemonic` Arguments](#existing-mnemonic-arguments)
+        - [Successful message](#successful-message)
+        - [`generate-bls-to-execution-change` Arguments](#generate-bls-to-execution-change-arguments)
+        - [`exit-transaction-keystore` Arguments](#exit-transaction-keystore-arguments)
+        - [`exit-transaction-mnemonic` Arguments](#exit-transaction-mnemonic-arguments)
+    - [Option 2. Build `deposit-cli` with native Python](#option-2-build-deposit-cli-with-native-python)
+      - [Step 0. Python version checking](#step-0-python-version-checking)
+      - [Step 1. Installation](#step-1-installation-1)
+      - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-1)
+        - [Language Argument](#language-argument)
+        - [Commands](#commands-1)
+        - [Arguments](#arguments)
+        - [Successful message](#successful-message-1)
+    - [Option 3. Build `deposit-cli` with `virtualenv`](#option-3-build-deposit-cli-with-virtualenv)
+      - [Step 0. Python version checking](#step-0-python-version-checking-1)
+      - [Step 1. Installation](#step-1-installation-2)
+      - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-2)
+        - [Language Argument](#language-argument-1)
+        - [Commands](#commands-2)
+        - [Arguments](#arguments-1)
+    - [Option 4. Use Docker image](#option-4-use-docker-image)
+      - [Step 1. Build the docker image](#step-1-build-the-docker-image)
+      - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-3)
+        - [Arguments](#arguments-2)
+        - [Successful message](#successful-message-2)
+  - [For Windows users](#for-windows-users)
+    - [Option 1. Download binary executable file](#option-1-download-binary-executable-file-1)
+      - [Step 1. Installation](#step-1-installation-3)
+      - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-4)
+        - [Language Argument](#language-argument-2)
+        - [Commands](#commands-3)
+        - [Arguments](#arguments-3)
+    - [Option 2. Build `deposit-cli` with native Python](#option-2-build-deposit-cli-with-native-python-1)
+      - [Step 0. Python version checking](#step-0-python-version-checking-2)
+      - [Step 1. Installation](#step-1-installation-4)
+      - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-5)
+        - [Language Argument](#language-argument-3)
+        - [Commands](#commands-4)
+        - [Arguments](#arguments-4)
+    - [Option 3. Build `deposit-cli` with `virtualenv`](#option-3-build-deposit-cli-with-virtualenv-1)
+      - [Step 0. Python version checking](#step-0-python-version-checking-3)
+      - [Step 1. Installation](#step-1-installation-5)
+      - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-6)
+        - [Language Argument](#language-argument-4)
+        - [Commands](#commands-5)
+        - [Arguments](#arguments-5)
+- [Development](#development)
+  - [Install basic requirements](#install-basic-requirements)
+  - [Install testing requirements](#install-testing-requirements)
+  - [Run tests](#run-tests)
+  - [Building Binaries](#building-binaries)
+      - [Mac M1 Binaries](#mac-m1-binaries)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Introduction
 
-`deposit-cli` is a tool for creating [EIP-2335 format](https://eips.ethereum.org/EIPS/eip-2335) BLS12-381 keystores and a corresponding `deposit_data*.json` file for [Ethereum Staking Launchpad](https://github.com/ethereum/staking-launchpad).
+`deposit-cli` is a tool for creating [EIP-2335 format](https://eips.ethereum.org/EIPS/eip-2335) BLS12-381 keystores and a corresponding `deposit_data*.json` file for [Ethereum Staking Launchpad](https://github.com/ethereum/staking-launchpad). One can also provide a keystore file to generate a `signed_exit_transaction*.json` file to be broadcast at a later date to exit a validator.
 
 - **Warning: Please generate your keystores on your own safe, completely offline device.**
 - **Warning: Please backup your mnemonic, keystores, and password securely.**
@@ -179,7 +180,7 @@ Success!
 Your keys can be found at: <YOUR_FOLDER_PATH>
 ```
 
-###### `generate-bls-to-execution-change` Arguments 
+###### `generate-bls-to-execution-change` Arguments
 
 You can use `bls-to-execution-change --help` to see all arguments. Note that if there are missing arguments that the CLI needs, it will ask you for them.
 
@@ -193,7 +194,34 @@ You can use `bls-to-execution-change --help` to see all arguments. Note that if 
 | `--validator_indices` | String of integer(s) | A list of the chosen validator index number(s) as identified on the beacon chain. Split multiple items with whitespaces or commas. |
 | `--bls_withdrawal_credentials_list` | String of hexstring(s). | A list of the old BLS withdrawal credentials of the given validator(s). It is for confirming you are using the correct keys. Split multiple items with whitespaces or commas. |
 | `--execution_address` (or `--eth1_withdrawal_address`) | String. Eth1 address in hexadecimal encoded form | If this field is set and valid, the given Eth1 address will be used to create the withdrawal credentials. Otherwise, it will generate withdrawal credentials with the mnemonic-derived withdrawal public key in [ERC-2334 format](https://eips.ethereum.org/EIPS/eip-2334#eth2-specific-parameters). |
-| `--devnet_chain_setting` | String. JSON string `'{"network_name": "<NETWORK_NAME>", "genesis_fork_version": "<GENESIS_FORK_VERSION>", "genesis_validator_root": "<GENESIS_VALIDATOR_ROOT>"}'` | The custom chain setting of a devnet or testnet. Note that it will override your `--chain` choice. |
+| `--devnet_chain_setting` | String. JSON string `'{"network_name": "<NETWORK_NAME>", "genesis_fork_version": "<GENESIS_FORK_VERSION>", "exit_fork_version": "<EXIT_FORK_VERSION>", "genesis_validator_root": "<GENESIS_VALIDATOR_ROOT>"}'` | The custom chain setting of a devnet or testnet. Note that it will override your `--chain` choice. |
+
+###### `exit-transaction-keystore` Arguments
+
+You can use `exit-transaction-keystore --help` to see all arguments. Note that if there are missing arguments that the CLI needs, it will ask you for them.
+
+| Argument | Type | Description |
+| -------- | -------- | -------- |
+| `--chain` | String. `mainnet` by default | The chain setting for the signing domain. |
+| `--keystore` | File | The keystore file associating with the validator you wish to exit. |
+| `--keystore_password` | String | The password that is used to encrypt the provided keystore. Note: It's not your mnemonic password. |
+| `--validator_index` | Integer | The validator index corresponding to the provided keystore. |
+| `--epoch` | Optional integer. 0 by default | The epoch of when the exit transaction will be valid. The transaction will always be valid by default. |
+| `--output_folder` | String. Pointing to `./exit_transaction` by default | The folder path for the `signed_exit_transaction-*` JSON file |
+
+###### `exit-transaction-mnemonic` Arguments
+
+You can use `exit-transaction-mnemonic --help` to see all arguments. Note that if there are missing arguments that the CLI needs, it will ask you for them.
+
+| Argument | Type | Description |
+| -------- | -------- | -------- |
+| `--chain` | String. `mainnet` by default | The chain setting for the signing domain. |
+| `--mnemonic` | String. mnemonic split by space.  | The mnemonic you used during key generation. |
+| `--mnemonic_password` | Optional string. Empty by default. | The mnemonic password you used in your key generation. Note: It's not the keystore password. |
+| `--validator_start_index` | Non-negative integer | The index position for the keys to start generating keystores in [ERC-2334 format](https://eips.ethereum.org/EIPS/eip-2334#eth2-specific-parameters). |
+| `--validator_indices` | String of integer(s) | A list of the chosen validator index number(s) as identified on the beacon chain. Split multiple items with whitespaces or commas. |
+| `--epoch` | Optional integer. 0 by default | The epoch of when the exit transaction will be valid. The transaction will always be valid by default. |
+| `--output_folder` | String. Pointing to `./exit_transaction` by default | The folder path for the `signed_exit_transaction-*` JSON file |
 
 #### Option 2. Build `deposit-cli` with native Python
 
@@ -252,9 +280,11 @@ See [here](#commands)
 
 ###### Arguments
 
-See [here](#new-mnemonic-arguments) for `new-mnemonic` arguments
-See [here](#existing-mnemonic-arguments) for `existing-mnemonic` arguments
-See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-execution-change` arguments
+See [here](#new-mnemonic-arguments) for `new-mnemonic` arguments\
+See [here](#existing-mnemonic-arguments) for `existing-mnemonic` arguments\
+See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-execution-change` arguments\
+See [here](#exit-transaction-keystore-arguments) for `exit-transaction-keystore` arguments\
+See [here](#exit-transaction-mnemonic-arguments) for `exit-transaction-mnemonic` arguments
 
 ###### Successful message
 See [here](#successful-message)
@@ -319,9 +349,11 @@ See [here](#commands)
 
 ###### Arguments
 
-See [here](#new-mnemonic-arguments) for `new-mnemonic` arguments
-See [here](#existing-mnemonic-arguments) for `existing-mnemonic` arguments
-See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-execution-change` arguments
+See [here](#new-mnemonic-arguments) for `new-mnemonic` arguments\
+See [here](#existing-mnemonic-arguments) for `existing-mnemonic` arguments\
+See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-execution-change` arguments\
+See [here](#exit-transaction-keystore-arguments) for `exit-transaction-keystore` arguments\
+See [here](#exit-transaction-mnemonic-arguments) for `exit-transaction-mnemonic` arguments
 
 #### Option 4. Use Docker image
 
@@ -403,9 +435,11 @@ See [here](#commands)
 
 ###### Arguments
 
-See [here](#new-mnemonic-arguments) for `new-mnemonic` arguments
-See [here](#existing-mnemonic-arguments) for `existing-mnemonic` arguments
-See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-execution-change` arguments
+See [here](#new-mnemonic-arguments) for `new-mnemonic` arguments\
+See [here](#existing-mnemonic-arguments) for `existing-mnemonic` arguments\
+See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-execution-change` arguments\
+See [here](#exit-transaction-keystore-arguments) for `exit-transaction-keystore` arguments\
+See [here](#exit-transaction-mnemonic-arguments) for `exit-transaction-mnemonic` arguments
 
 #### Option 2. Build `deposit-cli` with native Python
 
@@ -529,9 +563,11 @@ See [here](#commands)
 
 ###### Arguments
 
-See [here](#new-mnemonic-arguments) for `new-mnemonic` arguments
-See [here](#existing-mnemonic-arguments) for `existing-mnemonic` arguments
-See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-execution-change` arguments
+See [here](#new-mnemonic-arguments) for `new-mnemonic` arguments\
+See [here](#existing-mnemonic-arguments) for `existing-mnemonic` arguments\
+See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-execution-change` arguments\
+See [here](#exit-transaction-keystore-arguments) for `exit-transaction-keystore` arguments\
+See [here](#exit-transaction-mnemonic-arguments) for `exit-transaction-mnemonic` arguments
 
 ## Development
 

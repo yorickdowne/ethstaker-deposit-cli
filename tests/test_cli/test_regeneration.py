@@ -86,9 +86,9 @@ def test_regeneration(monkeypatch) -> None:
     # Finally:
     # Check the index=1 files have the same pubkey
     assert '1_0_0' in part_1_key_files[1] and '1_0_0' in part_2_key_files[0]
-    with open(Path(validator_keys_folder_path_1 + '/' + part_1_key_files[1])) as f:
+    with open(Path(validator_keys_folder_path_1 + '/' + part_1_key_files[1]), encoding='utf-8') as f:
         keystore_1_1 = json.load(f)
-    with open(Path(validator_keys_folder_path_2 + '/' + part_2_key_files[0])) as f:
+    with open(Path(validator_keys_folder_path_2 + '/' + part_2_key_files[0]), encoding='utf-8') as f:
         keystore_2_0 = json.load(f)
     assert keystore_1_1['pubkey'] == keystore_2_0['pubkey']
     assert keystore_1_1['path'] == keystore_2_0['path']
