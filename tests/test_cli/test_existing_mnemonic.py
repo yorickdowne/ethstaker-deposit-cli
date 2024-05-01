@@ -74,7 +74,6 @@ def test_existing_mnemonic_eth1_address_withdrawal() -> None:
         'existing-mnemonic',
         '--folder', my_folder_path,
         '--mnemonic_password', 'TREZOR',
-        '--eth1_withdrawal_address', eth1_withdrawal_address,
     ]
     result = runner.invoke(cli, arguments, input=data)
 
@@ -133,7 +132,6 @@ def test_existing_mnemonic_eth1_address_withdrawal_bad_checksum() -> None:
         'existing-mnemonic',
         '--folder', my_folder_path,
         '--mnemonic_password', 'TREZOR',
-        '--eth1_withdrawal_address', wrong_eth1_withdrawal_address,
     ]
     result = runner.invoke(cli, arguments, input=data)
 
