@@ -28,6 +28,7 @@ def test_existing_mnemonic_bls_withdrawal() -> None:
     arguments = [
         '--language', 'english',
         'existing-mnemonic',
+        '--eth1_withdrawal_address', '',
         '--folder', my_folder_path,
         '--mnemonic_password', 'TREZOR',
     ]
@@ -65,9 +66,8 @@ def test_existing_mnemonic_eth1_address_withdrawal() -> None:
     eth1_withdrawal_address = '0x00000000219ab540356cBB839Cbe05303d7705Fa'
     inputs = [
         'TREZOR',
-        eth1_withdrawal_address,
         'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about',
-        '2', '2', '5', 'mainnet', 'MyPassword', 'MyPassword']
+        '2', '2', '5', 'mainnet', 'MyPassword', 'MyPassword', eth1_withdrawal_address, eth1_withdrawal_address]
     data = '\n'.join(inputs)
     arguments = [
         '--language', 'english',
@@ -123,9 +123,9 @@ def test_existing_mnemonic_eth1_address_withdrawal_bad_checksum() -> None:
 
     inputs = [
         'TREZOR',
-        correct_eth1_withdrawal_address, correct_eth1_withdrawal_address,
         'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about',
-        '2', '2', '5', 'mainnet', 'MyPassword', 'MyPassword'
+        '2', '2', '5', 'mainnet', 'MyPassword', 'MyPassword',
+        wrong_eth1_withdrawal_address, correct_eth1_withdrawal_address, correct_eth1_withdrawal_address
     ]
     data = '\n'.join(inputs)
     arguments = [
@@ -195,6 +195,7 @@ async def test_script() -> None:
         '--validator_start_index', '1',
         '--chain', 'mainnet',
         '--keystore_password', 'MyPassword',
+        '--eth1_withdrawal_address', '""',
         '--folder', my_folder_path,
     ]
     proc = await asyncio.create_subprocess_shell(
@@ -242,6 +243,7 @@ async def test_script_abbreviated_mnemonic() -> None:
         '--validator_start_index', '1',
         '--chain', 'mainnet',
         '--keystore_password', 'MyPassword',
+        '--eth1_withdrawal_address', '""',
         '--folder', my_folder_path,
     ]
     proc = await asyncio.create_subprocess_shell(

@@ -36,6 +36,7 @@ def check_python_version() -> None:
     callback=captive_prompt_callback(
         lambda language: fuzzy_reverse_dict_lookup(language, INTL_LANG_OPTIONS),
         choice_prompt_func(lambda: 'Please choose your language', get_first_options(INTL_LANG_OPTIONS)),
+        default='English',
     ),
     default='English',
     help='The language you wish to use the CLI in.',
@@ -61,7 +62,11 @@ cli.add_command(exit_transaction_keystore)
 cli.add_command(exit_transaction_mnemonic)
 
 
-if __name__ == '__main__':
+def run() -> None:
     check_python_version()
     print('\n***Using the tool on an offline and secure device is highly recommended to keep your mnemonic safe.***\n')
     cli()
+
+
+if __name__ == '__main__':
+    run()
