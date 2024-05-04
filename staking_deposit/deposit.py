@@ -59,14 +59,20 @@ def check_connectivity() -> None:
     '--non_interactive',
     default=False,
     is_flag=True,
-    help='Disables interactive prompts. Warning: with this flag, there will be no confirmation step(s) to verify the input value(s). Please use it carefully.',  # noqa: E501
+    help=(
+        'Disables interactive prompts. Warning: With this flag, there will be no confirmation step(s) to verify the '
+        'input value(s). Please use it carefully.'
+    ),
     hidden=False,
 )
 @click.option(
     '--ignore_connectivity',
     default=False,
     is_flag=True,
-    help='Disables internet connectivity check.',
+    help=(
+        'Disables internet connectivity check. Warning: It is strongly recommended not to use this tool with internet '
+        'access. Ignoring this check can further the risk of theft and compromise of your generated key material.'
+    ),
     hidden=False,
 )
 def cli(ctx: click.Context, language: str, non_interactive: bool, ignore_connectivity: bool) -> None:
