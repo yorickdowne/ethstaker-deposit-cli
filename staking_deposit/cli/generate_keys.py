@@ -105,6 +105,12 @@ def generate_keys_arguments_decorator(function: Callable[..., Any]) -> Callable[
             param_decls=['--execution_address', '--eth1_withdrawal_address'],
             prompt=lambda: load_text(['arg_execution_address', 'prompt'], func='generate_keys_arguments_decorator'),
         ),
+        jit_option(
+            default=False,
+            is_flag=True,
+            param_decls='--pbkdf2',
+            help='Uses the pbkdf2 encryption method instead of scrypt.',
+        ),
     ]
     for decorator in reversed(decorators):
         function = decorator(function)
@@ -115,7 +121,7 @@ def generate_keys_arguments_decorator(function: Callable[..., Any]) -> Callable[
 @click.pass_context
 def generate_keys(ctx: click.Context, validator_start_index: int,
                   num_validators: int, folder: str, chain: str, keystore_password: str,
-                  execution_address: HexAddress, **kwargs: Any) -> None:
+                  execution_address: HexAddress, pbkdf2: bool, **kwargs: Any) -> None:
     mnemonic = ctx.obj['mnemonic']
     mnemonic_password = ctx.obj['mnemonic_password']
     amounts = [MAX_DEPOSIT_AMOUNT] * num_validators
@@ -134,6 +140,7 @@ def generate_keys(ctx: click.Context, validator_start_index: int,
         chain_setting=chain_setting,
         start_index=validator_start_index,
         hex_eth1_withdrawal_address=execution_address,
+        use_pbkdf2=pbkdf2
     )
     keystore_filefolders = credentials.export_keystores(password=keystore_password, folder=folder)
     deposits_file = credentials.export_deposit_data_json(folder=folder)
