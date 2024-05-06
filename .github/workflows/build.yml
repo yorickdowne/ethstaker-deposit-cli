@@ -91,14 +91,18 @@ jobs:
         run: gpg -K
       - name: Create archive, checksum and GPG signature (Linux & macOS)
         if: ${{ startsWith(matrix.os, 'ubuntu-') || startsWith(matrix.os, 'macos-') }}
+        env:
+          GPG_KEY_ID: $${{ steps.import-gpg-key.outputs.keyid }}
         run: |
           tar -zcvf ${BUILD_FILE_NAME}.tar.gz ./${BUILD_FILE_NAME}
           mkdir -p output/artifacts
           cp ${BUILD_FILE_NAME}.tar.gz output/artifacts
           sha256sum ${BUILD_FILE_NAME}.tar.gz | head -c 64 > output/artifacts/${BUILD_FILE_NAME}.sha256
-          gpg --sign --armor --output output/artifacts/${BUILD_FILE_NAME}.tar.gz.asc --detach-sig ${BUILD_FILE_NAME}.tar.gz
+          gpg --default-key ${GPG_KEY_ID} --sign --armor --output output/artifacts/${BUILD_FILE_NAME}.tar.gz.asc --detach-sig ${BUILD_FILE_NAME}.tar.gz
       - name: Create archive, checksum and GPG signature (Windows)
         if: ${{ startsWith(matrix.os, 'windows-') }}
+        env:
+          GPG_KEY_ID: $${{ steps.import-gpg-key.outputs.keyid }}
         run: |
           $env:ZIP_FILE_NAME = ($env:BUILD_FILE_NAME + ".zip")
           echo ("ZIP_FILE_NAME=" + $env:ZIP_FILE_NAME) | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
@@ -108,7 +112,7 @@ jobs:
           $env:CHECKSUM_FILE_NAME_PATH = ("output\artifacts\" + $env:BUILD_FILE_NAME + ".sha256")
           certUtil -hashfile $env:ZIP_FILE_NAME SHA256 | findstr /i /v "SHA256" | findstr /i /v "CertUtil" > $env:CHECKSUM_FILE_NAME_PATH
           $env:SIGNATURE_FILE_NAME_PATH = ("output\artifacts\" + $env:ZIP_FILE_NAME + ".asc")
-          gpg --sign --armor --output $env:ZIP_FILE_NAME --detach-sig $env:SIGNATURE_FILE_NAME_PATH
+          gpg --default-key $env:GPG_KEY_ID --sign --armor --output $env:ZIP_FILE_NAME --detach-sig $env:SIGNATURE_FILE_NAME_PATH
       - name: Generate artifacts attestation (Linux & macOS)
         if: ${{ startsWith(matrix.os, 'ubuntu-') || startsWith(matrix.os, 'macos-') }}
         uses: actions/attest-build-provenance@v1
