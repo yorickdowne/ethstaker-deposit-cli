@@ -102,12 +102,12 @@ jobs:
         if: ${{ startsWith(matrix.os, 'ubuntu-') || startsWith(matrix.os, 'macos-') }}
         uses: actions/attest-build-provenance@v1
         with:
-          subject-path: output/artifacts
+          subject-path: output/artifacts/*
       - name: Generate artifacts attestation (Windows)
         if: ${{ startsWith(matrix.os, 'windows-') }}
         uses: actions/attest-build-provenance@v1
         with:
-          subject-path: output\artifacts
+          subject-path: output\artifacts\*
       - name: Archive production artifacts (Linux & macOS)
         if: ${{ startsWith(matrix.os, 'ubuntu-') || startsWith(matrix.os, 'macos-') }}
         uses: actions/upload-artifact@v4
