@@ -1,6 +1,6 @@
 import click
+import socket
 import sys
-from urllib.request import urlopen
 
 from staking_deposit.cli.existing_mnemonic import existing_mnemonic
 from staking_deposit.cli.exit_transaction_keystore import exit_transaction_keystore
@@ -35,7 +35,8 @@ def check_connectivity() -> None:
     Checks if there is an internet connection and warns the user if so.
     '''
     try:
-        urlopen('https://www.google.com/', timeout=2)
+        socket.setdefaulttimeout(2)
+        socket.getaddrinfo('icann.org', 80)
         click.pause(load_text(['connectivity_warning']))
     except:  # noqa: E722
         return None
