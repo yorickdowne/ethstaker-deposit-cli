@@ -87,7 +87,7 @@ jobs:
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
-          trust_level: 4
+          trust_level: 5
       - name: List GPG keys
         run: gpg -K
       - name: Create archive, checksum and GPG signature (Linux & macOS)
