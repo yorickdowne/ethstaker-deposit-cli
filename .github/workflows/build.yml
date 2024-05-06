@@ -113,7 +113,7 @@ jobs:
           $env:CHECKSUM_FILE_NAME_PATH = ("output\artifacts\" + $env:BUILD_FILE_NAME + ".sha256")
           certUtil -hashfile $env:ZIP_FILE_NAME SHA256 | findstr /i /v "SHA256" | findstr /i /v "CertUtil" > $env:CHECKSUM_FILE_NAME_PATH
           $env:SIGNATURE_FILE_NAME_PATH = ("output\artifacts\" + $env:ZIP_FILE_NAME + ".asc")
-          gpg --default-key $env:GPG_KEY_ID --sign --armor --output $env:ZIP_FILE_NAME --detach-sig $env:SIGNATURE_FILE_NAME_PATH
+          gpg --default-key $env:GPG_KEY_ID --sign --armor --output $env:SIGNATURE_FILE_NAME_PATH --detach-sig $env:ZIP_FILE_NAME
       - name: Generate artifacts attestation (Linux & macOS)
         if: ${{ startsWith(matrix.os, 'ubuntu-') || startsWith(matrix.os, 'macos-') }}
         uses: actions/attest-build-provenance@v1
