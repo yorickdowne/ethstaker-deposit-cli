@@ -36,6 +36,7 @@ def test_regeneration(monkeypatch) -> None:
     inputs = ['english', 'english', '2', 'mainnet', my_password, my_password, mock_mnemonic]
     data = '\n'.join(inputs)
     arguments = [
+        '--ignore_connectivity',
         'new-mnemonic',
         '--eth1_withdrawal_address', '',
         '--folder', folder_path_1,
@@ -66,6 +67,7 @@ def test_regeneration(monkeypatch) -> None:
         '1', '1', '2', 'mainnet', 'MyPassword', 'MyPassword']
     data = '\n'.join(inputs)
     arguments = [
+        '--ignore_connectivity',
         'existing-mnemonic',
         '--eth1_withdrawal_address', '',
         '--folder', folder_path_2,

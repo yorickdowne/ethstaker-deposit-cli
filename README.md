@@ -15,6 +15,7 @@
       - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json)
         - [`language` Argument](#language-argument)
         - [`--non_interactive` flag](#--non_interactive-flag)
+        - [`--ignore_connectivity` flag](#--ignore_connectivity-flag)
         - [Commands](#commands)
         - [`new-mnemonic` Arguments](#new-mnemonic-arguments)
         - [`existing-mnemonic` Arguments](#existing-mnemonic-arguments)
@@ -67,6 +68,7 @@
   - [Install basic requirements](#install-basic-requirements)
   - [Install testing requirements](#install-testing-requirements)
   - [Run tests](#run-tests)
+  - [Run the app](#run-the-app)
   - [Building Binaries](#building-binaries)
       - [Mac M1 Binaries](#mac-m1-binaries)
 
@@ -126,11 +128,19 @@ The Launchpad offers many language/internationalization options. If you wish to 
 
 ###### `--non_interactive` flag
 
-**Warning: with this flag, there will be no confirmation step(s) to verify the input value(s). Please use it carefully.**
+**Warning: With this flag, there will be no confirmation step(s) to verify the input value(s). This will also ignore the connectivity check. Please use it carefully.**
 
 | Argument | Type | Description |
 | -------- | -------- | -------- |
 | `--non_interactive` | Flag | Run CLI in non-interactive mode. |
+
+###### `--ignore_connectivity` flag
+
+**Warning: It is strongly recommended not to use this tool with internet access. Ignoring this check can further the risk of theft and compromise of your generated key material.**
+
+| Argument | Type | Description |
+| -------- | -------- | -------- |
+| `--ignore_connectivity` | Flag | Skip internet connectivity check and warning. |
 
 ###### Commands
 

@@ -65,6 +65,7 @@ def test_existing_mnemonic_bls_withdrawal_interactive() -> None:
     data = '\n'.join(inputs)
     arguments = [
         '--language', 'english',
+        '--ignore_connectivity',
         'generate-bls-to-execution-change',
         '--bls_to_execution_changes_folder', my_folder_path,
     ]
