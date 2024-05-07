@@ -128,7 +128,7 @@ The Launchpad offers many language/internationalization options. If you wish to 
 
 ###### `--non_interactive` flag
 
-**Warning: With this flag, there will be no confirmation step(s) to verify the input value(s). Please use it carefully.**
+**Warning: With this flag, there will be no confirmation step(s) to verify the input value(s). This will also ignore the connectivity check. Please use it carefully.**
 
 | Argument | Type | Description |
 | -------- | -------- | -------- |

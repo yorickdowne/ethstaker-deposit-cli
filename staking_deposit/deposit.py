@@ -25,7 +25,7 @@ def check_python_version() -> None:
     '''
     Checks that the python version running is sufficient and exits if not.
     '''
-    if sys.version_info < (3, 7):
+    if sys.version_info < (3, 9):
         click.pause(load_text(['err_python_version']))
         sys.exit()
 
@@ -38,7 +38,7 @@ def check_connectivity() -> None:
         socket.setdefaulttimeout(2)
         socket.getaddrinfo('icann.org', 80)
         click.pause(load_text(['connectivity_warning']))
-    except:  # noqa: E722
+    except OSError:
         return None
 
 
@@ -62,7 +62,7 @@ def check_connectivity() -> None:
     is_flag=True,
     help=(
         'Disables interactive prompts. Warning: With this flag, there will be no confirmation step(s) to verify the '
-        'input value(s). Please use it carefully.'
+        'input value(s). This will also ignore the connectivity check. Please use it carefully.'
     ),
     hidden=False,
 )
@@ -77,7 +77,7 @@ def check_connectivity() -> None:
     hidden=False,
 )
 def cli(ctx: click.Context, language: str, non_interactive: bool, ignore_connectivity: bool) -> None:
-    if not ignore_connectivity:
+    if not ignore_connectivity and not non_interactive:
         check_connectivity()
     config.language = language
     config.non_interactive = non_interactive  # Remove interactive commands
