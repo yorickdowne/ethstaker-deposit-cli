@@ -1,6 +1,7 @@
 import click
 import json
 import re
+import concurrent.futures
 from typing import Any, Dict, Sequence
 
 from eth_typing import (
@@ -42,16 +43,34 @@ from staking_deposit.settings import BaseChainSetting
 # Deposit
 #
 
+def _deposit_validator(kwargs: Dict[str, Any]) -> bool:
+    deposit: Dict[str, Any] = kwargs.pop('deposit')
+    credential: Credential = kwargs.pop('credential')
+    return validate_deposit(deposit, credential)
+
+
 def verify_deposit_data_json(filefolder: str, credentials: Sequence[Credential]) -> bool:
     """
     Validate every deposit found in the deposit-data JSON file folder.
     """
+    valid = True
+    deposit_json = []
     with open(filefolder, 'r', encoding='utf-8') as f:
         deposit_json = json.load(f)
-        with click.progressbar(deposit_json, label=load_text(['msg_deposit_verification']),
-                               show_percent=False, show_pos=True) as deposits:
-            return all([validate_deposit(deposit, credential) for deposit, credential in zip(deposits, credentials)])
-    return False
+
+    with click.progressbar(length=len(deposit_json), label=load_text(['msg_deposit_verification']),
+                           show_percent=False, show_pos=True) as bar:
+        kwargs = [{
+            'credential': credential,
+            'deposit': deposit,
+        } for deposit, credential in zip(deposit_json, credentials)]
+
+        with concurrent.futures.ProcessPoolExecutor() as executor:
+            for valid_deposit in executor.map(_deposit_validator, kwargs):
+                valid &= valid_deposit
+                bar.update(1)
+
+    return valid
 
 
 def validate_deposit(deposit_data_dict: Dict[str, Any], credential: Credential) -> bool:
