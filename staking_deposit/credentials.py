@@ -243,6 +243,11 @@ def _keystore_verifier(kwargs: Dict[str, Any]) -> bool:
     return credential.verify_keystore(**kwargs)
 
 
+def _bls_to_execution_change_builder(kwargs: Dict[str, Any]) -> Dict[str, bytes]:
+    credential: Credential = kwargs.pop('credential')
+    return credential.get_bls_to_execution_change_dict(**kwargs)
+
+
 class CredentialList:
     """
     A collection of multiple Credentials, one for each validator.
@@ -269,7 +274,7 @@ class CredentialList:
         return_list: List[Credential] = []
         with click.progressbar(length=num_keys, label=load_text(['msg_key_creation']),
                                show_percent=False, show_pos=True) as bar:
-            kwargs = [{
+            executor_kwargs = [{
                 'mnemonic': mnemonic,
                 'mnemonic_password': mnemonic_password,
                 'index': index,
@@ -279,7 +284,7 @@ class CredentialList:
             } for index in key_indices]
 
             with concurrent.futures.ProcessPoolExecutor() as executor:
-                for credential in executor.map(_credential_builder, kwargs):
+                for credential in executor.map(_credential_builder, executor_kwargs):
                     return_list.append(credential)
                     bar.update(1)
         return cls(return_list)
@@ -288,14 +293,14 @@ class CredentialList:
         return_list: List[str] = []
         with click.progressbar(length=len(self.credentials), label=load_text(['msg_keystore_creation']),
                                show_percent=False, show_pos=True) as bar:
-            kwargs = [{
+            executor_kwargs = [{
                 'credential': credential,
                 'password': password,
                 'folder': folder,
             } for credential in self.credentials]
 
             with concurrent.futures.ProcessPoolExecutor() as executor:
-                for keystore in executor.map(_keystore_exporter, kwargs):
+                for keystore in executor.map(_keystore_exporter, executor_kwargs):
                     return_list.append(keystore)
                     bar.update(1)
         return return_list
@@ -322,24 +327,33 @@ class CredentialList:
         with click.progressbar(length=len(self.credentials),
                                label=load_text(['msg_keystore_verification']),
                                show_percent=False, show_pos=True) as bar:
-            kwargs = [{
+            executor_kwargs = [{
                 'credential': credential,
                 'keystore_filefolder': fileholder,
                 'password': password,
             } for credential, fileholder in zip(self.credentials, keystore_filefolders)]
 
             with concurrent.futures.ProcessPoolExecutor() as executor:
-                for valid_keystore in executor.map(_keystore_verifier, kwargs):
+                for valid_keystore in executor.map(_keystore_verifier, executor_kwargs):
                     valid &= valid_keystore
                     bar.update(1)
 
         return valid
 
     def export_bls_to_execution_change_json(self, folder: str, validator_indices: Sequence[int]) -> str:
-        with click.progressbar(self.credentials, label=load_text(['msg_bls_to_execution_change_creation']),
-                               show_percent=False, show_pos=True) as credentials:
-            bls_to_execution_changes = [cred.get_bls_to_execution_change_dict(validator_indices[i])
-                                        for i, cred in enumerate(credentials)]
+        bls_to_execution_changes = []
+        with click.progressbar(length=len(self.credentials), label=load_text(['msg_bls_to_execution_change_creation']),
+                               show_percent=False, show_pos=True) as bar:
+
+            executor_kwargs = [{
+                'credential': credential,
+                'validator_index': validator_indices[i],
+            } for i, credential in enumerate(self.credentials)]
+
+            with concurrent.futures.ProcessPoolExecutor() as executor:
+                for bls_to_execution_change in executor.map(_bls_to_execution_change_builder, executor_kwargs):
+                    bls_to_execution_changes.append(bls_to_execution_change)
+                    bar.update(1)
 
         filefolder = os.path.join(folder, 'bls_to_execution_change-%i.json' % time.time())
         with open(filefolder, 'w') as f:
