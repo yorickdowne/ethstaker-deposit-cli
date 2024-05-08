@@ -271,7 +271,7 @@ class CredentialList:
             )
         key_indices = range(start_index, start_index + num_keys)
 
-        return_list: List[Credential] = []
+        credentials: List[Credential] = []
         with click.progressbar(length=num_keys, label=load_text(['msg_key_creation']),
                                show_percent=False, show_pos=True) as bar:
             executor_kwargs = [{
@@ -285,12 +285,12 @@ class CredentialList:
 
             with concurrent.futures.ProcessPoolExecutor() as executor:
                 for credential in executor.map(_credential_builder, executor_kwargs):
-                    return_list.append(credential)
+                    credentials.append(credential)
                     bar.update(1)
-        return cls(return_list)
+        return cls(credentials)
 
     def export_keystores(self, password: str, folder: str) -> List[str]:
-        return_list: List[str] = []
+        filefolders: List[str] = []
         with click.progressbar(length=len(self.credentials), label=load_text(['msg_keystore_creation']),
                                show_percent=False, show_pos=True) as bar:
             executor_kwargs = [{
@@ -300,10 +300,10 @@ class CredentialList:
             } for credential in self.credentials]
 
             with concurrent.futures.ProcessPoolExecutor() as executor:
-                for keystore in executor.map(_keystore_exporter, executor_kwargs):
-                    return_list.append(keystore)
+                for filefolder in executor.map(_keystore_exporter, executor_kwargs):
+                    filefolders.append(filefolder)
                     bar.update(1)
-        return return_list
+        return filefolders
 
     def export_deposit_data_json(self, folder: str) -> str:
         deposit_data = []
