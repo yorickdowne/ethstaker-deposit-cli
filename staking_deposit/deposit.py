@@ -92,7 +92,7 @@ cli.add_command(exit_transaction_mnemonic)
 
 
 def run() -> None:
-    freeze_support() # Needed when running under Windows in a frozen bundle
+    freeze_support()  # Needed when running under Windows in a frozen bundle
     check_python_version()
     cli()
 
