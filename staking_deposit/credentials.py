@@ -323,7 +323,7 @@ class CredentialList:
         return filefolder
 
     def verify_keystores(self, keystore_filefolders: List[str], password: str) -> bool:
-        valid = True
+        all_valid_keystores = True
         with click.progressbar(length=len(self.credentials),
                                label=load_text(['msg_keystore_verification']),
                                show_percent=False, show_pos=True) as bar:
@@ -335,10 +335,10 @@ class CredentialList:
 
             with concurrent.futures.ProcessPoolExecutor() as executor:
                 for valid_keystore in executor.map(_keystore_verifier, executor_kwargs):
-                    valid &= valid_keystore
+                    all_valid_keystores &= valid_keystore
                     bar.update(1)
 
-        return valid
+        return all_valid_keystores
 
     def export_bls_to_execution_change_json(self, folder: str, validator_indices: Sequence[int]) -> str:
         bls_to_execution_changes = []

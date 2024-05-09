@@ -53,7 +53,7 @@ def verify_deposit_data_json(filefolder: str, credentials: Sequence[Credential])
     """
     Validate every deposit found in the deposit-data JSON file folder.
     """
-    valid = True
+    all_valid_deposits = True
     deposit_json = []
     with open(filefolder, 'r', encoding='utf-8') as f:
         deposit_json = json.load(f)
@@ -67,10 +67,10 @@ def verify_deposit_data_json(filefolder: str, credentials: Sequence[Credential])
 
         with concurrent.futures.ProcessPoolExecutor() as executor:
             for valid_deposit in executor.map(_deposit_validator, executor_kwargs):
-                valid &= valid_deposit
+                all_valid_deposits &= valid_deposit
                 bar.update(1)
 
-    return valid
+    return all_valid_deposits
 
 
 def validate_deposit(deposit_data_dict: Dict[str, Any], credential: Credential) -> bool:
@@ -185,7 +185,7 @@ def verify_bls_to_execution_change_json(filefolder: str,
     with open(filefolder, 'r', encoding='utf-8') as f:
         btec_json = json.load(f)
 
-    valid = True
+    all_valid_bls_changes = True
     with click.progressbar(length=len(btec_json), label=load_text(['msg_bls_to_execution_change_verification']),
                            show_percent=False, show_pos=True) as bar:
 
@@ -199,10 +199,10 @@ def verify_bls_to_execution_change_json(filefolder: str,
 
         with concurrent.futures.ProcessPoolExecutor() as executor:
             for valid_bls_change in executor.map(_bls_to_execution_change_validator, executor_kwargs):
-                valid &= valid_bls_change
+                all_valid_bls_changes &= valid_bls_change
                 bar.update(1)
 
-    return valid
+    return all_valid_bls_changes
 
 
 def validate_bls_to_execution_change(btec_dict: Dict[str, Any],
