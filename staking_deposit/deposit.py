@@ -1,4 +1,5 @@
 import click
+import socket
 import sys
 
 from staking_deposit.cli.existing_mnemonic import existing_mnemonic
@@ -24,9 +25,21 @@ def check_python_version() -> None:
     '''
     Checks that the python version running is sufficient and exits if not.
     '''
-    if sys.version_info < (3, 7):
+    if sys.version_info < (3, 9):
         click.pause(load_text(['err_python_version']))
         sys.exit()
+
+
+def check_connectivity() -> None:
+    '''
+    Checks if there is an internet connection and warns the user if so.
+    '''
+    try:
+        socket.setdefaulttimeout(2)
+        socket.getaddrinfo('icann.org', 80)
+        click.pause(load_text(['connectivity_warning']))
+    except OSError:
+        return None
 
 
 @click.group()
@@ -47,10 +60,25 @@ def check_python_version() -> None:
     '--non_interactive',
     default=False,
     is_flag=True,
-    help='Disables interactive prompts. Warning: with this flag, there will be no confirmation step(s) to verify the input value(s). Please use it carefully.',  # noqa: E501
+    help=(
+        'Disables interactive prompts. Warning: With this flag, there will be no confirmation step(s) to verify the '
+        'input value(s). This will also ignore the connectivity check. Please use it carefully.'
+    ),
     hidden=False,
 )
-def cli(ctx: click.Context, language: str, non_interactive: bool) -> None:
+@click.option(
+    '--ignore_connectivity',
+    default=False,
+    is_flag=True,
+    help=(
+        'Disables internet connectivity check. Warning: It is strongly recommended not to use this tool with internet '
+        'access. Ignoring this check can further the risk of theft and compromise of your generated key material.'
+    ),
+    hidden=False,
+)
+def cli(ctx: click.Context, language: str, non_interactive: bool, ignore_connectivity: bool) -> None:
+    if not ignore_connectivity and not non_interactive:
+        check_connectivity()
     config.language = language
     config.non_interactive = non_interactive  # Remove interactive commands
 
@@ -64,7 +92,6 @@ cli.add_command(exit_transaction_mnemonic)
 
 def run() -> None:
     check_python_version()
-    print('\n***Using the tool on an offline and secure device is highly recommended to keep your mnemonic safe.***\n')
     cli()
 
 
