@@ -109,7 +109,7 @@ def generate_keys_arguments_decorator(function: Callable[..., Any]) -> Callable[
             default=False,
             is_flag=True,
             param_decls='--pbkdf2',
-            help='Uses the pbkdf2 encryption method instead of scrypt.',
+            help=lambda: load_text(['arg_pbkdf2', 'help'], func='generate_keys_arguments_decorator'),
         ),
     ]
     for decorator in reversed(decorators):
