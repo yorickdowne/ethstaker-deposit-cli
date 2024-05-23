@@ -162,6 +162,7 @@ You can use `new-mnemonic --help` to see all arguments. Note that if there are m
 | `--folder` | String. Pointing to `./validator_keys` by default | The folder path for the keystore(s) and deposit(s) |
 | `--chain` | String. `mainnet` by default | The chain setting for the signing domain. |
 | `--execution_address` (or `--eth1_withdrawal_address`) | String. Eth1 address in hexadecimal encoded form | If this field is set and valid, the given Eth1 address will be used to create the withdrawal credentials. Otherwise, it will generate withdrawal credentials with the mnemonic-derived withdrawal public key in [ERC-2334 format](https://eips.ethereum.org/EIPS/eip-2334#eth2-specific-parameters). |
+| `--pbkdf2` | Flag | Will use pbkdf2 key derivation instead of scrypt for generated keystore files as defined in EIP-2335. This can be a good alternative if you intend to work with a large number of keys. |
 
 ###### `existing-mnemonic` Arguments
 
@@ -174,6 +175,7 @@ You can use `existing-mnemonic --help` to see all arguments. Note that if there 
 | `--folder` | String. Pointing to `./validator_keys` by default | The folder path for the keystore(s) and deposit(s) |
 | `--chain` | String. `mainnet` by default | The chain setting for the signing domain. |
 | `--execution_address` (or `--eth1_withdrawal_address`) | String. Eth1 address in hexadecimal encoded form | If this field is set and valid, the given Eth1 address will be used to create the withdrawal credentials. Otherwise, it will generate withdrawal credentials with the mnemonic-derived withdrawal public key in [ERC-2334 format](https://eips.ethereum.org/EIPS/eip-2334#eth2-specific-parameters). |
+| `--pbkdf2` | Flag | Will use pbkdf2 key derivation instead of scrypt for generated keystore files as defined in EIP-2335. This can be a good alternative if you intend to work with a large number of keys. |
 
 ###### Successful message
 

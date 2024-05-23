@@ -15,6 +15,7 @@ from staking_deposit.exit_transaction import exit_transaction_generation, export
 from staking_deposit.key_handling.key_derivation.path import mnemonic_and_path_to_key
 from staking_deposit.key_handling.keystore import (
     Keystore,
+    Pbkdf2Keystore,
     ScryptKeystore,
 )
 from staking_deposit.settings import DEPOSIT_CLI_VERSION, BaseChainSetting
@@ -50,7 +51,8 @@ class Credential:
     """
     def __init__(self, *, mnemonic: str, mnemonic_password: str,
                  index: int, amount: int, chain_setting: BaseChainSetting,
-                 hex_eth1_withdrawal_address: Optional[HexAddress]):
+                 hex_eth1_withdrawal_address: Optional[HexAddress],
+                 use_pbkdf2: Optional[bool] = False):
         # Set path as EIP-2334 format
         # https://eips.ethereum.org/EIPS/eip-2334
         purpose = '12381'
@@ -66,6 +68,7 @@ class Credential:
         self.amount = amount
         self.chain_setting = chain_setting
         self.hex_eth1_withdrawal_address = hex_eth1_withdrawal_address
+        self.use_pbkdf2 = use_pbkdf2
 
     @property
     def signing_pk(self) -> bytes:
@@ -150,7 +153,10 @@ class Credential:
 
     def signing_keystore(self, password: str) -> Keystore:
         secret = self.signing_sk.to_bytes(32, 'big')
-        return ScryptKeystore.encrypt(secret=secret, password=password, path=self.signing_key_path)
+        if self.use_pbkdf2:
+            return Pbkdf2Keystore.encrypt(secret=secret, password=password, path=self.signing_key_path)
+        else:
+            return ScryptKeystore.encrypt(secret=secret, password=password, path=self.signing_key_path)
 
     def save_signing_keystore(self, password: str, folder: str) -> str:
         keystore = self.signing_keystore(password)
@@ -264,7 +270,8 @@ class CredentialList:
                       amounts: List[int],
                       chain_setting: BaseChainSetting,
                       start_index: int,
-                      hex_eth1_withdrawal_address: Optional[HexAddress]) -> 'CredentialList':
+                      hex_eth1_withdrawal_address: Optional[HexAddress],
+                      use_pbkdf2: Optional[bool] = False) -> 'CredentialList':
         if len(amounts) != num_keys:
             raise ValueError(
                 f"The number of keys ({num_keys}) doesn't equal to the corresponding deposit amounts ({len(amounts)})."
@@ -281,6 +288,7 @@ class CredentialList:
                 'amount': amounts[index - start_index],
                 'chain_setting': chain_setting,
                 'hex_eth1_withdrawal_address': hex_eth1_withdrawal_address,
+                'use_pbkdf2': use_pbkdf2,
             } for index in key_indices]
 
             with concurrent.futures.ProcessPoolExecutor() as executor:

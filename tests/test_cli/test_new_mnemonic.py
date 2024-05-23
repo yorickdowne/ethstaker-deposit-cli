@@ -271,6 +271,89 @@ def test_new_mnemonic_eth1_address_withdrawal_double_params(monkeypatch) -> None
     assert result.exit_code == 0
 
 
+def test_pbkdf2_new_mnemonic(monkeypatch) -> None:
+    # monkeypatch get_mnemonic
+    def mock_get_mnemonic(language, words_path, entropy=None) -> str:
+        return "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
+
+    monkeypatch.setattr(new_mnemonic, "get_mnemonic", mock_get_mnemonic)
+
+    # Prepare pbkdf2 folder
+    pbkdf2_folder_path = os.path.join(os.getcwd(), 'TESTING_TEMP_FOLDER')
+    clean_key_folder(pbkdf2_folder_path)
+    if not os.path.exists(pbkdf2_folder_path):
+        os.mkdir(pbkdf2_folder_path)
+
+    # Prepare scrypt folder
+    scrypt_folder_path = os.path.join(os.getcwd(), 'TESTING_TEMP_FOLDER_2')
+    clean_key_folder(scrypt_folder_path)
+    if not os.path.exists(scrypt_folder_path):
+        os.mkdir(scrypt_folder_path)
+
+    runner = CliRunner()
+
+    inputs = ['english', '1', 'mainnet', 'MyPassword', 'MyPassword',
+              'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about']
+    data = '\n'.join(inputs)
+    arguments = [
+        '--language', 'english',
+        'new-mnemonic',
+        '--eth1_withdrawal_address', '',
+        '--folder', pbkdf2_folder_path,
+        '--pbkdf2',
+    ]
+    result = runner.invoke(cli, arguments, input=data)
+    assert result.exit_code == 0
+
+    arguments = [
+        '--language', 'english',
+        'new-mnemonic',
+        '--eth1_withdrawal_address', '',
+        '--folder', scrypt_folder_path,
+    ]
+    result = runner.invoke(cli, arguments, input=data)
+    assert result.exit_code == 0
+
+    # Load store generated files
+    validator_keys_folder_path = os.path.join(pbkdf2_folder_path, DEFAULT_VALIDATOR_KEYS_FOLDER_NAME)
+    _, _, key_files = next(os.walk(validator_keys_folder_path))
+
+    deposit_file = [key_file for key_file in key_files if key_file.startswith('deposit_data')][0]
+    with open(validator_keys_folder_path + '/' + deposit_file, 'r', encoding='utf-8') as f:
+        pbkdf2_deposit_dict = json.load(f)[0]
+
+    keystore_file = [key_file for key_file in key_files if key_file.startswith('keystore-m_')][0]
+    with open(validator_keys_folder_path + '/' + keystore_file, 'r', encoding='utf-8') as f:
+        pbkdf2_keystore_dict = json.load(f)
+
+    validator_keys_folder_path = os.path.join(scrypt_folder_path, DEFAULT_VALIDATOR_KEYS_FOLDER_NAME)
+    _, _, key_files = next(os.walk(validator_keys_folder_path))
+
+    deposit_file = [key_file for key_file in key_files if key_file.startswith('deposit_data')][0]
+    with open(validator_keys_folder_path + '/' + deposit_file, 'r', encoding='utf-8') as f:
+        scrypt_deposit_dict = json.load(f)[0]
+
+    keystore_file = [key_file for key_file in key_files if key_file.startswith('keystore-m_')][0]
+    with open(validator_keys_folder_path + '/' + keystore_file, 'r', encoding='utf-8') as f:
+        scrypt_keystore_dict = json.load(f)
+
+    # Verify deposit files
+    assert pbkdf2_deposit_dict['withdrawal_credentials'] == scrypt_deposit_dict['withdrawal_credentials']
+    assert pbkdf2_deposit_dict['pubkey'] == scrypt_deposit_dict['pubkey']
+    assert pbkdf2_deposit_dict['signature'] == scrypt_deposit_dict['signature']
+    assert pbkdf2_deposit_dict['deposit_message_root'] == scrypt_deposit_dict['deposit_message_root']
+    assert pbkdf2_deposit_dict['deposit_data_root'] == scrypt_deposit_dict['deposit_data_root']
+
+    # Verify keystore files
+    assert pbkdf2_keystore_dict['crypto']['kdf']['function'] == 'pbkdf2'
+    assert scrypt_keystore_dict['crypto']['kdf']['function'] == 'scrypt'
+    assert pbkdf2_keystore_dict['pubkey'] == scrypt_keystore_dict['pubkey']
+
+    # Clean up
+    clean_key_folder(pbkdf2_folder_path)
+    clean_key_folder(scrypt_folder_path)
+
+
 @pytest.mark.asyncio
 async def test_script_bls_withdrawal() -> None:
     # Prepare folder
