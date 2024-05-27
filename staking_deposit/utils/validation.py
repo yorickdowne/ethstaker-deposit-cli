@@ -43,11 +43,6 @@ from staking_deposit.settings import BaseChainSetting
 # Deposit
 #
 
-def _deposit_validator(kwargs: Dict[str, Any]) -> bool:
-    deposit: Dict[str, Any] = kwargs.pop('deposit')
-    credential: Credential = kwargs.pop('credential')
-    return validate_deposit(deposit, credential)
-
 
 def verify_deposit_data_json(filefolder: str, credentials: Sequence[Credential]) -> bool:
     """
@@ -60,13 +55,9 @@ def verify_deposit_data_json(filefolder: str, credentials: Sequence[Credential])
 
     with click.progressbar(length=len(deposit_json), label=load_text(['msg_deposit_verification']),
                            show_percent=False, show_pos=True) as bar:
-        executor_kwargs = [{
-            'credential': credential,
-            'deposit': deposit,
-        } for deposit, credential in zip(deposit_json, credentials)]
 
         with concurrent.futures.ProcessPoolExecutor() as executor:
-            for valid_deposit in executor.map(_deposit_validator, executor_kwargs):
+            for valid_deposit in executor.map(validate_deposit, deposit_json, credentials):
                 all_valid_deposits &= valid_deposit
                 bar.update(1)
 
