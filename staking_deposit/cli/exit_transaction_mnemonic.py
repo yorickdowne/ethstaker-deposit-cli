@@ -145,7 +145,6 @@ def exit_transaction_mnemonic(
                 transaction_filefolders.append(filefolder)
                 bar.update(1)
 
-    all_valid_exits = True
     with click.progressbar(length=num_keys, label=load_text(['msg_verify_exit_transaction']),
                            show_percent=False, show_pos=True) as bar:
 
@@ -156,11 +155,9 @@ def exit_transaction_mnemonic(
 
         with concurrent.futures.ProcessPoolExecutor() as executor:
             for valid_exit in executor.map(_exit_verifier, executor_kwargs):
-                all_valid_exits &= valid_exit
                 bar.update(1)
-
-    if not all_valid_exits:
-        raise ValidationError(load_text(['err_verify_exit_transactions']))
+                if not valid_exit:
+                    raise ValidationError(load_text(['err_verify_exit_transactions']))
 
     click.echo(load_text(['msg_creation_success']) + folder)
     click.pause(load_text(['msg_pause']))
