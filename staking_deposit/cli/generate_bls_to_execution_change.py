@@ -203,7 +203,7 @@ def generate_bls_to_execution_change(
             for e in executor.map(_validate_credentials_match, executor_kwargs):
                 bar.update(1)
                 if e is not None:
-                    click.echo('\n[Error] ' + str(e))
+                    click.echo('\n\n[Error] ' + str(e))
                     return
 
     btec_file = credentials.export_bls_to_execution_change_json(bls_to_execution_changes_folder, validator_indices)
