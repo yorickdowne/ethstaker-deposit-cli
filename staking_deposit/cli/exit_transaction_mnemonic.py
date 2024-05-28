@@ -129,6 +129,9 @@ def exit_transaction_mnemonic(
                 credentials.append(credential)
                 bar.update(1)
 
+    if not os.path.exists(folder):
+        os.mkdir(folder)
+
     transaction_filefolders = []
     with click.progressbar(length=num_keys, label=load_text(['msg_exit_transaction_creation']),
                            show_percent=False, show_pos=True) as bar:

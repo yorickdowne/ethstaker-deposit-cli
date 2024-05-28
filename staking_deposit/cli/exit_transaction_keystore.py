@@ -114,6 +114,8 @@ def exit_transaction_keystore(
     )
 
     folder = os.path.join(output_folder, DEFAULT_EXIT_TRANSACTION_FOLDER_NAME)
+    if not os.path.exists(folder):
+        os.mkdir(folder)
 
     click.echo(load_text(['msg_exit_transaction_creation']))
     saved_folder = export_exit_transaction_json(folder=folder, signed_exit=signed_exit)

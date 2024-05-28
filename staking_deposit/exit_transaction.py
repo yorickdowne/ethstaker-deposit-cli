@@ -48,9 +48,6 @@ def export_exit_transaction_json(folder: str, signed_exit: SignedVoluntaryExit) 
     signed_exit_json.update({'message': message})
     signed_exit_json.update({'signature': '0x' + signed_exit.signature.hex()})  # type: ignore[attr-defined]
 
-    if not os.path.exists(folder):
-        os.mkdir(folder)
-
     filefolder = os.path.join(
         folder,
         'signed_exit_transaction-%s-%i.json' % (
