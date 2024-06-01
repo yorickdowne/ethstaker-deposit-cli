@@ -3,6 +3,7 @@ import click
 from enum import Enum
 import time
 import json
+import concurrent.futures
 from typing import Dict, List, Optional, Any, Sequence
 
 from eth_typing import Address, HexAddress
@@ -230,6 +231,29 @@ class Credential:
         return export_exit_transaction_json(folder=folder, signed_exit=signed_voluntary_exit)
 
 
+def _credential_builder(kwargs: Dict[str, Any]) -> Credential:
+    return Credential(**kwargs)
+
+
+def _keystore_exporter(kwargs: Dict[str, Any]) -> str:
+    credential: Credential = kwargs.pop('credential')
+    return credential.save_signing_keystore(**kwargs)
+
+
+def _deposit_data_builder(credential: Credential) -> Dict[str, bytes]:
+    return credential.deposit_datum_dict
+
+
+def _keystore_verifier(kwargs: Dict[str, Any]) -> bool:
+    credential: Credential = kwargs.pop('credential')
+    return credential.verify_keystore(**kwargs)
+
+
+def _bls_to_execution_change_builder(kwargs: Dict[str, Any]) -> Dict[str, bytes]:
+    credential: Credential = kwargs.pop('credential')
+    return credential.get_bls_to_execution_change_dict(**kwargs)
+
+
 class CredentialList:
     """
     A collection of multiple Credentials, one for each validator.
@@ -253,23 +277,52 @@ class CredentialList:
                 f"The number of keys ({num_keys}) doesn't equal to the corresponding deposit amounts ({len(amounts)})."
             )
         key_indices = range(start_index, start_index + num_keys)
-        with click.progressbar(key_indices, label=load_text(['msg_key_creation']),
-                               show_percent=False, show_pos=True) as indices:
-            return cls([Credential(mnemonic=mnemonic, mnemonic_password=mnemonic_password,
-                                   index=index, amount=amounts[index - start_index], chain_setting=chain_setting,
-                                   hex_eth1_withdrawal_address=hex_eth1_withdrawal_address,
-                                   use_pbkdf2=use_pbkdf2)
-                        for index in indices])
+
+        credentials: List[Credential] = []
+        with click.progressbar(length=num_keys, label=load_text(['msg_key_creation']),
+                               show_percent=False, show_pos=True) as bar:
+            executor_kwargs = [{
+                'mnemonic': mnemonic,
+                'mnemonic_password': mnemonic_password,
+                'index': index,
+                'amount': amounts[index - start_index],
+                'chain_setting': chain_setting,
+                'hex_eth1_withdrawal_address': hex_eth1_withdrawal_address,
+                'use_pbkdf2': use_pbkdf2,
+            } for index in key_indices]
+
+            with concurrent.futures.ProcessPoolExecutor() as executor:
+                for credential in executor.map(_credential_builder, executor_kwargs):
+                    credentials.append(credential)
+                    bar.update(1)
+        return cls(credentials)
 
     def export_keystores(self, password: str, folder: str) -> List[str]:
-        with click.progressbar(self.credentials, label=load_text(['msg_keystore_creation']),
-                               show_percent=False, show_pos=True) as credentials:
-            return [credential.save_signing_keystore(password=password, folder=folder) for credential in credentials]
+        filefolders: List[str] = []
+        with click.progressbar(length=len(self.credentials), label=load_text(['msg_keystore_creation']),
+                               show_percent=False, show_pos=True) as bar:
+            executor_kwargs = [{
+                'credential': credential,
+                'password': password,
+                'folder': folder,
+            } for credential in self.credentials]
+
+            with concurrent.futures.ProcessPoolExecutor() as executor:
+                for filefolder in executor.map(_keystore_exporter, executor_kwargs):
+                    filefolders.append(filefolder)
+                    bar.update(1)
+        return filefolders
 
     def export_deposit_data_json(self, folder: str) -> str:
-        with click.progressbar(self.credentials, label=load_text(['msg_depositdata_creation']),
-                               show_percent=False, show_pos=True) as credentials:
-            deposit_data = [cred.deposit_datum_dict for cred in credentials]
+        deposit_data = []
+        with click.progressbar(length=len(self.credentials), label=load_text(['msg_depositdata_creation']),
+                               show_percent=False, show_pos=True) as bar:
+
+            with concurrent.futures.ProcessPoolExecutor() as executor:
+                for datum_dict in executor.map(_deposit_data_builder, self.credentials):
+                    deposit_data.append(datum_dict)
+                    bar.update(1)
+
         filefolder = os.path.join(folder, 'deposit_data-%i.json' % time.time())
         with open(filefolder, 'w') as f:
             json.dump(deposit_data, f, default=lambda x: x.hex())
@@ -278,17 +331,37 @@ class CredentialList:
         return filefolder
 
     def verify_keystores(self, keystore_filefolders: List[str], password: str) -> bool:
-        with click.progressbar(zip(self.credentials, keystore_filefolders),
+        all_valid_keystores = True
+        with click.progressbar(length=len(self.credentials),
                                label=load_text(['msg_keystore_verification']),
-                               length=len(self.credentials), show_percent=False, show_pos=True) as items:
-            return all(credential.verify_keystore(keystore_filefolder=filefolder, password=password)
-                       for credential, filefolder in items)
+                               show_percent=False, show_pos=True) as bar:
+            executor_kwargs = [{
+                'credential': credential,
+                'keystore_filefolder': fileholder,
+                'password': password,
+            } for credential, fileholder in zip(self.credentials, keystore_filefolders)]
+
+            with concurrent.futures.ProcessPoolExecutor() as executor:
+                for valid_keystore in executor.map(_keystore_verifier, executor_kwargs):
+                    all_valid_keystores &= valid_keystore
+                    bar.update(1)
+
+        return all_valid_keystores
 
     def export_bls_to_execution_change_json(self, folder: str, validator_indices: Sequence[int]) -> str:
-        with click.progressbar(self.credentials, label=load_text(['msg_bls_to_execution_change_creation']),
-                               show_percent=False, show_pos=True) as credentials:
-            bls_to_execution_changes = [cred.get_bls_to_execution_change_dict(validator_indices[i])
-                                        for i, cred in enumerate(credentials)]
+        bls_to_execution_changes = []
+        with click.progressbar(length=len(self.credentials), label=load_text(['msg_bls_to_execution_change_creation']),
+                               show_percent=False, show_pos=True) as bar:
+
+            executor_kwargs = [{
+                'credential': credential,
+                'validator_index': validator_indices[i],
+            } for i, credential in enumerate(self.credentials)]
+
+            with concurrent.futures.ProcessPoolExecutor() as executor:
+                for bls_to_execution_change in executor.map(_bls_to_execution_change_builder, executor_kwargs):
+                    bls_to_execution_changes.append(bls_to_execution_change)
+                    bar.update(1)
 
         filefolder = os.path.join(folder, 'bls_to_execution_change-%i.json' % time.time())
         with open(filefolder, 'w') as f:

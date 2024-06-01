@@ -1,3 +1,4 @@
+import asyncio
 import os
 import pytest
 
@@ -9,7 +10,7 @@ from staking_deposit.utils.constants import DEFAULT_EXIT_TRANSACTION_FOLDER_NAME
 from tests.test_cli.helpers import clean_exit_transaction_folder, read_json_file, verify_file_permission
 
 
-def test_exit_transaction_menmonic() -> None:
+def test_exit_transaction_mnemonic() -> None:
     # Prepare folder
     my_folder_path = os.path.join(os.getcwd(), 'TESTING_TEMP_FOLDER')
     clean_exit_transaction_folder(my_folder_path)
@@ -54,30 +55,43 @@ def test_exit_transaction_menmonic() -> None:
     clean_exit_transaction_folder(my_folder_path)
 
 
-def test_exit_transaction_menmonic_multiple() -> None:
+@pytest.mark.asyncio
+async def test_exit_transaction_mnemonic_multiple() -> None:
     # Prepare folder
     my_folder_path = os.path.join(os.getcwd(), 'TESTING_TEMP_FOLDER')
     clean_exit_transaction_folder(my_folder_path)
     if not os.path.exists(my_folder_path):
         os.mkdir(my_folder_path)
 
-    runner = CliRunner()
-    inputs = []
-    data = '\n'.join(inputs)
-    arguments = [
+    if os.name == 'nt':  # Windows
+        run_script_cmd = 'sh deposit.sh'
+    else:  # Mac or Linux
+        run_script_cmd = './deposit.sh'
+
+    install_cmd = run_script_cmd + ' install'
+    proc = await asyncio.create_subprocess_shell(
+        install_cmd,
+    )
+    await proc.wait()
+
+    cmd_args = [
+        run_script_cmd,
         '--language', 'english',
         '--non_interactive',
         'exit-transaction-mnemonic',
         '--output_folder', my_folder_path,
         '--chain', 'mainnet',
-        '--mnemonic', 'aban aban aban aban aban aban aban aban aban aban aban abou',
+        '--mnemonic', '"aban aban aban aban aban aban aban aban aban aban aban abou"',
         '--validator_start_index', '0',
-        '--validator_indices', '0 1 2 3',
+        '--validator_indices', '0,1,2,3',
         '--epoch', '1234',
     ]
-    result = runner.invoke(cli, arguments, input=data)
+    proc = await asyncio.create_subprocess_shell(
+        ' '.join(cmd_args),
+    )
+    await proc.wait()
 
-    assert result.exit_code == 0
+    assert proc.returncode == 0
 
     # Check files
     exit_transaction_folder_path = os.path.join(my_folder_path, DEFAULT_EXIT_TRANSACTION_FOLDER_NAME)

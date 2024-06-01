@@ -1,6 +1,7 @@
 import click
 import json
 import re
+import concurrent.futures
 from typing import Any, Dict, Sequence
 
 from eth_typing import (
@@ -42,16 +43,25 @@ from staking_deposit.settings import BaseChainSetting
 # Deposit
 #
 
+
 def verify_deposit_data_json(filefolder: str, credentials: Sequence[Credential]) -> bool:
     """
     Validate every deposit found in the deposit-data JSON file folder.
     """
+    all_valid_deposits = True
+    deposit_json = []
     with open(filefolder, 'r', encoding='utf-8') as f:
         deposit_json = json.load(f)
-        with click.progressbar(deposit_json, label=load_text(['msg_deposit_verification']),
-                               show_percent=False, show_pos=True) as deposits:
-            return all([validate_deposit(deposit, credential) for deposit, credential in zip(deposits, credentials)])
-    return False
+
+    with click.progressbar(length=len(deposit_json), label=load_text(['msg_deposit_verification']),
+                           show_percent=False, show_pos=True) as bar:
+
+        with concurrent.futures.ProcessPoolExecutor() as executor:
+            for valid_deposit in executor.map(validate_deposit, deposit_json, credentials):
+                all_valid_deposits &= valid_deposit
+                bar.update(1)
+
+    return all_valid_deposits
 
 
 def validate_deposit(deposit_data_dict: Dict[str, Any], credential: Credential) -> bool:
@@ -149,6 +159,9 @@ def validate_eth1_withdrawal_address(cts: click.Context, param: Any, address: st
 # BLSToExecutionChange
 #
 
+def _bls_to_execution_change_validator(kwargs: Dict[str, Any]) -> bool:
+    return validate_bls_to_execution_change(**kwargs)
+
 
 def verify_bls_to_execution_change_json(filefolder: str,
                                         credentials: Sequence[Credential],
@@ -159,19 +172,28 @@ def verify_bls_to_execution_change_json(filefolder: str,
     """
     Validate every BLSToExecutionChange found in the bls_to_execution_change JSON file folder.
     """
+    btec_json = []
     with open(filefolder, 'r', encoding='utf-8') as f:
         btec_json = json.load(f)
-        with click.progressbar(btec_json, label=load_text(['msg_bls_to_execution_change_verification']),
-                               show_percent=False, show_pos=True) as btecs:
-            return all([
-                validate_bls_to_execution_change(
-                    btec, credential,
-                    input_validator_index=input_validator_index,
-                    input_execution_address=input_execution_address,
-                    chain_setting=chain_setting)
-                for btec, credential, input_validator_index in zip(btecs, credentials, input_validator_indices)
-            ])
-    return False
+
+    all_valid_bls_changes = True
+    with click.progressbar(length=len(btec_json), label=load_text(['msg_bls_to_execution_change_verification']),
+                           show_percent=False, show_pos=True) as bar:
+
+        executor_kwargs = [{
+            'btec_dict': btec,
+            'credential': credential,
+            'input_validator_index': input_validator_index,
+            'input_execution_address': input_execution_address,
+            'chain_setting': chain_setting,
+        } for btec, credential, input_validator_index in zip(btec_json, credentials, input_validator_indices)]
+
+        with concurrent.futures.ProcessPoolExecutor() as executor:
+            for valid_bls_change in executor.map(_bls_to_execution_change_validator, executor_kwargs):
+                all_valid_bls_changes &= valid_bls_change
+                bar.update(1)
+
+    return all_valid_bls_changes
 
 
 def validate_bls_to_execution_change(btec_dict: Dict[str, Any],

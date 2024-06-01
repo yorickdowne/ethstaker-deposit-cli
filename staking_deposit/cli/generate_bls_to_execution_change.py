@@ -1,15 +1,19 @@
 import os
 import click
 import json
+import concurrent.futures
 from typing import (
     Any,
     Sequence,
+    Dict,
+    Optional
 )
 
 from eth_typing import HexAddress
 
 from staking_deposit.credentials import (
     CredentialList,
+    Credential
 )
 from staking_deposit.utils.validation import (
     validate_bls_withdrawal_credentials_list,
@@ -46,6 +50,17 @@ from .existing_mnemonic import (
 
 def get_password(text: str) -> str:
     return click.prompt(text, hide_input=True, show_default=False, type=str)
+
+
+def _validate_credentials_match(kwargs: Dict[str, Any]) -> Optional[ValidationError]:
+    credential: Credential = kwargs.pop('credential')
+    bls_withdrawal_credentials: bytes = kwargs.pop('bls_withdrawal_credentials')
+
+    try:
+        validate_bls_withdrawal_credentials_matching(bls_withdrawal_credentials, credential)
+    except ValidationError as e:
+        return e
+    return None
 
 
 FUNC_NAME = 'generate_bls_to_execution_change'
@@ -177,12 +192,19 @@ def generate_bls_to_execution_change(
     )
 
     # Check if the given old bls_withdrawal_credentials is as same as the mnemonic generated
-    for i, credential in enumerate(credentials.credentials):
-        try:
-            validate_bls_withdrawal_credentials_matching(bls_withdrawal_credentials_list[i], credential)
-        except ValidationError as e:
-            click.echo('\n[Error] ' + str(e))
-            return
+    with click.progressbar(length=len(credentials.credentials), label=load_text(['msg_credentials_verification']),
+                           show_percent=False, show_pos=True) as bar:
+        executor_kwargs = [{
+            'credential': credential,
+            'bls_withdrawal_credentials': bls_withdrawal_credentials_list[i],
+        } for i, credential in enumerate(credentials.credentials)]
+
+        with concurrent.futures.ProcessPoolExecutor() as executor:
+            for e in executor.map(_validate_credentials_match, executor_kwargs):
+                bar.update(1)
+                if e is not None:
+                    click.echo('\n\n[Error] ' + str(e))
+                    return
 
     btec_file = credentials.export_bls_to_execution_change_json(bls_to_execution_changes_folder, validator_indices)
 

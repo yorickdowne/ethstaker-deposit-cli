@@ -1,6 +1,7 @@
 import click
 import socket
 import sys
+from multiprocessing import freeze_support
 
 from staking_deposit.cli.existing_mnemonic import existing_mnemonic
 from staking_deposit.cli.exit_transaction_keystore import exit_transaction_keystore
@@ -91,6 +92,7 @@ cli.add_command(exit_transaction_mnemonic)
 
 
 def run() -> None:
+    freeze_support()  # Needed when running under Windows in a frozen bundle
     check_python_version()
     cli()
 
