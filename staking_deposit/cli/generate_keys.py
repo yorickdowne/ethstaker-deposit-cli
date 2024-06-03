@@ -32,7 +32,7 @@ from staking_deposit.utils.intl import (
 )
 from staking_deposit.settings import (
     MAINNET,
-    NON_PRATER_CHAIN_KEYS,
+    ALL_CHAIN_KEYS,
     get_chain_setting,
 )
 
@@ -64,10 +64,10 @@ def generate_keys_arguments_decorator(function: Callable[..., Any]) -> Callable[
         ),
         jit_option(
             callback=captive_prompt_callback(
-                lambda x: closest_match(x, NON_PRATER_CHAIN_KEYS),
+                lambda x: closest_match(x, ALL_CHAIN_KEYS),
                 choice_prompt_func(
                     lambda: load_text(['chain', 'prompt'], func='generate_keys_arguments_decorator'),
-                    NON_PRATER_CHAIN_KEYS
+                    ALL_CHAIN_KEYS
                 ),
                 default=MAINNET,
             ),
@@ -76,7 +76,7 @@ def generate_keys_arguments_decorator(function: Callable[..., Any]) -> Callable[
             param_decls='--chain',
             prompt=choice_prompt_func(
                 lambda: load_text(['chain', 'prompt'], func='generate_keys_arguments_decorator'),
-                NON_PRATER_CHAIN_KEYS
+                ALL_CHAIN_KEYS
             ),
         ),
         jit_option(
