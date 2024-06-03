@@ -4,19 +4,19 @@ from typing import (
     Callable,
 )
 
-from staking_deposit.exceptions import ValidationError
-from staking_deposit.key_handling.key_derivation.mnemonic import (
+from ethstaker_deposit.exceptions import ValidationError
+from ethstaker_deposit.key_handling.key_derivation.mnemonic import (
     reconstruct_mnemonic,
 )
-from staking_deposit.utils.constants import (
+from ethstaker_deposit.utils.constants import (
     WORD_LISTS_PATH,
 )
-from staking_deposit.utils.click import (
+from ethstaker_deposit.utils.click import (
     captive_prompt_callback,
     jit_option,
 )
-from staking_deposit.utils.intl import load_text
-from staking_deposit.utils.validation import validate_int_range
+from ethstaker_deposit.utils.intl import load_text
+from ethstaker_deposit.utils.validation import validate_int_range
 from .generate_keys import (
     generate_keys,
     generate_keys_arguments_decorator,

@@ -2,8 +2,8 @@ import os
 
 from click.testing import CliRunner
 
-from staking_deposit.deposit import cli
-from staking_deposit.utils.constants import DEFAULT_BLS_TO_EXECUTION_CHANGES_FOLDER_NAME
+from ethstaker_deposit.deposit import cli
+from ethstaker_deposit.utils.constants import DEFAULT_BLS_TO_EXECUTION_CHANGES_FOLDER_NAME
 from .helpers import (
     clean_btec_folder,
     prepare_testing_folder,

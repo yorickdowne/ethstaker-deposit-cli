@@ -1,4 +1,4 @@
-from staking_deposit.utils.crypto import (
+from ethstaker_deposit.utils.crypto import (
     HKDF,
     SHA256,
 )

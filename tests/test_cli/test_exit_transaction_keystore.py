@@ -2,11 +2,11 @@ import os
 
 from click.testing import CliRunner
 
-from staking_deposit.credentials import Credential
-from staking_deposit.deposit import cli
-from staking_deposit.settings import get_chain_setting
-from staking_deposit.utils.constants import DEFAULT_EXIT_TRANSACTION_FOLDER_NAME
-from staking_deposit.utils.intl import (
+from ethstaker_deposit.credentials import Credential
+from ethstaker_deposit.deposit import cli
+from ethstaker_deposit.settings import get_chain_setting
+from ethstaker_deposit.utils.constants import DEFAULT_EXIT_TRANSACTION_FOLDER_NAME
+from ethstaker_deposit.utils.intl import (
     load_text,
 )
 from tests.test_cli.helpers import (
@@ -279,7 +279,7 @@ def test_invalid_keystore_password() -> None:
 
     assert result.exit_code == 1
 
-    mnemonic_json_file = os.path.join(os.getcwd(), 'staking_deposit/cli/', 'exit_transaction_keystore.json')
+    mnemonic_json_file = os.path.join(os.getcwd(), 'ethstaker_deposit/cli/', 'exit_transaction_keystore.json')
     assert load_text(
         ['arg_exit_transaction_keystore_keystore_password', 'mismatch'],
         mnemonic_json_file,

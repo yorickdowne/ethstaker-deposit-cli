@@ -27,6 +27,6 @@ jobs:
       - name: Run tests
         run: pytest tests
       - name: Run type checker
-        run: python -m mypy --config-file mypy.ini -p staking_deposit
+        run: python -m mypy --config-file mypy.ini -p ethstaker_deposit
       - name: Run linter
-        run: flake8 --config=flake8.ini ./staking_deposit ./tests
+        run: flake8 --config=flake8.ini ./ethstaker_deposit ./tests

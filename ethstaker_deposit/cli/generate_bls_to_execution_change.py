@@ -11,11 +11,11 @@ from typing import (
 
 from eth_typing import HexAddress
 
-from staking_deposit.credentials import (
+from ethstaker_deposit.credentials import (
     CredentialList,
     Credential
 )
-from staking_deposit.utils.validation import (
+from ethstaker_deposit.utils.validation import (
     validate_bls_withdrawal_credentials_list,
     validate_bls_withdrawal_credentials_matching,
     validate_eth1_withdrawal_address,
@@ -23,21 +23,21 @@ from staking_deposit.utils.validation import (
     verify_bls_to_execution_change_json,
     validate_validator_indices,
 )
-from staking_deposit.utils.constants import (
+from ethstaker_deposit.utils.constants import (
     DEFAULT_BLS_TO_EXECUTION_CHANGES_FOLDER_NAME,
     MAX_DEPOSIT_AMOUNT,
 )
-from staking_deposit.utils.click import (
+from ethstaker_deposit.utils.click import (
     captive_prompt_callback,
     choice_prompt_func,
     jit_option,
 )
-from staking_deposit.exceptions import ValidationError
-from staking_deposit.utils.intl import (
+from ethstaker_deposit.exceptions import ValidationError
+from ethstaker_deposit.utils.intl import (
     closest_match,
     load_text,
 )
-from staking_deposit.settings import (
+from ethstaker_deposit.settings import (
     MAINNET,
     ALL_CHAIN_KEYS,
     get_chain_setting,

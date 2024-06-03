@@ -1,6 +1,4 @@
-# staking-deposit-cli
-
-[![GitPOAP Badge](https://public-api.gitpoap.io/v1/repo/ethereum/staking-deposit-cli/badge)](https://www.gitpoap.io/gh/ethereum/staking-deposit-cli)
+# ethstaker-deposit-cli
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -102,7 +100,7 @@ On Unix-based systems, keystores and the `deposit_data*.json` have `440`/`-r--r-
 
 ##### Step 1. Installation
 
-See [releases page](https://github.com/ethereum/staking-deposit-cli/releases) to download and decompress the corresponding binary files.
+See [releases page](https://github.com/eth-educators/ethstaker-deposit-cli/releases) to download and decompress the corresponding binary files.
 
 ##### Step 2. Create keys and `deposit_data-*.json`
 
@@ -332,23 +330,23 @@ pip3 install -r requirements.txt
 Run one of the following command to enter the interactive CLI:
 
 ```sh
-python3 -m staking_deposit new-mnemonic
+python3 -m ethstaker_deposit new-mnemonic
 ```
 
 or
 
 ```sh
-python3 -m staking_deposit existing-mnemonic
+python3 -m ethstaker_deposit existing-mnemonic
 ```
 
 You can also run the tool with optional arguments:
 
 ```sh
-python3 -m staking_deposit new-mnemonic --num_validators=<NUM_VALIDATORS> --mnemonic_language=english --chain=<CHAIN_NAME> --folder=<YOUR_FOLDER_PATH>
+python3 -m ethstaker_deposit new-mnemonic --num_validators=<NUM_VALIDATORS> --mnemonic_language=english --chain=<CHAIN_NAME> --folder=<YOUR_FOLDER_PATH>
 ```
 
 ```sh
-python3 -m staking_deposit existing-mnemonic --num_validators=<NUM_VALIDATORS> --validator_start_index=<START_INDEX> --chain=<CHAIN_NAME> --folder=<YOUR_FOLDER_PATH>
+python3 -m ethstaker_deposit existing-mnemonic --num_validators=<NUM_VALIDATORS> --validator_start_index=<START_INDEX> --chain=<CHAIN_NAME> --folder=<YOUR_FOLDER_PATH>
 ```
 
 ###### Language Argument
@@ -382,19 +380,19 @@ make build_docker
 Run the following command to enter the interactive CLI:
 
 ```sh
-docker run -it --rm -v $(pwd)/validator_keys:/app/validator_keys ethereum/staking-deposit-cli
+docker run -it --rm -v $(pwd)/validator_keys:/app/validator_keys ethereum/ethstaker-deposit-cli
 ```
 
 You can also run the tool with optional arguments:
 
 ```sh
-docker run -it --rm -v $(pwd)/validator_keys:/app/validator_keys ethereum/staking-deposit-cli new-mnemonic --num_validators=<NUM_VALIDATORS> --mnemonic_language=english --folder=<YOUR_FOLDER_PATH>
+docker run -it --rm -v $(pwd)/validator_keys:/app/validator_keys ethereum/ethstaker-deposit-cli new-mnemonic --num_validators=<NUM_VALIDATORS> --mnemonic_language=english --folder=<YOUR_FOLDER_PATH>
 ```
 
 Example for 1 validator on the [Prater testnet](https://prater.launchpad.ethereum.org/) using english:
 
 ```sh
-docker run -it --rm -v $(pwd)/validator_keys:/app/validator_keys ethereum/staking-deposit-cli new-mnemonic --num_validators=1 --mnemonic_language=english --chain=prater
+docker run -it --rm -v $(pwd)/validator_keys:/app/validator_keys ethereum/ethstaker-deposit-cli new-mnemonic --num_validators=1 --mnemonic_language=english --chain=prater
 ```
 
 ###### Arguments
@@ -411,7 +409,7 @@ See [here](#successful-message)
 
 ##### Step 1. Installation
 
-See [releases page](https://github.com/ethereum/staking-deposit-cli/releases) to download and decompress the corresponding binary files.
+See [releases page](https://github.com/eth-educators/ethstaker-deposit-cli/releases) to download and decompress the corresponding binary files.
 
 ##### Step 2. Create keys and `deposit_data-*.json`
 
@@ -546,23 +544,23 @@ pip3 install -r requirements.txt
 Run one of the following command to enter the interactive CLI:
 
 ```cmd
-python -m staking_deposit new-mnemonic
+python -m ethstaker_deposit new-mnemonic
 ```
 
 or
 
 ```cmd
-python -m staking_deposit existing-mnemonic
+python -m ethstaker_deposit existing-mnemonic
 ```
 
 You can also run the tool with optional arguments:
 
 ```cmd
-python -m staking_deposit new-mnemonic --num_validators=<NUM_VALIDATORS> --mnemonic_language=english --chain=<CHAIN_NAME> --folder=<YOUR_FOLDER_PATH>
+python -m ethstaker_deposit new-mnemonic --num_validators=<NUM_VALIDATORS> --mnemonic_language=english --chain=<CHAIN_NAME> --folder=<YOUR_FOLDER_PATH>
 ```
 
 ```cmd
-python -m staking_deposit existing-mnemonic --num_validators=<NUM_VALIDATORS> --validator_start_index=<START_INDEX> --chain=<CHAIN_NAME> --folder=<YOUR_FOLDER_PATH>
+python -m ethstaker_deposit existing-mnemonic --num_validators=<NUM_VALIDATORS> --validator_start_index=<START_INDEX> --chain=<CHAIN_NAME> --folder=<YOUR_FOLDER_PATH>
 ```
 
 ###### Language Argument
@@ -604,7 +602,7 @@ python3 -m pytest tests
 ### Run the app
 
 ```sh
-python3 -m staking_deposit [OPTIONS] COMMAND [ARGS]
+python3 -m ethstaker_deposit [OPTIONS] COMMAND [ARGS]
 ```
 
 ### Building Binaries

@@ -5,7 +5,7 @@ import sys
 import click
 from click.testing import CliRunner
 
-from staking_deposit.deposit import check_connectivity, check_python_version, cli
+from ethstaker_deposit.deposit import check_connectivity, check_python_version, cli
 from tests.test_cli.helpers import clean_key_folder
 
 

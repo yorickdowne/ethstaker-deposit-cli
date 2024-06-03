@@ -4,8 +4,8 @@ import pytest
 
 from click.testing import CliRunner
 
-from staking_deposit.deposit import cli
-from staking_deposit.utils.constants import DEFAULT_EXIT_TRANSACTION_FOLDER_NAME
+from ethstaker_deposit.deposit import cli
+from ethstaker_deposit.utils.constants import DEFAULT_EXIT_TRANSACTION_FOLDER_NAME
 
 from tests.test_cli.helpers import clean_exit_transaction_folder, read_json_file, verify_file_permission
 

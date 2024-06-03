@@ -4,8 +4,8 @@ import time
 from typing import Any, Dict
 from py_ecc.bls import G2ProofOfPossession as bls
 
-from staking_deposit.settings import BaseChainSetting
-from staking_deposit.utils.ssz import (
+from ethstaker_deposit.settings import BaseChainSetting
+from ethstaker_deposit.utils.ssz import (
     SignedVoluntaryExit,
     VoluntaryExit,
     compute_signing_root,
