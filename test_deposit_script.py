@@ -1,7 +1,7 @@
 import asyncio
 import os
 
-# For not importing staking_deposit here
+# For not importing ethstaker_deposit here
 DEFAULT_VALIDATOR_KEYS_FOLDER_NAME = 'validator_keys'
 
 

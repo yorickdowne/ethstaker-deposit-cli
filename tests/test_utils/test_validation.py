@@ -3,9 +3,9 @@ from typing import (
     Any,
 )
 
-from staking_deposit.exceptions import ValidationError
-from staking_deposit.settings import get_chain_setting
-from staking_deposit.utils.validation import (
+from ethstaker_deposit.exceptions import ValidationError
+from ethstaker_deposit.settings import get_chain_setting
+from ethstaker_deposit.utils.validation import (
     normalize_input_list,
     validate_int_range,
     validate_password_strength,

@@ -3,25 +3,25 @@ import os
 import concurrent.futures
 
 from typing import Any, Sequence, Dict
-from staking_deposit.cli.existing_mnemonic import load_mnemonic_arguments_decorator
-from staking_deposit.credentials import Credential
-from staking_deposit.exceptions import ValidationError
-from staking_deposit.settings import (
+from ethstaker_deposit.cli.existing_mnemonic import load_mnemonic_arguments_decorator
+from ethstaker_deposit.credentials import Credential
+from ethstaker_deposit.exceptions import ValidationError
+from ethstaker_deposit.settings import (
     MAINNET,
     ALL_CHAIN_KEYS,
     get_chain_setting,
 )
-from staking_deposit.utils.click import (
+from ethstaker_deposit.utils.click import (
     captive_prompt_callback,
     choice_prompt_func,
     jit_option,
 )
-from staking_deposit.utils.constants import DEFAULT_EXIT_TRANSACTION_FOLDER_NAME
-from staking_deposit.utils.intl import (
+from ethstaker_deposit.utils.constants import DEFAULT_EXIT_TRANSACTION_FOLDER_NAME
+from ethstaker_deposit.utils.intl import (
     closest_match,
     load_text,
 )
-from staking_deposit.utils.validation import validate_int_range, validate_validator_indices, verify_signed_exit_json
+from ethstaker_deposit.utils.validation import validate_int_range, validate_validator_indices, verify_signed_exit_json
 
 
 def _credential_builder(kwargs: Dict[str, Any]) -> Credential:

@@ -2,24 +2,24 @@ import click
 import os
 
 from typing import Any
-from staking_deposit.exit_transaction import exit_transaction_generation, export_exit_transaction_json
-from staking_deposit.key_handling.keystore import Keystore
-from staking_deposit.settings import (
+from ethstaker_deposit.exit_transaction import exit_transaction_generation, export_exit_transaction_json
+from ethstaker_deposit.key_handling.keystore import Keystore
+from ethstaker_deposit.settings import (
     MAINNET,
     ALL_CHAIN_KEYS,
     get_chain_setting,
 )
-from staking_deposit.utils.click import (
+from ethstaker_deposit.utils.click import (
     captive_prompt_callback,
     choice_prompt_func,
     jit_option,
 )
-from staking_deposit.utils.constants import DEFAULT_EXIT_TRANSACTION_FOLDER_NAME
-from staking_deposit.utils.intl import (
+from ethstaker_deposit.utils.constants import DEFAULT_EXIT_TRANSACTION_FOLDER_NAME
+from ethstaker_deposit.utils.intl import (
     closest_match,
     load_text,
 )
-from staking_deposit.utils.validation import validate_int_range, validate_keystore_file, verify_signed_exit_json
+from ethstaker_deposit.utils.validation import validate_int_range, validate_keystore_file, verify_signed_exit_json
 
 
 FUNC_NAME = 'exit_transaction_keystore'

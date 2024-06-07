@@ -12,10 +12,10 @@ from eth_typing import (
 from eth_utils import is_hex_address, is_checksum_address, to_normalized_address, decode_hex
 from py_ecc.bls import G2ProofOfPossession as bls
 
-from staking_deposit.exceptions import ValidationError
-from staking_deposit.key_handling.keystore import Keystore
-from staking_deposit.utils.intl import load_text
-from staking_deposit.utils.ssz import (
+from ethstaker_deposit.exceptions import ValidationError
+from ethstaker_deposit.key_handling.keystore import Keystore
+from ethstaker_deposit.utils.intl import load_text
+from ethstaker_deposit.utils.ssz import (
     BLSToExecutionChange,
     DepositData,
     DepositMessage,
@@ -26,17 +26,17 @@ from staking_deposit.utils.ssz import (
     compute_signing_root,
     compute_voluntary_exit_domain,
 )
-from staking_deposit.credentials import (
+from ethstaker_deposit.credentials import (
     Credential,
 )
-from staking_deposit.utils.constants import (
+from ethstaker_deposit.utils.constants import (
     MAX_DEPOSIT_AMOUNT,
     MIN_DEPOSIT_AMOUNT,
     BLS_WITHDRAWAL_PREFIX,
     ETH1_ADDRESS_WITHDRAWAL_PREFIX,
 )
-from staking_deposit.utils.crypto import SHA256
-from staking_deposit.settings import BaseChainSetting
+from ethstaker_deposit.utils.crypto import SHA256
+from ethstaker_deposit.settings import BaseChainSetting
 
 
 #

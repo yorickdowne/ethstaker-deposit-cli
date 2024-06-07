@@ -1,7 +1,7 @@
 import pytest
 
-from staking_deposit.credentials import CredentialList
-from staking_deposit.settings import MainnetSetting
+from ethstaker_deposit.credentials import CredentialList
+from ethstaker_deposit.settings import MainnetSetting
 
 
 def test_from_mnemonic() -> None:

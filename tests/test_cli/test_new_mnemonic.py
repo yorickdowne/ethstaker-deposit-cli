@@ -7,15 +7,15 @@ from click.testing import CliRunner
 
 from eth_utils import decode_hex
 
-from staking_deposit.cli import new_mnemonic
-from staking_deposit.deposit import cli
-from staking_deposit.key_handling.key_derivation.mnemonic import abbreviate_words
-from staking_deposit.utils.constants import (
+from ethstaker_deposit.cli import new_mnemonic
+from ethstaker_deposit.deposit import cli
+from ethstaker_deposit.key_handling.key_derivation.mnemonic import abbreviate_words
+from ethstaker_deposit.utils.constants import (
     BLS_WITHDRAWAL_PREFIX,
     DEFAULT_VALIDATOR_KEYS_FOLDER_NAME,
     ETH1_ADDRESS_WITHDRAWAL_PREFIX,
 )
-from staking_deposit.utils.intl import load_text
+from ethstaker_deposit.utils.intl import load_text
 from .helpers import clean_key_folder, get_permissions, get_uuid
 
 
@@ -393,7 +393,7 @@ async def test_script_bls_withdrawal() -> None:
 
     seed_phrase = ''
     parsing = False
-    mnemonic_json_file = os.path.join(os.getcwd(), 'staking_deposit/../staking_deposit/cli/', 'new_mnemonic.json')
+    mnemonic_json_file = os.path.join(os.getcwd(), 'ethstaker_deposit/../ethstaker_deposit/cli/', 'new_mnemonic.json')
     async for out in proc.stdout:
         output = out.decode('utf-8').rstrip()
         if output.startswith(load_text(['msg_mnemonic_presentation'], mnemonic_json_file, 'new_mnemonic')):
@@ -480,7 +480,7 @@ async def test_script_abbreviated_mnemonic() -> None:
 
     seed_phrase = ''
     parsing = False
-    mnemonic_json_file = os.path.join(os.getcwd(), 'staking_deposit/../staking_deposit/cli/', 'new_mnemonic.json')
+    mnemonic_json_file = os.path.join(os.getcwd(), 'ethstaker_deposit/../ethstaker_deposit/cli/', 'new_mnemonic.json')
     async for out in proc.stdout:
         output = out.decode('utf-8').rstrip()
         if output.startswith(load_text(['msg_mnemonic_presentation'], mnemonic_json_file, 'new_mnemonic')):

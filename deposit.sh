@@ -8,7 +8,7 @@ if [[ "$OSTYPE" == "linux"* ]] || [[ "$OSTYPE" == "linux-android"* ]] || [[ "$OS
         exit 1
     fi
     echo "Running deposit-cli..."
-    python3 -m staking_deposit "$@"
+    python3 -m ethstaker_deposit "$@"
 
 elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "cygwin" ]]; then
     echo $OSTYPE
@@ -18,10 +18,10 @@ elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "cygwin" ]]; then
         exit 1
     fi
     echo "Running deposit-cli..."
-    python -m staking_deposit "$@"
+    python -m ethstaker_deposit "$@"
 
 else
-    echo "Sorry, to run deposit-cli on" $(uname -s)", please see the trouble-shooting on https://github.com/ethereum/staking-deposit-cli"
+    echo "Sorry, to run deposit-cli on" $(uname -s)", please see the trouble-shooting on https://github.com/eth-educators/ethstaker-deposit-cli"
     exit 1
 
 fi

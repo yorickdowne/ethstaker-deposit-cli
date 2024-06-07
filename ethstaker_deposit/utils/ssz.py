@@ -7,7 +7,7 @@ from ssz import (
     bytes48,
     bytes96
 )
-from staking_deposit.utils.constants import (
+from ethstaker_deposit.utils.constants import (
     DOMAIN_BLS_TO_EXECUTION_CHANGE,
     DOMAIN_DEPOSIT,
     DOMAIN_VOLUNTARY_EXIT,

@@ -3,19 +3,19 @@ import socket
 import sys
 from multiprocessing import freeze_support
 
-from staking_deposit.cli.existing_mnemonic import existing_mnemonic
-from staking_deposit.cli.exit_transaction_keystore import exit_transaction_keystore
-from staking_deposit.cli.exit_transaction_mnemonic import exit_transaction_mnemonic
-from staking_deposit.cli.generate_bls_to_execution_change import generate_bls_to_execution_change
-from staking_deposit.cli.new_mnemonic import new_mnemonic
-from staking_deposit.utils.click import (
+from ethstaker_deposit.cli.existing_mnemonic import existing_mnemonic
+from ethstaker_deposit.cli.exit_transaction_keystore import exit_transaction_keystore
+from ethstaker_deposit.cli.exit_transaction_mnemonic import exit_transaction_mnemonic
+from ethstaker_deposit.cli.generate_bls_to_execution_change import generate_bls_to_execution_change
+from ethstaker_deposit.cli.new_mnemonic import new_mnemonic
+from ethstaker_deposit.utils.click import (
     captive_prompt_callback,
     choice_prompt_func,
     jit_option,
 )
-from staking_deposit.utils import config
-from staking_deposit.utils.constants import INTL_LANG_OPTIONS
-from staking_deposit.utils.intl import (
+from ethstaker_deposit.utils import config
+from ethstaker_deposit.utils.constants import INTL_LANG_OPTIONS
+from ethstaker_deposit.utils.intl import (
     get_first_options,
     fuzzy_reverse_dict_lookup,
     load_text,

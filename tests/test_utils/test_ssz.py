@@ -1,6 +1,6 @@
 import pytest
 
-from staking_deposit.utils.ssz import (
+from ethstaker_deposit.utils.ssz import (
     DepositMessage,
     compute_deposit_domain,
     compute_deposit_fork_data_root,
