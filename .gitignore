@@ -4,7 +4,7 @@ validator_keys
 
 # Python testing & linting:
 build/
-docs/build
+docs/book
 dist/
 venv/
 *.pytest_cache
