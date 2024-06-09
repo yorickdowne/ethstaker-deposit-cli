@@ -3,7 +3,7 @@
 ## Description
 Generates a BLS to execution address change message.
 
-## Arguments
+## Optional Arguments
 
 - **`--bls_to_execution_changes_folder`**: The path to store the change JSON file.
 

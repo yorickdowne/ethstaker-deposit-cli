@@ -3,7 +3,7 @@
 ## Description
 Uses an existing BIP-39 mnemonic phrase for key generation.
 
-## Arguments
+## Optional Arguments
 
 - **`--chain`**: The chain to use for generating the deposit data. Options are: 'mainnet', 'holesky', etc...
 

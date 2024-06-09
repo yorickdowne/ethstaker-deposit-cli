@@ -34,6 +34,8 @@ gpg --verify staking_deposit-cli-***.asc staking_deposit-cli-***
 
 ## Step 3: Usage
 
+**Windows users:** You should replace `./deposit` with `deposit.exe` to run properly.
+
 **MacOS users:** In order to run from the terminal, you must first open the file to bypass MacOS code signing issues. Do so by right clicking the `deposit` file and then selecting `Open`.
 
 Determine which command best suites what you would like to accomplish:

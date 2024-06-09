@@ -3,7 +3,7 @@
 ## Description
 Creates an exit transaction using a mnemonic phrase.
 
-## Arguments
+## Optional Arguments
 
 - **`--chain`**: The chain to use for generating the deposit data. Options are: 'mainnet', 'holesky', etc.
 

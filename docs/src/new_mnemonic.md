@@ -3,7 +3,7 @@
 ## Description
 Generates a new BIP-39 mnemonic along with validator keystore and deposit files depending on how many validators you wish to create.
 
-## Arguments
+## Optional Arguments
 
 - **`--mnemonic_language`**: The language of the BIP-39 mnemonic. Options are: 'chinese_simplified', 'chinese_traditional', 'czech', 'english', 'french', 'italian', 'japanese', 'korean', 'portuguese', 'spanish'.
 
