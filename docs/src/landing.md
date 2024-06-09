@@ -27,11 +27,11 @@ The general usage of the CLI is:
 
 Each CLI command has a number of command options that can be provided:
 
-- **--language**: The language you wish to use the CLI in. Options: العربية, ελληνικά, English, Français, Bahasa melayu, Italiano, 日本語, 한국어, Português do Brasil, român, 简体中文. Default to English.
+- **`--language`**: The language you wish to use the CLI in. Options: العربية, ελληνικά, English, Français, Bahasa melayu, Italiano, 日本語, 한국어, Português do Brasil, român, 简体中文. Default to English.
 
-- **--non_interactive**: Run CLI in non-interactive mode. This will skip all confirmation and internet connectivity checks.
+- **`--non_interactive`**: Run CLI in non-interactive mode. This will skip all confirmation and internet connectivity checks.
 
-- **--ignore_connectivity**: Skip internet connectivity check and warning.
+- **`--ignore_connectivity`**: Skip internet connectivity check and warning.
 
 
 ## Commands
