@@ -22,3 +22,4 @@ Creates an exit transaction using a keystore file.
 
 ```sh
 ./deposit exit-transaction-keystore --keystore /path/to/keystore.json
+```

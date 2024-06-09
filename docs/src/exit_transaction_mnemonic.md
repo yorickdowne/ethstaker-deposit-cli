@@ -23,3 +23,4 @@ Creates an exit transaction using a mnemonic phrase.
 
 ```sh
 ./deposit exit-transaction-mnemonic
+```

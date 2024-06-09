@@ -23,8 +23,8 @@ Generates a BLS to execution address change message.
 
 - **`--devnet_chain_setting`**: The custom chain setting of a devnet or testnet. Note that it will override your `--chain` choice.
 
-
 ## Example Usage
 
 ```sh
 ./deposit generate-bls-to-execution-change
+```

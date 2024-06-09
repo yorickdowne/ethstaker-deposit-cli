@@ -1,0 +1,53 @@
+# Quick Setup
+
+This guide will walk you through the steps to download and set up the `ethstaker-deposit-cli` for your operating system.
+
+## Step 1: Download the Latest Release
+
+1. Navigate to the [Releases page](https://github.com/eth-educators/ethstaker-deposit-cli/releases) of the `ethstaker-deposit-cli` repository.
+
+2. Download the corresponding file for your operating system:
+    - **Windows**: Look for a file with `windows` in the name.
+    - **MacOS**: Look for a file with `darwin` in the name.
+    - **Linux**: Look for a file with `linux` in the name.
+
+3. Extract the contents of the zipped file
+
+4. Open a terminal or command prompt and navigate to the extracted folder
+
+
+## Step 2: Verify the Installation
+
+1. Make sure you have GPG installed.
+
+2. Make sure you have the `edc-security@ethstaker.cc` public key by running
+```sh
+gpg --keyserver keys.openpgp.org --search-keys 'edc-security@ethstaker.cc'
+```
+
+3. Verify the signature file against the corresponding file but be sure to replace the contents with the exact file name:
+```sh
+gpg --verify staking_deposit-cli-***.asc staking_deposit-cli-***
+```
+
+4. You should see `Good signature from "EDC Security <edc-security@ethstaker.cc>"` in the output **otherwise do not continue**.
+
+## Step 3: Usage
+
+**MacOS users:** In order to run from the terminal, you must first open the file to bypass MacOS code signing issues. Do so by right clicking the `deposit` file and then selecting `Open`.
+
+Determine which command best suites what you would like to accomplish:
+
+- **[new-mnemonic](new_mnemonic.md)**: Used to generate a new mnemonic, validator keys, and deposit file. It is not recommended to use this command if you have existing validators.
+
+- **[existing-mnemonic](existing_mnemonic.md)**: Provide a mnemonic to regenerate validator keys or create new ones.
+
+- **[generate-bls-to-execution-change](generate_bls_to_execution_change.md)**: Update your withdrawal credentials of existing validators. It is **required** to have the corresponding mnemonic.
+
+- **[exit-transaction-keystore](exit_transaction_keystore.md)**: Generate an exit message using the keystore of your validators.
+
+- **[exit-transaction-mnemonic](exit_transaction_mnemonic.md)**: Generate an exit message using the mnemonic of your validators.
+
+---
+
+If you encounter any issues, please check the [issues page](https://github.com/eth-educators/ethstaker-deposit-cli/issues) for help or to report a problem. You may also contact us on the [Ethstaker discord](https://dsc.gg/ethstaker).
