@@ -131,14 +131,16 @@ def validate_password_strength(password: str) -> str:
 
 def validate_int_range(num: Any, low: int, high: int) -> int:
     '''
-    Verifies that `num` is an `int` andlow <= num < high
+    Verifies that `num` is an `int` and low <= num < high
     '''
     try:
         num_int = int(num)  # Try cast to int
-        assert num_int == float(num)  # Check num is not float
-        assert low <= num_int < high  # Check num in range
+        if num_int != float(num):  # Check num is not float
+            raise ValidationError('Num is float')
+        if not (low <= num_int < high):  # Check num in range
+            raise ValidationError('Num is not in range')
         return num_int
-    except (ValueError, AssertionError):
+    except (ValueError, ValidationError):
         raise ValidationError(load_text(['err_not_positive_integer']))
 
 
@@ -263,9 +265,11 @@ def validate_bls_withdrawal_credentials(bls_withdrawal_credentials: str) -> byte
         raise ValidationError(load_text(['err_is_already_eth1_form']) + '\n')
 
     try:
-        assert len(bls_withdrawal_credentials_bytes) == 32
-        assert bls_withdrawal_credentials_bytes[:1] == BLS_WITHDRAWAL_PREFIX
-    except (ValueError, AssertionError):
+        if len(bls_withdrawal_credentials_bytes) != 32:
+            raise ValidationError('Lenght is not 32')
+        if bls_withdrawal_credentials_bytes[:1] != BLS_WITHDRAWAL_PREFIX:
+            raise ValidationError('Prefix is wrong')
+    except (ValueError, ValidationError):
         raise ValidationError(load_text(['err_not_bls_form']) + '\n')
 
     return bls_withdrawal_credentials_bytes
