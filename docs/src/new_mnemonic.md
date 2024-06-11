@@ -13,7 +13,7 @@ Generates a new BIP-39 mnemonic along with validator keystore and deposit files 
 
 - **`--keystore_password`**: The password that is used to encrypt the provided keystore. Note: It's not your mnemonic password.
 
-- **`--execution_address`**: The Ethereum 1 address for validator withdrawals.
+- **`--execution_address`**: The Ethereum execution address for validator withdrawals.
 
 - **`--pbkdf2`**: Will use pbkdf2 key derivation instead of scrypt for generated keystore files as defined in [EIP-2335](https://eips.ethereum.org/EIPS/eip-2335#decryption-key). This can be a good alternative if you intend to work with a large number of keys.
 
