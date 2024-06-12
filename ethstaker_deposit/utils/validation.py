@@ -266,7 +266,7 @@ def validate_bls_withdrawal_credentials(bls_withdrawal_credentials: str) -> byte
 
     try:
         if len(bls_withdrawal_credentials_bytes) != 32:
-            raise ValidationError('Lenght is not 32')
+            raise ValidationError('Length is not 32')
         if bls_withdrawal_credentials_bytes[:1] != BLS_WITHDRAWAL_PREFIX:
             raise ValidationError('Prefix is wrong')
     except (ValueError, ValidationError):
