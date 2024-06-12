@@ -7,8 +7,8 @@ To install the `ethstaker-deposit-cli`, follow these steps:
 Ensure you have the following software installed on your system:
 
 - **Git**: Version control system to clone the repository. [Download Git](https://git-scm.com/downloads)
-- **Python 3.12+**: The programming language required to run the tool. [Download Python](https://www.python.org/downloads/)
-- **pip**: Package installer for Python, which is included with Python 3.12+.
+- **Python 3.9+**: The programming language required to run the tool. [Download Python](https://www.python.org/downloads/)
+- **pip**: Package installer for Python, which is included with Python 3.9+.
 
 
 ## Local Development Steps

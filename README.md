@@ -87,7 +87,7 @@ You can find the audit report by Trail of Bits [here](https://github.com/trailof
 
 ### Build requirements
 
-- [Python **3.12+**](https://www.python.org/about/gettingstarted/)
+- [Python **3.9+**](https://www.python.org/about/gettingstarted/)
 - [pip3](https://pip.pypa.io/en/stable/installing/)
 
 ### For Linux or MacOS users
@@ -237,7 +237,7 @@ You can use `exit-transaction-mnemonic --help` to see all arguments. Note that i
 
 ##### Step 0. Python version checking
 
-Ensure you are using Python version >= Python3.12:
+Ensure you are using Python version >= Python3.9:
 
 ```sh
 python3 -V
@@ -303,7 +303,7 @@ See [here](#successful-message)
 
 ##### Step 0. Python version checking
 
-Ensure you are using Python version >= Python3.12:
+Ensure you are using Python version >= Python3.9:
 
 ```sh
 python3 -V
@@ -517,7 +517,7 @@ See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-exe
 
 ##### Step 0. Python version checking
 
-Ensure you are using Python version >= Python3.12 (Assume that you've installed Python 3 as the main Python):
+Ensure you are using Python version >= Python3.9 (Assume that you've installed Python 3 as the main Python):
 
 ```cmd
 python -V
