@@ -1,5 +1,7 @@
 # new-mnemonic
 
+{{#include ./snippet/warning_message.md}}
+
 ## Description
 Generates a new BIP-39 mnemonic along with validator keystore and deposit files depending on how many validators you wish to create.
 
@@ -11,7 +13,7 @@ Generates a new BIP-39 mnemonic along with validator keystore and deposit files 
 
 - **`--num_validators`**: Number of validators to create.
 
-- **`--keystore_password`**: The password that is used to encrypt the provided keystore. Note: It's not your mnemonic password.
+- **`--keystore_password`**: The password that is used to encrypt the provided keystore. Note: It's not your mnemonic password. <span class="warning"></span>
 
 - **`--execution_address`**: The Ethereum execution address for validator withdrawals.
 

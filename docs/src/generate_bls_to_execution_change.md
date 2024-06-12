@@ -1,5 +1,7 @@
 # generate-bls-to-execution-change
 
+{{#include ./snippet/warning_message.md}}
+
 ## Description
 Generates a BLS to execution address change message.
 
@@ -9,9 +11,9 @@ Generates a BLS to execution address change message.
 
 - **`--chain`**: The chain to use for generating the deposit data. Options are: 'mainnet', 'holesky', etc.
 
-- **`--mnemonic`**: The mnemonic you used to create withdrawal credentials.
+- **`--mnemonic`**: The mnemonic you used to create withdrawal credentials. <span class="warning"></span>
 
-- **`--mnemonic_password`**: The mnemonic password you used in your key generation. Note: It's not the keystore password.
+- **`--mnemonic_password`**: The mnemonic password you used in your key generation. Note: It's not the keystore password. <span class="warning"></span>
 
 - **`--validator_start_index`**: The index position for the keys to start generating withdrawal credentials for.
 

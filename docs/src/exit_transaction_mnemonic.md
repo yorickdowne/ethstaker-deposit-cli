@@ -1,5 +1,7 @@
 # exit-transaction-mnemonic
 
+{{#include ./snippet/warning_message.md}}
+
 ## Description
 Creates an exit transaction using a mnemonic phrase.
 
@@ -7,9 +9,9 @@ Creates an exit transaction using a mnemonic phrase.
 
 - **`--chain`**: The chain to use for generating the deposit data. Options are: 'mainnet', 'holesky', etc.
 
-- **`--mnemonic`**: The mnemonic you used during key generation.
+- **`--mnemonic`**: The mnemonic you used during key generation. <span class="warning"></span>
 
-- **`--mnemonic_password`**: The mnemonic password you used in your key generation. Note: It's not the keystore password.
+- **`--mnemonic_password`**: The mnemonic password you used in your key generation. Note: It's not the keystore password. <span class="warning"></span>
 
 - **`--validator_start_index`**: The index position for the keys to start generating keystores in [ERC-2334 format](https://eips.ethereum.org/EIPS/eip-2334#eth2-specific-parameters) format.
 

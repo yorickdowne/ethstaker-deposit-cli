@@ -1,5 +1,7 @@
 # exit-transaction-keystore
 
+{{#include ./snippet/warning_message.md}}
+
 ## Description
 Creates an exit transaction using a keystore file.
 
@@ -9,7 +11,7 @@ Creates an exit transaction using a keystore file.
 
 - **`--keystore`**: The keystore file associating with the validator you wish to exit.
 
-- **`--keystore_password`**: The password that is used to encrypt the provided keystore. Note: It's not your mnemonic password.
+- **`--keystore_password`**: The password that is used to encrypt the provided keystore. Note: It's not your mnemonic password. <span class="warning"></span>
 
 - **`--validator_index`**: The validator index corresponding to the provided keystore.
 
