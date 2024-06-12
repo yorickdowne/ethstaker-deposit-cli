@@ -129,7 +129,7 @@ def reconstruct_mnemonic(mnemonic: str, words_path: str) -> Optional[str]:
                 It is needed to ensure abbrivated words aren't valid in multiple languages
                 """
                 if reconstructed_mnemonic is not None:
-                    raise ValidationError("This mnemonic abbrivated form is available in multiple languages.")
+                    raise ValidationError("This mnemonic abbreviated form is available in multiple languages.")
                 reconstructed_mnemonic = ' '.join([_index_to_word(full_word_list, index) for index in word_indices])
             else:
                 pass
