@@ -1,3 +1,3 @@
 <div class="warning">
-Adding sensitive arguments when executing CLI commands is a security risk where the value can be accessible through the disk and shell history. This can allow another user, an admin account, and a malicious actor to gain access to that material putting your funds at risk.
+Including sensitive arguments when executing CLI commands poses a security risk, as these values can be accessible through disk and shell history. This exposure can allow other users, including admins and malicious actors, to gain access to sensitive information, putting your funds at risk.
 </div>
