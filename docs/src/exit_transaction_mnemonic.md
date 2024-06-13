@@ -1,0 +1,28 @@
+# exit-transaction-mnemonic
+
+{{#include ./snippet/warning_message.md}}
+
+## Description
+Creates an exit transaction using a mnemonic phrase.
+
+## Optional Arguments
+
+- **`--chain`**: The chain to use for generating the deposit data. Options are: 'mainnet', 'holesky', etc.
+
+- **`--mnemonic`**: The mnemonic you used during key generation. <span class="warning"></span>
+
+- **`--mnemonic_password`**: The mnemonic password you used in your key generation. Note: It's not the keystore password. <span class="warning"></span>
+
+- **`--validator_start_index`**: The index position for the keys to start generating keystores in [ERC-2334 format](https://eips.ethereum.org/EIPS/eip-2334#eth2-specific-parameters) format.
+
+- **`--validator_indices`**: A list of the chosen validator index number(s) as identified on the beacon chain. Split multiple items with whitespaces or commas.
+
+- **`--epoch`**: The epoch of when the exit transaction will be valid. The transaction will always be valid by default.
+
+- **`--output_folder`**: The folder path for the `signed_exit_transaction-*` JSON file.
+
+## Example Usage
+
+```sh
+./deposit exit-transaction-mnemonic
+```
