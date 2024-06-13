@@ -4,7 +4,7 @@ run-name: ${{ github.actor }} is running docs
 on:
   push:
     branches:
-      - github-docs
+      - main
 
 jobs:
   build:
