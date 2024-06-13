@@ -25,13 +25,21 @@ Ensure you have the following software installed on your system:
     cd ethstaker-deposit-cli
     ```
 
-3. **Install Dependencies**
+3. **Setup virtualenv (optional)**
+
+    ```sh
+    pip3 install virtualenv
+    virtualenv venv
+    .\venv\Scripts\activate
+    ```
+
+4. **Install Dependencies**
 
     ```sh
     pip3 install -r requirements.txt
     ```
 
-4. **Run the CLI**
+5. **Run the CLI**
 
     You can now run the CLI tool using the following command:
 
