@@ -28,11 +28,12 @@ def _get_from_dict(dataDict: Dict[str, Any], mapList: Iterable[str]) -> str:
     '''
     try:
         ans = reduce(dict.get, mapList, dataDict)
-        assert isinstance(ans, str)
+        if not isinstance(ans, str):
+            raise ValidationError('Incomplete')
         return ans
     except TypeError:
         raise KeyError('%s not in internationalisation json file.' % mapList)
-    except AssertionError:
+    except ValidationError:
         raise KeyError('The provided params (%s) were incomplete.' % mapList)
 
 
