@@ -60,7 +60,9 @@ MNEMONIC_LANG_OPTIONS = _add_index_to_options({
     'chinese_traditional': ['繁體中文', 'zh-tw', 'Chinese Traditional'],
     'czech': ['čeština', 'český jazyk', 'cs', 'Czech'],
     'english': ['English', 'en'],
+    'french': ['Français', 'Francais', 'fr', 'French'],
     'italian': ['Italiano', 'it', 'Italian'],
+    'japanese': ['日本語', 'ja', 'Japanese'],
     'korean': ['한국어', '조선말', '韓國語', 'ko', 'Korean'],
     # Portuguese mnemonics are in both pt & pt-BR
     'portuguese': ['Português', 'Português do Brasil', 'pt', 'pt-BR', 'Portuguese'],
