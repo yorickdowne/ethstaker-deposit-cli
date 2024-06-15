@@ -51,9 +51,9 @@ INTL_LANG_OPTIONS = _add_index_to_options({
     'ja': ['日本語', 'ja', 'Japanese'],
     'ko': ['한국어', '조선말', '韓國語', 'ko', 'Korean'],
     'pt-BR': ['Português do Brasil', 'Brasil', 'pt-BR', 'Brazilian Portuguese'],
-    'ro': ['român', 'limba română', 'ro', 'Romainian'],
+    'ro': ['român', 'limba română', 'ro', 'Romanian'],
     'tr': ['Türkçe', 'tr', 'Turkish'],
-    'zh-CN': ['简体中文', 'zh-CN', 'zh', 'Chinease'],
+    'zh-CN': ['简体中文', 'zh-CN', 'zh', 'Chinese'],
 })
 MNEMONIC_LANG_OPTIONS = _add_index_to_options({
     'chinese_simplified': ['简体中文', 'zh', 'zh-CN', 'Chinese Simplified'],
