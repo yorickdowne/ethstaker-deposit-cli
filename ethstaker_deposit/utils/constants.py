@@ -51,16 +51,18 @@ INTL_LANG_OPTIONS = _add_index_to_options({
     'ja': ['日本語', 'ja', 'Japanese'],
     'ko': ['한국어', '조선말', '韓國語', 'ko', 'Korean'],
     'pt-BR': ['Português do Brasil', 'Brasil', 'pt-BR', 'Brazilian Portuguese'],
-    'ro': ['român', 'limba română', 'ro', 'Romainian'],
+    'ro': ['român', 'limba română', 'ro', 'Romanian'],
     'tr': ['Türkçe', 'tr', 'Turkish'],
-    'zh-CN': ['简体中文', 'zh-CN', 'zh', 'Chinease'],
+    'zh-CN': ['简体中文', 'zh-CN', 'zh', 'Chinese'],
 })
 MNEMONIC_LANG_OPTIONS = _add_index_to_options({
     'chinese_simplified': ['简体中文', 'zh', 'zh-CN', 'Chinese Simplified'],
     'chinese_traditional': ['繁體中文', 'zh-tw', 'Chinese Traditional'],
     'czech': ['čeština', 'český jazyk', 'cs', 'Czech'],
     'english': ['English', 'en'],
+    'french': ['Français', 'Francais', 'fr', 'French'],
     'italian': ['Italiano', 'it', 'Italian'],
+    'japanese': ['日本語', 'ja', 'Japanese'],
     'korean': ['한국어', '조선말', '韓國語', 'ko', 'Korean'],
     # Portuguese mnemonics are in both pt & pt-BR
     'portuguese': ['Português', 'Português do Brasil', 'pt', 'pt-BR', 'Portuguese'],
