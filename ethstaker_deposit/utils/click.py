@@ -95,6 +95,8 @@ def captive_prompt_callback(
     :param confirmation_prompt: the optional prompt for confirming user input (the user must repeat their input)
     :param confirmation_mismatch_msg: the message displayed to the user should their input and confirmation not match
     :param hide_input: bool, hides the input as the user types
+    :param default: the optional callable that returns a str or a str to be used as the default value if nothing is
+    entered by the user
     '''
     def callback(ctx: click.Context, param: Any, user_input: str) -> Any:
         if config.non_interactive:
