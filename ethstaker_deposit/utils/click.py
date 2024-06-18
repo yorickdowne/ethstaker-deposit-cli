@@ -112,10 +112,7 @@ def captive_prompt_callback(
                 return processed_input
             except ValidationError as e:
                 click.echo('\n[Error] ' + str(e))
-                default_value = default
-                if callable(default):
-                    default_value = default()
-                user_input = click.prompt(prompt(), hide_input=hide_input, default=default_value)
+                user_input = click.prompt(prompt(), hide_input=hide_input, default=_value_of(default))
     return callback
 
 
