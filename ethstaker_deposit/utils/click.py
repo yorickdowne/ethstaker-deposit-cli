@@ -85,7 +85,7 @@ def captive_prompt_callback(
     confirmation_prompt: Optional[Callable[[], str]]=None,
     confirmation_mismatch_msg: Callable[[], str]=lambda: '',
     hide_input: bool=False,
-    default: Any=None,
+    default: Optional[Union[Callable[[], str], str]]=None,
 ) -> Callable[[click.Context, str, str], Any]:
     '''
     Traps the user in a prompt until the value chosen is acceptable
@@ -95,6 +95,8 @@ def captive_prompt_callback(
     :param confirmation_prompt: the optional prompt for confirming user input (the user must repeat their input)
     :param confirmation_mismatch_msg: the message displayed to the user should their input and confirmation not match
     :param hide_input: bool, hides the input as the user types
+    :param default: the optional callable that returns a str or a str to be used as the default value if nothing is
+    entered by the user
     '''
     def callback(ctx: click.Context, param: Any, user_input: str) -> Any:
         if config.non_interactive:
@@ -110,7 +112,7 @@ def captive_prompt_callback(
                 return processed_input
             except ValidationError as e:
                 click.echo('\n[Error] ' + str(e))
-                user_input = click.prompt(prompt(), hide_input=hide_input, default=default)
+                user_input = click.prompt(prompt(), hide_input=hide_input, default=_value_of(default))
     return callback
 
 
