@@ -99,7 +99,8 @@ def run() -> None:
     try:
         cli()
     except (ValueError, ValidationError) as e:
-        click.echo(f"\nError: {e}\n")
+        click.echo(f"\nError: {e}\n", err=True)
+        sys.exit(1)
 
 
 if __name__ == '__main__':
