@@ -18,7 +18,7 @@ from ethstaker_deposit.credentials import (
 from ethstaker_deposit.utils.validation import (
     validate_bls_withdrawal_credentials_list,
     validate_bls_withdrawal_credentials_matching,
-    validate_eth1_withdrawal_address,
+    validate_withdrawal_address,
     validate_int_range,
     verify_bls_to_execution_change_json,
     validate_validator_indices,
@@ -123,13 +123,13 @@ FUNC_NAME = 'generate_bls_to_execution_change'
 )
 @jit_option(
     callback=captive_prompt_callback(
-        lambda address: validate_eth1_withdrawal_address(None, None, address),
+        lambda address: validate_withdrawal_address(None, None, address),
         lambda: load_text(['arg_execution_address', 'prompt'], func=FUNC_NAME),
         lambda: load_text(['arg_execution_address', 'confirm'], func=FUNC_NAME),
         lambda: load_text(['arg_execution_address', 'mismatch'], func=FUNC_NAME),
     ),
     help=lambda: load_text(['arg_execution_address', 'help'], func=FUNC_NAME),
-    param_decls=['--execution_address', '--eth1_withdrawal_address'],
+    param_decls=['--execution_address'],
     prompt=lambda: load_text(['arg_execution_address', 'prompt'], func=FUNC_NAME),
 )
 @jit_option(
@@ -188,7 +188,7 @@ def generate_bls_to_execution_change(
         amounts=amounts,
         chain_setting=chain_setting,
         start_index=validator_start_index,
-        hex_eth1_withdrawal_address=execution_address,
+        hex_withdrawal_address=execution_address,
     )
 
     # Check if the given old bls_withdrawal_credentials is as same as the mnemonic generated

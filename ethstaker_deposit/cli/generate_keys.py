@@ -14,7 +14,7 @@ from ethstaker_deposit.utils.validation import (
     verify_deposit_data_json,
     validate_int_range,
     validate_password_strength,
-    validate_eth1_withdrawal_address,
+    validate_withdrawal_address,
 )
 from ethstaker_deposit.utils.constants import (
     MAX_DEPOSIT_AMOUNT,
@@ -94,7 +94,7 @@ def generate_keys_arguments_decorator(function: Callable[..., Any]) -> Callable[
         ),
         jit_option(
             callback=captive_prompt_callback(
-                lambda address: validate_eth1_withdrawal_address(None, None, address),
+                lambda address: validate_withdrawal_address(None, None, address),
                 lambda: load_text(['arg_execution_address', 'prompt'], func='generate_keys_arguments_decorator'),
                 lambda: load_text(['arg_execution_address', 'confirm'], func='generate_keys_arguments_decorator'),
                 lambda: load_text(['arg_execution_address', 'mismatch'], func='generate_keys_arguments_decorator'),
@@ -102,7 +102,7 @@ def generate_keys_arguments_decorator(function: Callable[..., Any]) -> Callable[
             ),
             default="",
             help=lambda: load_text(['arg_execution_address', 'help'], func='generate_keys_arguments_decorator'),
-            param_decls=['--execution_address', '--eth1_withdrawal_address'],
+            param_decls=['--execution_address'],
             prompt=lambda: load_text(['arg_execution_address', 'prompt'], func='generate_keys_arguments_decorator'),
         ),
         jit_option(
@@ -139,7 +139,7 @@ def generate_keys(ctx: click.Context, validator_start_index: int,
         amounts=amounts,
         chain_setting=chain_setting,
         start_index=validator_start_index,
-        hex_eth1_withdrawal_address=execution_address,
+        hex_withdrawal_address=execution_address,
         use_pbkdf2=pbkdf2
     )
     keystore_filefolders = credentials.export_keystores(password=keystore_password, folder=folder)
