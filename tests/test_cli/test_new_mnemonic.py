@@ -39,7 +39,7 @@ def test_new_mnemonic_bls_withdrawal(monkeypatch) -> None:
     arguments = [
         '--ignore_connectivity',
         'new-mnemonic',
-        '--execution_address', '',
+        '--withdrawal_address', '',
         '--folder', my_folder_path,
     ]
     result = runner.invoke(cli, arguments, input=data)
@@ -196,8 +196,8 @@ def test_new_mnemonic_withdrawal_address_parameter(monkeypatch) -> None:
         os.mkdir(my_folder_path)
 
     runner = CliRunner()
-    execution_address = '0x00000000219ab540356cBB839Cbe05303d7705Fa'
-    inputs = [execution_address, 'english', '1', 'mainnet', 'MyPassword', 'MyPassword',
+    withdrawal_address = '0x00000000219ab540356cBB839Cbe05303d7705Fa'
+    inputs = [withdrawal_address, 'english', '1', 'mainnet', 'MyPassword', 'MyPassword',
               'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about']
     data = '\n'.join(inputs)
     arguments = [
@@ -205,7 +205,7 @@ def test_new_mnemonic_withdrawal_address_parameter(monkeypatch) -> None:
         '--ignore_connectivity',
         'new-mnemonic',
         '--folder', my_folder_path,
-        '--execution_address', execution_address,
+        '--withdrawal_address', withdrawal_address,
     ]
     result = runner.invoke(cli, arguments, input=data)
     assert result.exit_code == 0
@@ -220,7 +220,7 @@ def test_new_mnemonic_withdrawal_address_parameter(monkeypatch) -> None:
     for deposit in deposits_dict:
         withdrawal_credentials = bytes.fromhex(deposit['withdrawal_credentials'])
         assert withdrawal_credentials == (
-            EXECUTION_ADDRESS_WITHDRAWAL_PREFIX + b'\x00' * 11 + decode_hex(execution_address)
+            EXECUTION_ADDRESS_WITHDRAWAL_PREFIX + b'\x00' * 11 + decode_hex(withdrawal_address)
         )
 
     all_uuid = [
@@ -266,7 +266,7 @@ def test_pbkdf2_new_mnemonic(monkeypatch) -> None:
     arguments = [
         '--language', 'english',
         'new-mnemonic',
-        '--execution_address', '',
+        '--withdrawal_address', '',
         '--folder', pbkdf2_folder_path,
         '--pbkdf2',
     ]
@@ -276,7 +276,7 @@ def test_pbkdf2_new_mnemonic(monkeypatch) -> None:
     arguments = [
         '--language', 'english',
         'new-mnemonic',
-        '--execution_address', '',
+        '--withdrawal_address', '',
         '--folder', scrypt_folder_path,
     ]
     result = runner.invoke(cli, arguments, input=data)
@@ -350,7 +350,7 @@ async def test_script_bls_withdrawal() -> None:
         '--mnemonic_language', 'english',
         '--chain', 'mainnet',
         '--keystore_password', 'MyPassword',
-        '--execution_address', '""',
+        '--withdrawal_address', '""',
         '--folder', my_folder_path,
     ]
     proc = await asyncio.create_subprocess_shell(
@@ -437,7 +437,7 @@ async def test_script_abbreviated_mnemonic() -> None:
         '--mnemonic_language', 'english',
         '--chain', 'mainnet',
         '--keystore_password', 'MyPassword',
-        '--execution_address', '""',
+        '--withdrawal_address', '""',
         '--folder', my_folder_path,
     ]
     proc = await asyncio.create_subprocess_shell(

@@ -29,7 +29,7 @@ def test_existing_mnemonic_bls_withdrawal() -> None:
         '--language', 'english',
         '--ignore_connectivity',
         'existing-mnemonic',
-        '--execution_address', '',
+        '--withdrawal_address', '',
         '--folder', my_folder_path,
         '--mnemonic_password', 'TREZOR',
     ]
@@ -190,7 +190,7 @@ def test_pbkdf2_new_mnemonic() -> None:
     arguments = [
         '--language', 'english',
         'existing-mnemonic',
-        '--execution_address', '',
+        '--withdrawal_address', '',
         '--folder', pbkdf2_folder_path,
         '--pbkdf2',
     ]
@@ -200,7 +200,7 @@ def test_pbkdf2_new_mnemonic() -> None:
     arguments = [
         '--language', 'english',
         'existing-mnemonic',
-        '--execution_address', '',
+        '--withdrawal_address', '',
         '--folder', scrypt_folder_path,
     ]
     result = runner.invoke(cli, arguments, input=data)
@@ -274,7 +274,7 @@ async def test_script() -> None:
         '--validator_start_index', '1',
         '--chain', 'mainnet',
         '--keystore_password', 'MyPassword',
-        '--execution_address', '""',
+        '--withdrawal_address', '""',
         '--folder', my_folder_path,
     ]
     proc = await asyncio.create_subprocess_shell(
@@ -323,7 +323,7 @@ async def test_script_abbreviated_mnemonic() -> None:
         '--validator_start_index', '1',
         '--chain', 'mainnet',
         '--keystore_password', 'MyPassword',
-        '--execution_address', '""',
+        '--withdrawal_address', '""',
         '--folder', my_folder_path,
     ]
     proc = await asyncio.create_subprocess_shell(

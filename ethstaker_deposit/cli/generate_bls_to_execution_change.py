@@ -124,13 +124,13 @@ FUNC_NAME = 'generate_bls_to_execution_change'
 @jit_option(
     callback=captive_prompt_callback(
         lambda address: validate_withdrawal_address(None, None, address),
-        lambda: load_text(['arg_execution_address', 'prompt'], func=FUNC_NAME),
-        lambda: load_text(['arg_execution_address', 'confirm'], func=FUNC_NAME),
-        lambda: load_text(['arg_execution_address', 'mismatch'], func=FUNC_NAME),
+        lambda: load_text(['arg_withdrawal_address', 'prompt'], func=FUNC_NAME),
+        lambda: load_text(['arg_withdrawal_address', 'confirm'], func=FUNC_NAME),
+        lambda: load_text(['arg_withdrawal_address', 'mismatch'], func=FUNC_NAME),
     ),
-    help=lambda: load_text(['arg_execution_address', 'help'], func=FUNC_NAME),
-    param_decls=['--execution_address'],
-    prompt=lambda: load_text(['arg_execution_address', 'prompt'], func=FUNC_NAME),
+    help=lambda: load_text(['arg_withdrawal_address', 'help'], func=FUNC_NAME),
+    param_decls=['--withdrawal_address'],
+    prompt=lambda: load_text(['arg_withdrawal_address', 'prompt'], func=FUNC_NAME),
 )
 @jit_option(
     # Only for devnet tests
@@ -148,7 +148,7 @@ def generate_bls_to_execution_change(
         validator_start_index: int,
         validator_indices: Sequence[int],
         bls_withdrawal_credentials_list: Sequence[bytes],
-        execution_address: HexAddress,
+        withdrawal_address: HexAddress,
         devnet_chain_setting: str,
         **kwargs: Any) -> None:
     # Generate folder
@@ -188,7 +188,7 @@ def generate_bls_to_execution_change(
         amounts=amounts,
         chain_setting=chain_setting,
         start_index=validator_start_index,
-        hex_withdrawal_address=execution_address,
+        hex_withdrawal_address=withdrawal_address,
     )
 
     # Check if the given old bls_withdrawal_credentials is as same as the mnemonic generated
@@ -212,7 +212,7 @@ def generate_bls_to_execution_change(
         btec_file,
         credentials.credentials,
         input_validator_indices=validator_indices,
-        input_execution_address=execution_address,
+        input_withdrawal_address=withdrawal_address,
         chain_setting=chain_setting,
     )
     if not json_file_validation_result:

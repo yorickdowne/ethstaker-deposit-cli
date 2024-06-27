@@ -169,7 +169,7 @@ def verify_bls_to_execution_change_json(filefolder: str,
                                         credentials: Sequence[Credential],
                                         *,
                                         input_validator_indices: Sequence[int],
-                                        input_execution_address: str,
+                                        input_withdrawal_address: str,
                                         chain_setting: BaseChainSetting) -> bool:
     """
     Validate every BLSToExecutionChange found in the bls_to_execution_change JSON file folder.
@@ -186,7 +186,7 @@ def verify_bls_to_execution_change_json(filefolder: str,
             'btec_dict': btec,
             'credential': credential,
             'input_validator_index': input_validator_index,
-            'input_execution_address': input_execution_address,
+            'input_withdrawal_address': input_withdrawal_address,
             'chain_setting': chain_setting,
         } for btec, credential, input_validator_index in zip(btec_json, credentials, input_validator_indices)]
 
@@ -202,7 +202,7 @@ def validate_bls_to_execution_change(btec_dict: Dict[str, Any],
                                      credential: Credential,
                                      *,
                                      input_validator_index: int,
-                                     input_execution_address: str,
+                                     input_withdrawal_address: str,
                                      chain_setting: BaseChainSetting) -> bool:
     validator_index = int(btec_dict['message']['validator_index'])
     from_bls_pubkey = BLSPubkey(decode_hex(btec_dict['message']['from_bls_pubkey']))
@@ -216,7 +216,7 @@ def validate_bls_to_execution_change(btec_dict: Dict[str, Any],
         return False
     if (
         to_execution_address != credential.withdrawal_address
-        or to_execution_address != decode_hex(input_execution_address)
+        or to_execution_address != decode_hex(input_withdrawal_address)
     ):
         return False
     if genesis_validators_root != chain_setting.GENESIS_VALIDATORS_ROOT:
