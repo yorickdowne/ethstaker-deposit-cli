@@ -102,7 +102,7 @@ def generate_keys_arguments_decorator(function: Callable[..., Any]) -> Callable[
             ),
             default="",
             help=lambda: load_text(['arg_withdrawal_address', 'help'], func='generate_keys_arguments_decorator'),
-            param_decls=['--withdrawal_address'],
+            param_decls=['--withdrawal_address', '--execution_address', '--eth1_withdrawal_address'],
             prompt=lambda: load_text(['arg_withdrawal_address', 'prompt'], func='generate_keys_arguments_decorator'),
         ),
         jit_option(

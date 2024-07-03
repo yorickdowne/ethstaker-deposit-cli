@@ -239,6 +239,122 @@ def test_new_mnemonic_withdrawal_address_parameter(monkeypatch) -> None:
     clean_key_folder(my_folder_path)
 
 
+# Alternative parameter "--eth1_withdrawal_address" for setting withdrawal credentials
+def test_new_mnemonic_eth1_withdrawal_address_param(monkeypatch) -> None:
+    # monkeypatch get_mnemonic
+    def mock_get_mnemonic(language, words_path, entropy=None) -> str:
+        return "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
+
+    monkeypatch.setattr(new_mnemonic, "get_mnemonic", mock_get_mnemonic)
+
+    # Prepare folder
+    my_folder_path = os.path.join(os.getcwd(), 'TESTING_TEMP_FOLDER')
+    clean_key_folder(my_folder_path)
+    if not os.path.exists(my_folder_path):
+        os.mkdir(my_folder_path)
+
+    runner = CliRunner()
+    withdrawal_address = '0x00000000219ab540356cBB839Cbe05303d7705Fa'
+    inputs = [withdrawal_address, 'english', '1', 'mainnet', 'MyPassword', 'MyPassword',
+              'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about']
+    data = '\n'.join(inputs)
+    arguments = [
+        '--language', 'english',
+        '--ignore_connectivity',
+        'new-mnemonic',
+        '--folder', my_folder_path,
+        '--eth1_withdrawal_address', withdrawal_address,
+    ]
+    result = runner.invoke(cli, arguments, input=data)
+    assert result.exit_code == 0
+
+    # Check files
+    validator_keys_folder_path = os.path.join(my_folder_path, DEFAULT_VALIDATOR_KEYS_FOLDER_NAME)
+    _, _, key_files = next(os.walk(validator_keys_folder_path))
+
+    deposit_file = [key_file for key_file in key_files if key_file.startswith('deposit_data')][0]
+    with open(validator_keys_folder_path + '/' + deposit_file, 'r', encoding='utf-8') as f:
+        deposits_dict = json.load(f)
+    for deposit in deposits_dict:
+        withdrawal_credentials = bytes.fromhex(deposit['withdrawal_credentials'])
+        assert withdrawal_credentials == (
+            EXECUTION_ADDRESS_WITHDRAWAL_PREFIX + b'\x00' * 11 + decode_hex(withdrawal_address)
+        )
+
+    all_uuid = [
+        get_uuid(validator_keys_folder_path + '/' + key_file)
+        for key_file in key_files
+        if key_file.startswith('keystore')
+    ]
+    assert len(set(all_uuid)) == 1
+
+    # Verify file permissions
+    if os.name == 'posix':
+        for file_name in key_files:
+            assert get_permissions(validator_keys_folder_path, file_name) == '0o440'
+
+    # Clean up
+    clean_key_folder(my_folder_path)
+
+
+# Alternative parameter "--execution_address" for setting withdrawal credentials
+def test_new_mnemonic_execution_address_param(monkeypatch) -> None:
+    # monkeypatch get_mnemonic
+    def mock_get_mnemonic(language, words_path, entropy=None) -> str:
+        return "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
+
+    monkeypatch.setattr(new_mnemonic, "get_mnemonic", mock_get_mnemonic)
+
+    # Prepare folder
+    my_folder_path = os.path.join(os.getcwd(), 'TESTING_TEMP_FOLDER')
+    clean_key_folder(my_folder_path)
+    if not os.path.exists(my_folder_path):
+        os.mkdir(my_folder_path)
+
+    runner = CliRunner()
+    withdrawal_address = '0x00000000219ab540356cBB839Cbe05303d7705Fa'
+    inputs = [withdrawal_address, 'english', '1', 'mainnet', 'MyPassword', 'MyPassword',
+              'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about']
+    data = '\n'.join(inputs)
+    arguments = [
+        '--language', 'english',
+        '--ignore_connectivity',
+        'new-mnemonic',
+        '--folder', my_folder_path,
+        '--execution_address', withdrawal_address,
+    ]
+    result = runner.invoke(cli, arguments, input=data)
+    assert result.exit_code == 0
+
+    # Check files
+    validator_keys_folder_path = os.path.join(my_folder_path, DEFAULT_VALIDATOR_KEYS_FOLDER_NAME)
+    _, _, key_files = next(os.walk(validator_keys_folder_path))
+
+    deposit_file = [key_file for key_file in key_files if key_file.startswith('deposit_data')][0]
+    with open(validator_keys_folder_path + '/' + deposit_file, 'r', encoding='utf-8') as f:
+        deposits_dict = json.load(f)
+    for deposit in deposits_dict:
+        withdrawal_credentials = bytes.fromhex(deposit['withdrawal_credentials'])
+        assert withdrawal_credentials == (
+            EXECUTION_ADDRESS_WITHDRAWAL_PREFIX + b'\x00' * 11 + decode_hex(withdrawal_address)
+        )
+
+    all_uuid = [
+        get_uuid(validator_keys_folder_path + '/' + key_file)
+        for key_file in key_files
+        if key_file.startswith('keystore')
+    ]
+    assert len(set(all_uuid)) == 1
+
+    # Verify file permissions
+    if os.name == 'posix':
+        for file_name in key_files:
+            assert get_permissions(validator_keys_folder_path, file_name) == '0o440'
+
+    # Clean up
+    clean_key_folder(my_folder_path)
+
+
 def test_pbkdf2_new_mnemonic(monkeypatch) -> None:
     # monkeypatch get_mnemonic
     def mock_get_mnemonic(language, words_path, entropy=None) -> str:
