@@ -1,5 +1,6 @@
 #
-name: Create and publish a Docker image
+name: ci-docker
+run-name: ${{ github.actor }} is running ci-docker
 
 # Configures this workflow to run every time a change is pushed to a tag that starts with `v`.
 on:
