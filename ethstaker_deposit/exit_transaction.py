@@ -1,6 +1,5 @@
 import json
 import os
-import time
 from typing import Any, Dict
 from py_ecc.bls import G2ProofOfPossession as bls
 
@@ -39,7 +38,7 @@ def exit_transaction_generation(
     return signed_exit
 
 
-def export_exit_transaction_json(folder: str, signed_exit: SignedVoluntaryExit) -> str:
+def export_exit_transaction_json(folder: str, signed_exit: SignedVoluntaryExit, timestamp: float) -> str:
     signed_exit_json: Dict[str, Any] = {}
     message = {
         'epoch': str(signed_exit.message.epoch),  # type: ignore[attr-defined]
@@ -51,7 +50,8 @@ def export_exit_transaction_json(folder: str, signed_exit: SignedVoluntaryExit) 
     filefolder = os.path.join(
         folder,
         'signed_exit_transaction-%s-%i.json' % (
-            signed_exit.message.validator_index, time.time()  # type: ignore[attr-defined]
+            signed_exit.message.validator_index,  # type: ignore[attr-defined]
+            timestamp,
         )
     )
 
