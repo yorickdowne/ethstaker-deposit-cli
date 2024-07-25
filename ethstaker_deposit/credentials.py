@@ -158,9 +158,9 @@ class Credential:
         else:
             return ScryptKeystore.encrypt(secret=secret, password=password, path=self.signing_key_path)
 
-    def save_signing_keystore(self, password: str, folder: str) -> str:
+    def save_signing_keystore(self, password: str, folder: str, timestamp: float) -> str:
         keystore = self.signing_keystore(password)
-        filefolder = os.path.join(folder, 'keystore-%s-%i.json' % (keystore.path.replace('/', '_'), time.time()))
+        filefolder = os.path.join(folder, 'keystore-%s-%i.json' % (keystore.path.replace('/', '_'), timestamp))
         keystore.save(filefolder)
         return filefolder
 
@@ -218,7 +218,7 @@ class Credential:
         result_dict.update({'metadata': metadata})
         return result_dict
 
-    def save_exit_transaction(self, validator_index: int, epoch: int, folder: str) -> str:
+    def save_exit_transaction(self, validator_index: int, epoch: int, folder: str, timestamp: float) -> str:
         signing_key = self.signing_sk
 
         signed_voluntary_exit = exit_transaction_generation(
@@ -228,7 +228,7 @@ class Credential:
             epoch=epoch
         )
 
-        return export_exit_transaction_json(folder=folder, signed_exit=signed_voluntary_exit)
+        return export_exit_transaction_json(folder=folder, signed_exit=signed_voluntary_exit, timestamp=timestamp)
 
 
 def _credential_builder(kwargs: Dict[str, Any]) -> Credential:
@@ -297,7 +297,7 @@ class CredentialList:
                     bar.update(1)
         return cls(credentials)
 
-    def export_keystores(self, password: str, folder: str) -> List[str]:
+    def export_keystores(self, password: str, folder: str, timestamp: float) -> List[str]:
         filefolders: List[str] = []
         with click.progressbar(length=len(self.credentials), label=load_text(['msg_keystore_creation']),
                                show_percent=False, show_pos=True) as bar:
@@ -305,6 +305,7 @@ class CredentialList:
                 'credential': credential,
                 'password': password,
                 'folder': folder,
+                'timestamp': timestamp,
             } for credential in self.credentials]
 
             with concurrent.futures.ProcessPoolExecutor() as executor:
@@ -313,7 +314,7 @@ class CredentialList:
                     bar.update(1)
         return filefolders
 
-    def export_deposit_data_json(self, folder: str) -> str:
+    def export_deposit_data_json(self, folder: str, timestamp: float) -> str:
         deposit_data = []
         with click.progressbar(length=len(self.credentials), label=load_text(['msg_depositdata_creation']),
                                show_percent=False, show_pos=True) as bar:
@@ -323,7 +324,7 @@ class CredentialList:
                     deposit_data.append(datum_dict)
                     bar.update(1)
 
-        filefolder = os.path.join(folder, 'deposit_data-%i.json' % time.time())
+        filefolder = os.path.join(folder, 'deposit_data-%i.json' % timestamp)
         with open(filefolder, 'w') as f:
             json.dump(deposit_data, f, default=lambda x: x.hex())
         if os.name == 'posix':

@@ -1,5 +1,6 @@
-import os
 import click
+import os
+import time
 from typing import (
     Any,
     Callable,
@@ -142,8 +143,11 @@ def generate_keys(ctx: click.Context, validator_start_index: int,
         hex_withdrawal_address=withdrawal_address,
         use_pbkdf2=pbkdf2
     )
-    keystore_filefolders = credentials.export_keystores(password=keystore_password, folder=folder)
-    deposits_file = credentials.export_deposit_data_json(folder=folder)
+
+    timestamp = time.time()
+
+    keystore_filefolders = credentials.export_keystores(password=keystore_password, folder=folder, timestamp=timestamp)
+    deposits_file = credentials.export_deposit_data_json(folder=folder, timestamp=timestamp)
     if not credentials.verify_keystores(keystore_filefolders=keystore_filefolders, password=keystore_password):
         raise ValidationError(load_text(['err_verify_keystores']))
     if not verify_deposit_data_json(deposits_file, credentials.credentials):

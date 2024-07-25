@@ -1,4 +1,5 @@
 import os
+import time
 
 from click.testing import CliRunner
 
@@ -41,7 +42,7 @@ def test_exit_transaction_keystore() -> None:
     )
 
     # Save keystore file
-    keystore_filepath = credential.save_signing_keystore(keystore_password, exit_transaction_folder_path)
+    keystore_filepath = credential.save_signing_keystore(keystore_password, exit_transaction_folder_path, time.time())
 
     runner = CliRunner()
     arguments = [
@@ -126,10 +127,12 @@ def test_exit_transaction_with_pbkdf2() -> None:
     pbkdf2_keystore_filepath = pbkdf2_credential.save_signing_keystore(
         keystore_password,
         pbkdf2_exit_transaction_folder_path,
+        time.time(),
     )
     scrypt_keystore_filepath = scrypt_credential.save_signing_keystore(
         keystore_password,
         scrypt_exit_transaction_folder_path,
+        time.time(),
     )
 
     runner = CliRunner()
@@ -260,7 +263,7 @@ def test_invalid_keystore_password() -> None:
     )
 
     # Save keystore file
-    keystore_filepath = credential.save_signing_keystore(keystore_password, exit_transaction_folder_path)
+    keystore_filepath = credential.save_signing_keystore(keystore_password, exit_transaction_folder_path, time.time())
     runner = CliRunner()
     inputs = []
     data = '\n'.join(inputs)

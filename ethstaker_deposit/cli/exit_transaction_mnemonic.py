@@ -1,6 +1,7 @@
 import click
-import os
 import concurrent.futures
+import os
+import time
 
 from typing import Any, Sequence, Dict
 from ethstaker_deposit.cli.existing_mnemonic import load_mnemonic_arguments_decorator
@@ -141,6 +142,7 @@ def exit_transaction_mnemonic(
             'validator_index': validator_index,
             'epoch': epoch,
             'folder': folder,
+            'timestamp': time.time(),
         } for credential, validator_index in zip(credentials, validator_indices)]
 
         with concurrent.futures.ProcessPoolExecutor() as executor:

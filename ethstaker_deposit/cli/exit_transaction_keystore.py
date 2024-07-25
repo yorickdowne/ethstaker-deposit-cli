@@ -1,5 +1,6 @@
 import click
 import os
+import time
 
 from typing import Any
 from ethstaker_deposit.exit_transaction import exit_transaction_generation, export_exit_transaction_json
@@ -118,7 +119,7 @@ def exit_transaction_keystore(
         os.mkdir(folder)
 
     click.echo(load_text(['msg_exit_transaction_creation']))
-    saved_folder = export_exit_transaction_json(folder=folder, signed_exit=signed_exit)
+    saved_folder = export_exit_transaction_json(folder=folder, signed_exit=signed_exit, timestamp=time.time())
 
     click.echo(load_text(['msg_verify_exit_transaction']))
     if (not verify_signed_exit_json(saved_folder, keystore.pubkey, chain_settings)):
