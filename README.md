@@ -151,6 +151,9 @@ The CLI offers different commands depending on what you want to do with the tool
 | ------- | ----------- |
 | `new-mnemonic` | (Recommended) This command is used to generate keystores with a new mnemonic. |
 | `existing-mnemonic` | This command is used to re-generate or derive new keys from your existing mnemonic. Use this command, if (i) you have already generated keys with this CLI before, (ii) you want to reuse your mnemonic that you know is secure that you generated elsewhere (reusing your eth wallet mnemonic .etc), or (iii) you lost your keystores and need to recover your keys. |
+| `generate-bls-to-execution-change` | This command is used to generate BLS to execution address change message. This is used to add a withdrawal address to a validator that does not currently have one. |
+| `exit-transaction-keystore` | This command is used to create an exit transaction using a keystore file. |
+| `exit-transaction-mnemonic` | This command is used to create an exit transaction using a mnemonic phrase. |
 
 ###### `new-mnemonic` Arguments
 
