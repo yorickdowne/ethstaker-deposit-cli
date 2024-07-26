@@ -36,29 +36,32 @@
         - [Language Argument](#language-argument-1)
         - [Commands](#commands-2)
         - [Arguments](#arguments-1)
-    - [Option 4. Use Docker image](#option-4-use-docker-image)
-      - [Step 1. Build the docker image](#step-1-build-the-docker-image)
+    - [Option 4. Use published docker image](#option-4-use-published-docker-image)
+      - [Step 1. Pull the official docker image](#step-1-pull-the-official-docker-image)
       - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-3)
+    - [Option 5. Use local docker image](#option-5-use-local-docker-image)
+      - [Step 1. Build the docker image](#step-1-build-the-docker-image)
+      - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-4)
         - [Arguments](#arguments-2)
         - [Successful message](#successful-message-2)
   - [For Windows users](#for-windows-users)
     - [Option 1. Download binary executable file](#option-1-download-binary-executable-file-1)
       - [Step 1. Installation](#step-1-installation-3)
-      - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-4)
+      - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-5)
         - [Language Argument](#language-argument-2)
         - [Commands](#commands-3)
         - [Arguments](#arguments-3)
     - [Option 2. Build `deposit-cli` with native Python](#option-2-build-deposit-cli-with-native-python-1)
       - [Step 0. Python version checking](#step-0-python-version-checking-2)
       - [Step 1. Installation](#step-1-installation-4)
-      - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-5)
+      - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-6)
         - [Language Argument](#language-argument-3)
         - [Commands](#commands-4)
         - [Arguments](#arguments-4)
     - [Option 3. Build `deposit-cli` with `virtualenv`](#option-3-build-deposit-cli-with-virtualenv-1)
       - [Step 0. Python version checking](#step-0-python-version-checking-3)
       - [Step 1. Installation](#step-1-installation-5)
-      - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-6)
+      - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-7)
         - [Language Argument](#language-argument-4)
         - [Commands](#commands-5)
         - [Arguments](#arguments-5)
@@ -74,7 +77,7 @@
 
 ## Introduction
 
-`deposit-cli` is a tool for creating [EIP-2335 format](https://eips.ethereum.org/EIPS/eip-2335) BLS12-381 keystores and a corresponding `deposit_data*.json` file for [Ethereum Staking Launchpad](https://github.com/ethereum/staking-launchpad). One can also provide a keystore file to generate a `signed_exit_transaction*.json` file to be broadcast at a later date to exit a validator.
+`ethstaker-deposit-cli` is a tool for creating [EIP-2335 format](https://eips.ethereum.org/EIPS/eip-2335) BLS12-381 keystores and a corresponding `deposit_data*.json` file for [Ethereum Staking Launchpad](https://github.com/ethereum/staking-launchpad). One can also provide a keystore file to generate a `signed_exit_transaction*.json` file to be broadcast at a later date to exit a validator.
 
 - **Warning: Please generate your keystores on your own safe, completely offline device.**
 - **Warning: Please backup your mnemonic, keystores, and password securely.**
@@ -365,7 +368,37 @@ See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-exe
 See [here](#exit-transaction-keystore-arguments) for `exit-transaction-keystore` arguments\
 See [here](#exit-transaction-mnemonic-arguments) for `exit-transaction-mnemonic` arguments
 
-#### Option 4. Use Docker image
+#### Option 4. Use published docker image
+
+##### Step 1. Pull the official docker image
+
+Run the following command to pull the latest docker image published on the Github repository:
+
+```sh
+docker pull ghcr.io/eth-educators/ethstaker-deposit-cli:latest
+```
+
+##### Step 2. Create keys and `deposit_data-*.json`
+
+Run the following command to enter the interactive CLI:
+
+```sh
+docker run -it --rm -v $(pwd)/validator_keys:/app/validator_keys ghcr.io/eth-educators/ethstaker-deposit-cli:latest
+```
+
+You can also run the tool with optional arguments:
+
+```sh
+docker run -it --rm -v $(pwd)/validator_keys:/app/validator_keys ghcr.io/eth-educators/ethstaker-deposit-cli:latest new-mnemonic --num_validators=<NUM_VALIDATORS> --mnemonic_language=english
+```
+
+Example for 1 validator on the [Holesky testnet](https://holesky.launchpad.ethereum.org/) using english:
+
+```sh
+docker run -it --rm -v $(pwd)/validator_keys:/app/validator_keys ghcr.io/eth-educators/ethstaker-deposit-cli:latest new-mnemonic --num_validators=1 --mnemonic_language=english --chain=holesky
+```
+
+#### Option 5. Use local docker image
 
 ##### Step 1. Build the docker image
 
@@ -386,13 +419,13 @@ docker run -it --rm -v $(pwd)/validator_keys:/app/validator_keys eth-educators/e
 You can also run the tool with optional arguments:
 
 ```sh
-docker run -it --rm -v $(pwd)/validator_keys:/app/validator_keys eth-educators/ethstaker-deposit-cli new-mnemonic --num_validators=<NUM_VALIDATORS> --mnemonic_language=english --folder=<YOUR_FOLDER_PATH>
+docker run -it --rm -v $(pwd)/validator_keys:/app/validator_keys eth-educators/ethstaker-deposit-cli new-mnemonic --num_validators=<NUM_VALIDATORS> --mnemonic_language=english
 ```
 
-Example for 1 validator on the [Prater testnet](https://prater.launchpad.ethereum.org/) using english:
+Example for 1 validator on the [Holesky testnet](https://holesky.launchpad.ethereum.org/) using english:
 
 ```sh
-docker run -it --rm -v $(pwd)/validator_keys:/app/validator_keys eth-educators/ethstaker-deposit-cli new-mnemonic --num_validators=1 --mnemonic_language=english --chain=prater
+docker run -it --rm -v $(pwd)/validator_keys:/app/validator_keys eth-educators/ethstaker-deposit-cli new-mnemonic --num_validators=1 --mnemonic_language=english --chain=holesky
 ```
 
 ###### Arguments
