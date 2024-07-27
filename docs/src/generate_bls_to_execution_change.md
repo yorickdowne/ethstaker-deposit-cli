@@ -3,7 +3,7 @@
 {{#include ./snippet/warning_message.md}}
 
 ## Description
-Generates a BLS to execution address change message.
+Generates a BLS to execution address change message. This is used to add a withdrawal address to a validator that does not currently have one.
 
 ## Optional Arguments
 
