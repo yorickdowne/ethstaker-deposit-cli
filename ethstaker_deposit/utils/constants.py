@@ -42,7 +42,7 @@ def _add_index_to_options(d: Dict[str, List[str]]) -> Dict[str, List[str]]:
 
 
 INTL_LANG_OPTIONS = _add_index_to_options({
-    'ar': ['العربية', 'ar', 'Arabic'],
+    'ar': ['\u202bالعربية\u202c', 'ar', 'Arabic'],
     'el': ['ελληνικά', 'el', 'Greek'],
     'en': ['English', 'en'],
     'fr': ['Français', 'Francais', 'fr', 'French'],
