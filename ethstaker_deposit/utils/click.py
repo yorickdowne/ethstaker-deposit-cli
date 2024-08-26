@@ -56,9 +56,9 @@ class JITOption(click.Option):
         self.help = _value_of(self.callable_help)
         return super().get_help_record(ctx)
 
-    def get_default(self, ctx: click.Context) -> Any:
+    def get_default(self, ctx: click.Context, call: bool = True) -> Any:
         self.default = _value_of(self.callable_default)
-        return super().get_default(ctx)
+        return super().get_default(ctx, call)
 
 
 def jit_option(*args: Any, **kwargs: Any) -> Callable[[Any], Any]:
@@ -86,6 +86,7 @@ def captive_prompt_callback(
     confirmation_mismatch_msg: Callable[[], str]=lambda: '',
     hide_input: bool=False,
     default: Optional[Union[Callable[[], str], str]]=None,
+    prompt_if_none: bool=False,
 ) -> Callable[[click.Context, str, str], Any]:
     '''
     Traps the user in a prompt until the value chosen is acceptable
@@ -99,6 +100,13 @@ def captive_prompt_callback(
     entered by the user
     '''
     def callback(ctx: click.Context, param: Any, user_input: str) -> Any:
+        # the callback is called twice, once for the option prompt and once to verify the input
+        # To avoid showing confirmation prompt twice, we introduce a flag to prompt inside
+        # the callback
+        # See https://github.com/pallets/click/discussions/2673
+        if (prompt_if_none and param.prompt is None and
+                ctx.get_parameter_source(param.name) == click.core.ParameterSource.DEFAULT):
+            user_input = click.prompt(prompt(), hide_input=hide_input, default=_value_of(default))
         if config.non_interactive:
             return processing_func(user_input)
         while True:

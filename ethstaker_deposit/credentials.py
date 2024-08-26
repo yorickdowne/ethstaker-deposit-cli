@@ -279,7 +279,7 @@ class CredentialList:
         key_indices = range(start_index, start_index + num_keys)
 
         credentials: List[Credential] = []
-        with click.progressbar(length=num_keys, label=load_text(['msg_key_creation']),
+        with click.progressbar(length=num_keys, label=load_text(['msg_key_creation']),  # type: ignore[var-annotated]
                                show_percent=False, show_pos=True) as bar:
             executor_kwargs = [{
                 'mnemonic': mnemonic,
@@ -299,7 +299,8 @@ class CredentialList:
 
     def export_keystores(self, password: str, folder: str, timestamp: float) -> List[str]:
         filefolders: List[str] = []
-        with click.progressbar(length=len(self.credentials), label=load_text(['msg_keystore_creation']),
+        with click.progressbar(length=len(self.credentials),  # type: ignore[var-annotated]
+                               label=load_text(['msg_keystore_creation']),
                                show_percent=False, show_pos=True) as bar:
             executor_kwargs = [{
                 'credential': credential,
@@ -316,7 +317,8 @@ class CredentialList:
 
     def export_deposit_data_json(self, folder: str, timestamp: float) -> str:
         deposit_data = []
-        with click.progressbar(length=len(self.credentials), label=load_text(['msg_depositdata_creation']),
+        with click.progressbar(length=len(self.credentials),  # type: ignore[var-annotated]
+                               label=load_text(['msg_depositdata_creation']),
                                show_percent=False, show_pos=True) as bar:
 
             with concurrent.futures.ProcessPoolExecutor() as executor:
@@ -333,7 +335,7 @@ class CredentialList:
 
     def verify_keystores(self, keystore_filefolders: List[str], password: str) -> bool:
         all_valid_keystores = True
-        with click.progressbar(length=len(self.credentials),
+        with click.progressbar(length=len(self.credentials),  # type: ignore[var-annotated]
                                label=load_text(['msg_keystore_verification']),
                                show_percent=False, show_pos=True) as bar:
             executor_kwargs = [{
@@ -351,7 +353,8 @@ class CredentialList:
 
     def export_bls_to_execution_change_json(self, folder: str, validator_indices: Sequence[int]) -> str:
         bls_to_execution_changes = []
-        with click.progressbar(length=len(self.credentials), label=load_text(['msg_bls_to_execution_change_creation']),
+        with click.progressbar(length=len(self.credentials),  # type: ignore[var-annotated]
+                               label=load_text(['msg_bls_to_execution_change_creation']),
                                show_percent=False, show_pos=True) as bar:
 
             executor_kwargs = [{

@@ -122,7 +122,8 @@ async def test_exit_transaction_mnemonic_multiple() -> None:
         # 2 exit code due to thrown ValidationError
         ('holesky', "aban aban aban aban aban aban aban aban aban aban aban abou", "a", 0, 0, 2),
         ('holesky', "aban aban aban aban aban aban aban aban aban aban aban abou", 0, "b", 0, 1),
-        ('holesky', "aban aban aban aban aban aban aban aban aban aban aban abou", 0, 0, "c", 1),
+        # 2 exit code due to thrown ValidationError
+        ('holesky', "aban aban aban aban aban aban aban aban aban aban aban abou", 0, 0, "c", 2),
     ]
 )
 def test_exit_mnemonic_invalid_params(chain, mnemonic, start_index, indices, epoch, assertion) -> None:
