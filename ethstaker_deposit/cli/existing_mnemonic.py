@@ -42,7 +42,7 @@ def load_mnemonic_arguments_decorator(function: Callable[..., Any]) -> Callable[
                 lambda: load_text(['arg_mnemonic_password', 'prompt'], func='existing_mnemonic'),
                 lambda: load_text(['arg_mnemonic_password', 'confirm'], func='existing_mnemonic'),
                 lambda: load_text(['arg_mnemonic_password', 'mismatch'], func='existing_mnemonic'),
-                True,
+                hide_input=True,
             ),
             default='',
             help=lambda: load_text(['arg_mnemonic_password', 'help'], func='existing_mnemonic'),
@@ -73,11 +73,12 @@ def validate_mnemonic(ctx: click.Context, param: Any, mnemonic: str) -> str:
         lambda num: validate_int_range(num, 0, 2**32),
         lambda: load_text(['arg_validator_start_index', 'prompt'], func='existing_mnemonic'),
         lambda: load_text(['arg_validator_start_index', 'confirm'], func='existing_mnemonic'),
+        prompt_if_none=True,
     ),
     default=0,
     help=lambda: load_text(['arg_validator_start_index', 'help'], func='existing_mnemonic'),
     param_decls="--validator_start_index",
-    prompt=lambda: load_text(['arg_validator_start_index', 'prompt'], func='existing_mnemonic'),
+    prompt=False,  # the callback handles the prompt
 )
 @generate_keys_arguments_decorator
 @click.pass_context

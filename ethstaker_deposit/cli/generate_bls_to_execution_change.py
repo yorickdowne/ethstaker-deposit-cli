@@ -116,10 +116,11 @@ FUNC_NAME = 'generate_bls_to_execution_change'
         lambda bls_withdrawal_credentials_list:
             validate_bls_withdrawal_credentials_list(bls_withdrawal_credentials_list),
         lambda: load_text(['arg_bls_withdrawal_credentials_list', 'prompt'], func=FUNC_NAME),
+        prompt_if_none=True,
     ),
     help=lambda: load_text(['arg_bls_withdrawal_credentials_list', 'help'], func=FUNC_NAME),
     param_decls='--bls_withdrawal_credentials_list',
-    prompt=lambda: load_text(['arg_bls_withdrawal_credentials_list', 'prompt'], func=FUNC_NAME),
+    prompt=False,  # the callback handles the prompt, to avoid second callback with bytes
 )
 @jit_option(
     callback=captive_prompt_callback(
@@ -127,10 +128,11 @@ FUNC_NAME = 'generate_bls_to_execution_change'
         lambda: load_text(['arg_withdrawal_address', 'prompt'], func=FUNC_NAME),
         lambda: load_text(['arg_withdrawal_address', 'confirm'], func=FUNC_NAME),
         lambda: load_text(['arg_withdrawal_address', 'mismatch'], func=FUNC_NAME),
+        prompt_if_none=True,
     ),
     help=lambda: load_text(['arg_withdrawal_address', 'help'], func=FUNC_NAME),
     param_decls=['--withdrawal_address'],
-    prompt=lambda: load_text(['arg_withdrawal_address', 'prompt'], func=FUNC_NAME),
+    prompt=False,  # the callback handles the prompt
 )
 @jit_option(
     # Only for devnet tests
@@ -192,7 +194,8 @@ def generate_bls_to_execution_change(
     )
 
     # Check if the given old bls_withdrawal_credentials is as same as the mnemonic generated
-    with click.progressbar(length=len(credentials.credentials), label=load_text(['msg_credentials_verification']),
+    with click.progressbar(length=len(credentials.credentials),  # type: ignore[var-annotated]
+                           label=load_text(['msg_credentials_verification']),
                            show_percent=False, show_pos=True) as bar:
         executor_kwargs = [{
             'credential': credential,

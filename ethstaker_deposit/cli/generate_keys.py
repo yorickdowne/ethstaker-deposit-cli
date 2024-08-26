@@ -87,11 +87,12 @@ def generate_keys_arguments_decorator(function: Callable[..., Any]) -> Callable[
                 lambda: load_text(['keystore_password', 'confirm'], func='generate_keys_arguments_decorator'),
                 lambda: load_text(['keystore_password', 'mismatch'], func='generate_keys_arguments_decorator'),
                 True,
+                prompt_if_none=True,
             ),
             help=lambda: load_text(['keystore_password', 'help'], func='generate_keys_arguments_decorator'),
             hide_input=True,
             param_decls='--keystore_password',
-            prompt=lambda: load_text(['keystore_password', 'prompt'], func='generate_keys_arguments_decorator'),
+            prompt=False,  # the callback handles the prompt
         ),
         jit_option(
             callback=captive_prompt_callback(
@@ -100,11 +101,12 @@ def generate_keys_arguments_decorator(function: Callable[..., Any]) -> Callable[
                 lambda: load_text(['arg_withdrawal_address', 'confirm'], func='generate_keys_arguments_decorator'),
                 lambda: load_text(['arg_withdrawal_address', 'mismatch'], func='generate_keys_arguments_decorator'),
                 default="",
+                prompt_if_none=True,
             ),
             default="",
             help=lambda: load_text(['arg_withdrawal_address', 'help'], func='generate_keys_arguments_decorator'),
             param_decls=['--withdrawal_address', '--execution_address', '--eth1_withdrawal_address'],
-            prompt=lambda: load_text(['arg_withdrawal_address', 'prompt'], func='generate_keys_arguments_decorator'),
+            prompt=False,  # the callback handles the prompt
         ),
         jit_option(
             default=False,
