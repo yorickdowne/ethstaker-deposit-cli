@@ -2,6 +2,7 @@ from decimal import Decimal, InvalidOperation
 import click
 import json
 import re
+import sys
 import concurrent.futures
 from typing import Any, Dict, Sequence
 
@@ -138,6 +139,14 @@ def validate_deposit(deposit_data_dict: Dict[str, Any], credential: Credential =
 def validate_password_strength(password: str) -> str:
     if len(password) < 8:
         raise ValidationError(load_text(['msg_password_length']))
+
+    encoding = sys.stdin.encoding.lower()
+    if encoding != 'utf-8' and not password.isascii():
+        if sys.platform == 'win32':
+            raise ValidationError(load_text(['msg_password_utf8_win32']))
+        else:
+            raise ValidationError(load_text(['msg_password_utf8']))
+
     return password
 
 

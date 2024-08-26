@@ -3,7 +3,9 @@
         "msg_deposit_verification": "Verifying your deposit_data-*.json file(s):\t"
     },
     "validate_password_strength": {
-        "msg_password_length": "The password length should be at least 8. Please retype"
+        "msg_password_length": "The password length should be at least 8. Please retype.",
+        "msg_password_utf8_win32": "Your terminal is not UTF-8 encoded. To ensure the keystore file can be imported on Linux, the password should contain only English-language characters. Please retype.",
+        "msg_password_utf8": "Your terminal is not UTF-8 encoded. To ensure the keystore file can be imported on Linux, the password should contain only English-language characters. Please retype.\nAlternatively, you can quit this program and relaunch it from a UTF-8 encoded terminal."
     },
     "validate_int_range": {
         "err_not_positive_integer": "That is not a positive integer. Please retype."
@@ -14,7 +16,7 @@
     "validate_withdrawal_address": {
         "err_invalid_ECDSA_hex_addr": "The given execution address is not in hexadecimal encoded form.",
         "err_invalid_ECDSA_hex_addr_checksum": "The given execution address is not in checksum form.",
-        "err_missing_address": "An address must must be providing",
+        "err_missing_address": "An address must be provided",
         "msg_ECDSA_hex_addr_withdrawal": "**[Warning] you are setting an execution address as your withdrawal address. Please ensure that you have control over this address.**"
     },
     "validate_partial_deposit_amount": {
