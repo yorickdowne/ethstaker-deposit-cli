@@ -138,7 +138,7 @@ def reconstruct_mnemonic(mnemonic: str, words_path: str) -> Optional[str]:
     return reconstructed_mnemonic
 
 
-def get_mnemonic(*, language: str, words_path: str, entropy: Optional[bytes]=None) -> str:
+def get_mnemonic(*, language: str, words_path: str, entropy: Optional[bytes] = None) -> str:
     """
     Return a mnemonic string in a given `language` based on `entropy` via the calculated checksum.
 

@@ -37,7 +37,7 @@ def _get_from_dict(dataDict: Dict[str, Any], mapList: Iterable[str]) -> str:
         raise KeyError('The provided params (%s) were incomplete.' % mapList)
 
 
-def load_text(params: List[str], file_path: str='', func: str='', lang: str='') -> str:
+def load_text(params: List[str], file_path: str = '', func: str = '', lang: str = '') -> str:
     '''
     Determine and return the appropriate internationalisation text for a given set of `params`.
     '''

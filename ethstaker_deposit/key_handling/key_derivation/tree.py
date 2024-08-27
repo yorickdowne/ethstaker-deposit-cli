@@ -41,7 +41,7 @@ def _parent_SK_to_lamport_PK(*, parent_SK: int, index: int) -> bytes:
     return compressed_PK
 
 
-def _HKDF_mod_r(*, IKM: bytes, key_info: bytes=b'') -> int:
+def _HKDF_mod_r(*, IKM: bytes, key_info: bytes = b'') -> int:
     """
     Hashes the IKM using HKDF and returns the answer as an int modulo r, the BLS field order.
 
