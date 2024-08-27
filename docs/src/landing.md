@@ -52,6 +52,20 @@ If there is a specific command you would like to understand more, please choose 
 
 - **[exit-transaction-mnemonic](exit_transaction_mnemonic.md)**: Generate an exit message using the mnemonic of your validators.
 
+## Canonical Deposit Contract and Launchpad
+
+Ethstaker confirms the canonical Ethereum staking deposit contract addresses and launchpad URLs.
+Please be sure that your ETH is deposited only to this deposit contract address, depending on chain.
+
+Depositing to the wrong address **will** lose you your ETH.
+
+- Ethereum mainnet
+  - Deposit address: [0x00000000219ab540356cBB839Cbe05303d7705Fa](https://etherscan.io/address/0x00000000219ab540356cBB839Cbe05303d7705Fa)
+  - [Launchpad](https://launchpad.ethereum.org/)
+- Ethereum Holešky (Holešovice) testnet
+  - Deposit address: [0x4242424242424242424242424242424242424242](https://holesky.etherscan.io/address/0x4242424242424242424242424242424242424242)
+  - [Launchpad](https://holesky.launchpad.ethereum.org/)
+
 ## Contributing
 
 This project is open-source and welcomes contributions from the community. If you would like to contribute to the `ethstaker-deposit-cli`, please read the [Local Development Instructions](local_development.md), fork the project, and create a pull request with a description of the changes you have made and why.
