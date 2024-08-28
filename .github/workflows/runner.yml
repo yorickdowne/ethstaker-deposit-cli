@@ -1,8 +1,15 @@
 name: ci-runner
 run-name: ${{ github.actor }} is running ci-runner
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+    types: [opened, synchronize, labeled, unlabeled]
+    branches: [main]
 jobs:
   ci-runner:
+    if: |
+      contains(github.event.pull_request.labels.*.name, 'run-tests') ||
+      github.event_name == 'push'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
