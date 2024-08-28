@@ -15,6 +15,7 @@ from ethstaker_deposit.utils.click import (
     captive_prompt_callback,
     choice_prompt_func,
     jit_option,
+    deactivate_prompts_callback
 )
 from ethstaker_deposit.utils import config
 from ethstaker_deposit.utils.constants import INTL_LANG_OPTIONS
@@ -81,6 +82,7 @@ class SortedGroup(click.Group):
 )
 @click.option(
     '--non_interactive',
+    callback=deactivate_prompts_callback(["language"]),
     default=False,
     is_flag=True,
     help=(
