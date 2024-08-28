@@ -37,6 +37,8 @@ def check_connectivity() -> None:
     '''
     Checks if there is an internet connection and warns the user if so.
     '''
+    if '--help' in sys.argv:
+        return None
     try:
         socket.setdefaulttimeout(2)
         socket.getaddrinfo('icann.org', 80)
