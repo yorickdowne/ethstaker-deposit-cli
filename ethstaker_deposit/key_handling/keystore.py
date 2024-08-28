@@ -127,9 +127,9 @@ class Keystore(BytesDataclass):
         return password.encode('UTF-8')
 
     @classmethod
-    def encrypt(cls, *, secret: bytes, password: str, path: str='',
-                kdf_salt: bytes=randbits(256).to_bytes(32, 'big'),
-                aes_iv: bytes=randbits(128).to_bytes(16, 'big')) -> 'Keystore':
+    def encrypt(cls, *, secret: bytes, password: str, path: str = '',
+                kdf_salt: bytes = randbits(256).to_bytes(32, 'big'),
+                aes_iv: bytes = randbits(128).to_bytes(16, 'big')) -> 'Keystore':
         """
         Encrypt a secret (BLS SK) as an EIP 2335 Keystore.
         """

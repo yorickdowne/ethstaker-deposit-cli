@@ -199,14 +199,14 @@ class Credential:
         message = {
             'validator_index':
                 str(signed_bls_to_execution_change.message.validator_index),  # type: ignore[attr-defined]
-            'from_bls_pubkey': '0x' +
-                signed_bls_to_execution_change.message.from_bls_pubkey.hex(),  # type: ignore[attr-defined]
-            'to_execution_address': '0x' +
-                signed_bls_to_execution_change.message.to_execution_address.hex(),  # type: ignore[attr-defined]
+            'from_bls_pubkey': '0x'
+                + signed_bls_to_execution_change.message.from_bls_pubkey.hex(),  # type: ignore[attr-defined]
+            'to_execution_address': '0x'
+                + signed_bls_to_execution_change.message.to_execution_address.hex(),  # type: ignore[attr-defined]
         }
         result_dict.update({'message': message})
-        result_dict.update({'signature': '0x' +
-                            signed_bls_to_execution_change.signature.hex()})  # type: ignore[attr-defined]
+        result_dict.update({'signature': '0x'
+                            + signed_bls_to_execution_change.signature.hex()})  # type: ignore[attr-defined]
 
         # metadata
         metadata: Dict[str, Any] = {
