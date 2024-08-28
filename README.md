@@ -165,6 +165,7 @@ You can use `new-mnemonic --help` to see all arguments. Note that if there are m
 | `--mnemonic_language` | String. Options: `简体中文`, `繁體中文`, `český jazyk`, `English`, `Italiano`, `한국어`, `Português`, `Español`. Default to `English` | The language of the mnemonic word list |
 | `--folder` | String. Pointing to `./validator_keys` by default | The folder path for the keystore(s) and deposit(s) |
 | `--chain` | String. `mainnet` by default | The chain setting for the signing domain. |
+| `--keystore_password` | String | The password that will secure your keystores. You will need to re-enter this to decrypt them when you setup your Ethereum validators. It is recommended not to use this argument when running interactively, and wait for the CLI to ask you for your password, as otherwise it will appear in your shell history. When used in a script, please be sure to also use `--non_interactive`. A future version may enforce this. |
 | `--withdrawal_address` | String. Ethereum execution address in hexadecimal encoded form | If this field is set and valid, the given execution address will be used to create the withdrawal credentials. Otherwise, it will generate withdrawal credentials with the mnemonic-derived withdrawal public key in [ERC-2334 format](https://eips.ethereum.org/EIPS/eip-2334#eth2-specific-parameters). |
 | `--pbkdf2` | Flag | Will use pbkdf2 key derivation instead of scrypt for generated keystore files as defined in EIP-2335. This can be a good alternative if you intend to work with a large number of keys. |
 
@@ -178,6 +179,7 @@ You can use `existing-mnemonic --help` to see all arguments. Note that if there 
 | `--num_validators`  | Non-negative integer | The number of new signing keys you want to generate. Note that the child key(s) are generated via the same master key. |
 | `--folder` | String. Pointing to `./validator_keys` by default | The folder path for the keystore(s) and deposit(s) |
 | `--chain` | String. `mainnet` by default | The chain setting for the signing domain. |
+| `--keystore_password` | String | The password that will secure your keystores. You will need to re-enter this to decrypt them when you setup your Ethereum validators. It is recommended not to use this argument when running interactively, and wait for the CLI to ask you for your password, as otherwise it will appear in your shell history. When used in a script, please be sure to also use `--non_interactive`. A future version may enforce this. |
 | `--withdrawal_address` | String. Ethereum execution address in hexadecimal encoded form | If this field is set and valid, the given execution address will be used to create the withdrawal credentials. Otherwise, it will generate withdrawal credentials with the mnemonic-derived withdrawal public key in [ERC-2334 format](https://eips.ethereum.org/EIPS/eip-2334#eth2-specific-parameters). |
 | `--pbkdf2` | Flag | Will use pbkdf2 key derivation instead of scrypt for generated keystore files as defined in EIP-2335. This can be a good alternative if you intend to work with a large number of keys. |
 
