@@ -670,6 +670,19 @@ python3 -m pytest tests
 python3 -m ethstaker_deposit [OPTIONS] COMMAND [ARGS]
 ```
 
+### Use pre-commit
+
+Install `pre-commit` if not already installed, e.g. for Debian/Ubuntu:
+
+```sh
+sudo apt update && sudo apt install pre-commit
+```
+
+Enable it for your `git commit` workflow:
+```sh
+pre-commit install
+```
+
 ### Building Binaries
 **Developers Only**
 
