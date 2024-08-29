@@ -27,10 +27,17 @@ Ensure you have the following software installed on your system:
 
 3. **Setup virtualenv (optional)**
 
+    Install `venv` if not already installed, e.g. for Debian/Ubuntu:
+
     ```sh
-    pip3 install virtualenv
-    virtualenv venv
-    .\venv\Scripts\activate
+    sudo apt update && sudo apt install python3-venv
+    ```
+
+    Create a new [virtual environment](https://docs.python.org/3/library/venv.html):
+
+    ```sh
+    python3 -m venv .venv
+    source .venv/bin/activate
     ```
 
 4. **Install Dependencies**
@@ -45,6 +52,19 @@ Ensure you have the following software installed on your system:
 
     ```sh
     python3 -m ethstaker_deposit [OPTIONS] COMMAND [ARGS]
+    ```
+
+6. **Use pre-commit for PRs**
+
+    Install `pre-commit` if not already installed, e.g. for Debian/Ubuntu:
+
+    ```sh
+    sudo apt update && sudo apt install pre-commit
+    ```
+
+    Enable it for your `git commit` workflow:
+    ```sh
+    pre-commit install
     ```
 
 **To execute tests, you will need to install the test dependencies**:
