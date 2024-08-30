@@ -15,6 +15,7 @@ from ethstaker_deposit.credentials import (
     CredentialList,
     Credential
 )
+from ethstaker_deposit.utils.ascii_art import OWL_0
 from ethstaker_deposit.utils.validation import (
     validate_bls_withdrawal_credentials_list,
     validate_bls_withdrawal_credentials_matching,
@@ -221,6 +222,8 @@ def generate_bls_to_execution_change(
     if not json_file_validation_result:
         raise ValidationError(load_text(['err_verify_btec']))
 
+    click.clear()
+    click.echo(OWL_0)
     click.echo(load_text(['msg_creation_success']) + str(bls_to_execution_changes_folder))
 
     click.pause(load_text(['msg_pause']))
