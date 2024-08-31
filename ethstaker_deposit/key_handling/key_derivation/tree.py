@@ -3,7 +3,6 @@ from ethstaker_deposit.utils.crypto import (
     SHA256,
 )
 from py_ecc.optimized_bls12_381 import curve_order as bls_curve_order
-from typing import List
 
 
 def _flip_bits_256(input: int) -> int:
@@ -13,7 +12,7 @@ def _flip_bits_256(input: int) -> int:
     return input ^ (2**256 - 1)
 
 
-def _IKM_to_lamport_SK(*, IKM: bytes, salt: bytes) -> List[bytes]:
+def _IKM_to_lamport_SK(*, IKM: bytes, salt: bytes) -> list[bytes]:
     """
     Derives the lamport SK for a given `IKM` and `salt`.
 

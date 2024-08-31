@@ -1,5 +1,3 @@
-from typing import List
-
 from .mnemonic import get_seed
 from .tree import (
     derive_master_SK,
@@ -7,7 +5,7 @@ from .tree import (
 )
 
 
-def path_to_nodes(path: str) -> List[int]:
+def path_to_nodes(path: str) -> list[int]:
     """
     Maps from a path string to a list of indices where each index represents the corresponding level in the path.
     """

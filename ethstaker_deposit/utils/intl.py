@@ -6,7 +6,6 @@ from typing import (
     Any,
     Dict,
     Iterable,
-    List,
     Mapping,
     Sequence,
 )
@@ -37,7 +36,7 @@ def _get_from_dict(dataDict: Dict[str, Any], mapList: Iterable[str]) -> str:
         raise KeyError('The provided params (%s) were incomplete.' % mapList)
 
 
-def load_text(params: List[str], file_path: str = '', func: str = '', lang: str = '') -> str:
+def load_text(params: list[str], file_path: str = '', func: str = '', lang: str = '') -> str:
     '''
     Determine and return the appropriate internationalisation text for a given set of `params`.
     '''
@@ -75,7 +74,7 @@ def load_text(params: List[str], file_path: str = '', func: str = '', lang: str 
         return load_text(params, file_path, func, 'en')
 
 
-def get_first_options(options: Mapping[str, Sequence[str]]) -> List[str]:
+def get_first_options(options: Mapping[str, Sequence[str]]) -> list[str]:
     '''
     Returns the first `option` in the values of the `options` dict.
     '''
