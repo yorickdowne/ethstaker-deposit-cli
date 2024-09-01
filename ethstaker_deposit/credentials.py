@@ -4,7 +4,7 @@ from enum import Enum
 import time
 import json
 import concurrent.futures
-from typing import Dict, List, Optional, Any, Sequence
+from typing import Dict, Optional, Any, Sequence
 
 from eth_typing import Address, HexAddress
 from eth_utils import to_canonical_address
@@ -259,7 +259,7 @@ class CredentialList:
     """
     A collection of multiple Credentials, one for each validator.
     """
-    def __init__(self, credentials: List[Credential]):
+    def __init__(self, credentials: list[Credential]):
         self.credentials = credentials
 
     @classmethod
@@ -268,7 +268,7 @@ class CredentialList:
                       mnemonic: str,
                       mnemonic_password: str,
                       num_keys: int,
-                      amounts: List[int],
+                      amounts: list[int],
                       chain_setting: BaseChainSetting,
                       start_index: int,
                       hex_withdrawal_address: Optional[HexAddress],
@@ -279,7 +279,7 @@ class CredentialList:
             )
         key_indices = range(start_index, start_index + num_keys)
 
-        credentials: List[Credential] = []
+        credentials: list[Credential] = []
         with click.progressbar(length=num_keys, label=load_text(['msg_key_creation']),  # type: ignore[var-annotated]
                                show_percent=False, show_pos=True) as bar:
             executor_kwargs = [{
@@ -298,8 +298,8 @@ class CredentialList:
                     bar.update(1)
         return cls(credentials)
 
-    def export_keystores(self, password: str, folder: str, timestamp: float) -> List[str]:
-        filefolders: List[str] = []
+    def export_keystores(self, password: str, folder: str, timestamp: float) -> list[str]:
+        filefolders: list[str] = []
         with click.progressbar(length=len(self.credentials),  # type: ignore[var-annotated]
                                label=load_text(['msg_keystore_creation']),
                                show_percent=False, show_pos=True) as bar:
@@ -329,7 +329,7 @@ class CredentialList:
 
         return export_deposit_data_json_util(folder, timestamp, deposit_data)
 
-    def verify_keystores(self, keystore_filefolders: List[str], password: str) -> bool:
+    def verify_keystores(self, keystore_filefolders: list[str], password: str) -> bool:
         all_valid_keystores = True
         with click.progressbar(length=len(self.credentials),  # type: ignore[var-annotated]
                                label=load_text(['msg_keystore_verification']),

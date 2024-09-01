@@ -2,7 +2,6 @@ import click
 import socket
 import sys
 from multiprocessing import freeze_support
-from typing import List
 
 from ethstaker_deposit.cli.existing_mnemonic import existing_mnemonic
 from ethstaker_deposit.cli.exit_transaction_keystore import exit_transaction_keystore
@@ -61,7 +60,7 @@ commands = [
 
 class SortedGroup(click.Group):
 
-    def list_commands(self, ctx: click.Context) -> List[str]:
+    def list_commands(self, ctx: click.Context) -> list[str]:
         return [x.name for x in commands]
 
 

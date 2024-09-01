@@ -2,7 +2,6 @@ import os
 from unicodedata import normalize
 from secrets import randbits
 from typing import (
-    List,
     Optional,
     Sequence,
 )
@@ -93,7 +92,7 @@ def _get_checksum(entropy: bytes) -> int:
     return int.from_bytes(SHA256(entropy), 'big') >> (256 - checksum_length)
 
 
-def abbreviate_words(words: Sequence[str]) -> List[str]:
+def abbreviate_words(words: Sequence[str]) -> list[str]:
     """
     Given a series of word strings, return the 4-letter version of each word (which is unique according to BIP39)
     """

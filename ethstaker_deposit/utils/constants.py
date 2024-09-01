@@ -1,7 +1,6 @@
 import os
 from typing import (
     Dict,
-    List,
 )
 
 
@@ -33,7 +32,7 @@ DEFAULT_PARTIAL_DEPOSIT_FOLDER_NAME = 'partial_deposits'
 INTL_CONTENT_PATH = os.path.join('ethstaker_deposit', 'intl')
 
 
-def _add_index_to_options(d: Dict[str, List[str]]) -> Dict[str, List[str]]:
+def _add_index_to_options(d: Dict[str, list[str]]) -> Dict[str, list[str]]:
     '''
     Adds the (1 indexed) index (in the dict) to the first element of value list.
     eg. {'en': ['English', 'en']} -> {'en': ['1. English', '1', 'English', 'en']}
