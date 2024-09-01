@@ -18,3 +18,8 @@ repos:
         - ssz==0.5.0
       files: ^ethstaker_deposit/
       args: [--config-file, mypy.ini]
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: 'v4.6.0'
+    hooks:
+    - id: check-json
+      files: ^ethstaker_deposit/intl
