@@ -23,6 +23,17 @@ jobs:
         run: python -m mypy --config-file mypy.ini -p ethstaker_deposit
       - name: Run linter
         run: flake8 --config=flake8.ini ./ethstaker_deposit ./tests
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+      - name: Install jsonlint
+        run: npm install -g @prantlf/jsonlint
+      - name: Validate JSON files
+        run: |
+          for file in $(find ./ethstaker_deposit/intl -name "*.json"); do
+            jsonlint --no-duplicate-keys --quiet --compact $file
+          done
   ci-runner:
     needs: lint
     if: |
