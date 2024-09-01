@@ -10,6 +10,11 @@ from typing import (
 
 from ethstaker_deposit.exceptions import ValidationError
 from ethstaker_deposit.utils import config
+# To work around an issue with disabling language prompt and CLIRunner() isolation
+from ethstaker_deposit.utils.constants import INTL_LANG_OPTIONS
+from ethstaker_deposit.utils.intl import (
+    get_first_options,
+)
 
 
 def _value_of(f: Union[Callable[[], Any], Any]) -> Any:
@@ -140,3 +145,19 @@ def choice_prompt_func(prompt_func: Callable[[], str], choices: Sequence[str]) -
                 output = output + ', '
     output = output + ']'
     return lambda: '%s %s: ' % (prompt_func(), output)
+
+
+def deactivate_prompts_callback(param_names: list[str]) -> Callable[[click.Context, str, str], Any]:
+    def callback(ctx: click.Context, param: Any, value: str) -> Any:
+        if value:
+            for p in ctx.command.params:
+                if isinstance(p, click.Option) and p.name in param_names and p.prompt is not None:
+                    p.prompt = None
+        else:  # CLIRunner() is not as isolated as it should be. Restore the language prompt during tests
+            for p in ctx.command.params:
+                if isinstance(p, click.Option) and p.prompt is None:
+                    if p.name == 'language':
+                        p.prompt = choice_prompt_func(lambda: 'Please choose your language',
+                                                      get_first_options(INTL_LANG_OPTIONS))()
+        return value
+    return callback
