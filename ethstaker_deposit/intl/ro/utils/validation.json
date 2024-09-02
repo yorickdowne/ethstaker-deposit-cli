@@ -3,6 +3,6 @@
         "msg_deposit_verification": "Se verifică depozitele tale:\t"
     },
     "validate_password_strength": {
-        "msg_password_length": "Parola trebuie să aibă o lungime de cel puțin 8. Te rugăm să o reintroduci"
+        "msg_password_length": "Parola trebuie să aibă o lungime de cel puțin 12. Te rugăm să o reintroduci"
     }
 }

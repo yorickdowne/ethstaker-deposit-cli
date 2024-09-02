@@ -34,7 +34,7 @@ def test_new_mnemonic_bls_withdrawal(monkeypatch) -> None:
         os.mkdir(my_folder_path)
 
     runner = CliRunner()
-    inputs = ['english', 'english', '1', 'mainnet', 'MyPassword', 'MyPassword',
+    inputs = ['english', 'english', '1', 'mainnet', 'MyPasswordIs', 'MyPasswordIs',
               'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about']
     data = '\n'.join(inputs)
     arguments = [
@@ -81,7 +81,7 @@ def test_new_mnemonic_withdrawal_address(monkeypatch) -> None:
 
     runner = CliRunner()
     withdrawal_address = '0x00000000219ab540356cBB839Cbe05303d7705Fa'
-    inputs = ['english', '1', 'mainnet', 'MyPassword', 'MyPassword', withdrawal_address, withdrawal_address,
+    inputs = ['english', '1', 'mainnet', 'MyPasswordIs', 'MyPasswordIs', withdrawal_address, withdrawal_address,
               'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about']
     data = '\n'.join(inputs)
     arguments = [
@@ -141,7 +141,7 @@ def test_new_mnemonic_withdrawal_address_bad_checksum(monkeypatch) -> None:
     wrong_withdrawal_address = '0x00000000219ab540356cBB839Cbe05303d7705FA'
     correct_withdrawal_address = '0x00000000219ab540356cBB839Cbe05303d7705Fa'
 
-    inputs = ['english', '1', 'mainnet', 'MyPassword', 'MyPassword',
+    inputs = ['english', '1', 'mainnet', 'MyPasswordIs', 'MyPasswordIs',
               wrong_withdrawal_address, correct_withdrawal_address, correct_withdrawal_address,
               'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about']
     data = '\n'.join(inputs)
@@ -198,7 +198,7 @@ def test_new_mnemonic_withdrawal_address_parameter(monkeypatch) -> None:
 
     runner = CliRunner()
     withdrawal_address = '0x00000000219ab540356cBB839Cbe05303d7705Fa'
-    inputs = [withdrawal_address, 'english', '1', 'mainnet', 'MyPassword', 'MyPassword',
+    inputs = [withdrawal_address, 'english', '1', 'mainnet', 'MyPasswordIs', 'MyPasswordIs',
               'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about']
     data = '\n'.join(inputs)
     arguments = [
@@ -256,7 +256,7 @@ def test_new_mnemonic_eth1_withdrawal_address_param(monkeypatch) -> None:
 
     runner = CliRunner()
     withdrawal_address = '0x00000000219ab540356cBB839Cbe05303d7705Fa'
-    inputs = [withdrawal_address, 'english', '1', 'mainnet', 'MyPassword', 'MyPassword',
+    inputs = [withdrawal_address, 'english', '1', 'mainnet', 'MyPasswordIs', 'MyPasswordIs',
               'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about']
     data = '\n'.join(inputs)
     arguments = [
@@ -314,7 +314,7 @@ def test_new_mnemonic_execution_address_param(monkeypatch) -> None:
 
     runner = CliRunner()
     withdrawal_address = '0x00000000219ab540356cBB839Cbe05303d7705Fa'
-    inputs = [withdrawal_address, 'english', '1', 'mainnet', 'MyPassword', 'MyPassword',
+    inputs = [withdrawal_address, 'english', '1', 'mainnet', 'MyPasswordIs', 'MyPasswordIs',
               'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about']
     data = '\n'.join(inputs)
     arguments = [
@@ -377,7 +377,7 @@ def test_pbkdf2_new_mnemonic(monkeypatch) -> None:
 
     runner = CliRunner()
 
-    inputs = ['english', '1', 'mainnet', 'MyPassword', 'MyPassword',
+    inputs = ['english', '1', 'mainnet', 'MyPasswordIs', 'MyPasswordIs',
               'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about']
     data = '\n'.join(inputs)
     arguments = [
@@ -467,7 +467,7 @@ async def test_script_bls_withdrawal() -> None:
         '--num_validators', '5',
         '--mnemonic_language', 'english',
         '--chain', 'mainnet',
-        '--keystore_password', 'MyPassword',
+        '--keystore_password', 'MyPasswordIs',
         '--withdrawal_address', '""',
         '--folder', my_folder_path,
     ]
@@ -555,7 +555,7 @@ async def test_script_abbreviated_mnemonic() -> None:
         '--num_validators', '5',
         '--mnemonic_language', 'english',
         '--chain', 'mainnet',
-        '--keystore_password', 'MyPassword',
+        '--keystore_password', 'MyPasswordIs',
         '--withdrawal_address', '""',
         '--folder', my_folder_path,
     ]
