@@ -1,4 +1,5 @@
 import click
+import pyperclip
 from typing import (
     Any,
     Callable,
@@ -85,4 +86,9 @@ def validate_mnemonic(ctx: click.Context, param: Any, mnemonic: str) -> str:
 def existing_mnemonic(ctx: click.Context, mnemonic: str, mnemonic_password: str, **kwargs: Any) -> None:
     ctx.obj = {} if ctx.obj is None else ctx.obj  # Create a new ctx.obj if it doesn't exist
     ctx.obj.update({'mnemonic': mnemonic, 'mnemonic_password': mnemonic_password})
+    # Clear clipboard
+    try:  # Failing this on headless Linux is expected
+        pyperclip.copy(' ')
+    except Exception:
+        pass
     ctx.forward(generate_keys)

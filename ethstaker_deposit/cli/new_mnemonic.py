@@ -1,4 +1,5 @@
 import click
+import pyperclip
 from typing import (
     Any,
 )
@@ -58,6 +59,11 @@ def new_mnemonic(ctx: click.Context, mnemonic_language: str, **kwargs: Any) -> N
         click.clear()
         test_mnemonic = click.prompt(load_text(['msg_mnemonic_retype_prompt']) + '\n\n')
     click.clear()
+    # Clear clipboard
+    try:  # Failing this on headless Linux is expected
+        pyperclip.copy(' ')
+    except Exception:
+        pass
     # Do NOT use mnemonic_password.
     ctx.obj = {'mnemonic': mnemonic, 'mnemonic_password': ''}
     ctx.params['validator_start_index'] = 0
