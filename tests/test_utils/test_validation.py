@@ -1,4 +1,5 @@
 import pytest
+import sys
 from typing import (
     Any,
 )
@@ -21,7 +22,38 @@ from ethstaker_deposit.utils.validation import (
         ('1234567', False),
     ]
 )
-def test_validate_password_strength(password, valid):
+def test_validate_password_strength(password: str, valid: bool) -> None:
+    if valid:
+        validate_password_strength(password=password)
+    else:
+        with pytest.raises(ValidationError):
+            validate_password_strength(password=password)
+
+
+@pytest.mark.parametrize(
+    'password, encoding, platform, valid',
+    [
+        ('Surströmming', 'utf-8', 'linux', True),
+        ('Surströmming', 'latin-1', 'linux', False),
+        ('Surstromming', 'latin-1', 'linux', True),
+        ('Surströmming', 'utf-8', 'darwin', True),
+        ('Surströmming', 'latin-1', 'darwin', False),
+        ('Surstromming', 'latin-1', 'darwin', True),
+        ('Surströmming', 'utf-8', 'win32', True),
+        ('Surströmming', 'latin-1', 'win32', False),
+        ('Surstromming', 'latin-1', 'win32', True),
+    ]
+)
+def test_validate_password_strength_encoding(
+    monkeypatch, password: str, encoding: str, platform: str, valid: bool
+) -> None:
+    class MockStdin:
+        def __init__(self, encoding):
+            self.encoding = encoding
+    mock_stdin = MockStdin(encoding=encoding)
+    monkeypatch.setattr(sys, 'stdin', mock_stdin)
+    monkeypatch.setattr(sys, 'platform', platform)
+
     if valid:
         validate_password_strength(password=password)
     else:
@@ -119,7 +151,9 @@ invalid_signature = (
         ('mainnet', 0, 0, valid_pubkey, invalid_signature, False),
     ]
 )
-def test_validate_signed_exit(chain, epoch, validator_index, pubkey, signature, result):
+def test_validate_signed_exit(
+    chain: str, epoch: int, validator_index: int, pubkey: str, signature: str, result: bool
+) -> None:
     chain_settings = get_chain_setting(chain)
 
     assert validate_signed_exit(validator_index, epoch, signature, pubkey, chain_settings) == result

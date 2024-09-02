@@ -12,7 +12,7 @@ from tests.test_cli.helpers import clean_key_folder
 def test_should_notify_user_and_exit_if_invalid_python_version(monkeypatch) -> None:
     exit_called = False
 
-    def _mock_sys_exit():
+    def _mock_sys_exit(arg):
         nonlocal exit_called
         exit_called = True
 
