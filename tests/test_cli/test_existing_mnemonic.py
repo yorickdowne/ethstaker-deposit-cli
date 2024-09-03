@@ -23,7 +23,7 @@ def test_existing_mnemonic_bls_withdrawal() -> None:
     inputs = [
         'TREZOR',
         'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about',
-        '2', '2', '5', 'mainnet', 'MyPassword', 'MyPassword']
+        '2', '2', '5', 'mainnet', 'MyPasswordIs', 'MyPasswordIs']
     data = '\n'.join(inputs)
     arguments = [
         '--language', 'english',
@@ -68,7 +68,7 @@ def test_existing_mnemonic_withdrawal_address() -> None:
     inputs = [
         'TREZOR',
         'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about',
-        '2', '2', '5', 'mainnet', 'MyPassword', 'MyPassword', withdrawal_address, withdrawal_address]
+        '2', '2', '5', 'mainnet', 'MyPasswordIs', 'MyPasswordIs', withdrawal_address, withdrawal_address]
     data = '\n'.join(inputs)
     arguments = [
         '--language', 'english',
@@ -125,7 +125,7 @@ def test_existing_mnemonic_withdrawal_address_bad_checksum() -> None:
     inputs = [
         'TREZOR',
         'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about',
-        '2', '2', '5', 'mainnet', 'MyPassword', 'MyPassword',
+        '2', '2', '5', 'mainnet', 'MyPasswordIs', 'MyPasswordIs',
         wrong_withdrawal_address, correct_withdrawal_address, correct_withdrawal_address
     ]
     data = '\n'.join(inputs)
@@ -184,7 +184,7 @@ def test_pbkdf2_new_mnemonic() -> None:
     runner = CliRunner()
     inputs = [
         'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about',
-        '0', '0', '1', 'mainnet', 'MyPassword', 'MyPassword',
+        '0', '0', '1', 'mainnet', 'MyPasswordIs', 'MyPasswordIs',
     ]
     data = '\n'.join(inputs)
     arguments = [
@@ -273,7 +273,7 @@ async def test_script() -> None:
         '--mnemonic_password', 'TREZOR',
         '--validator_start_index', '1',
         '--chain', 'mainnet',
-        '--keystore_password', 'MyPassword',
+        '--keystore_password', 'MyPasswordIs',
         '--withdrawal_address', '""',
         '--folder', my_folder_path,
     ]
@@ -322,7 +322,7 @@ async def test_script_abbreviated_mnemonic() -> None:
         '--mnemonic_password', 'TREZOR',
         '--validator_start_index', '1',
         '--chain', 'mainnet',
-        '--keystore_password', 'MyPassword',
+        '--keystore_password', 'MyPasswordIs',
         '--withdrawal_address', '""',
         '--folder', my_folder_path,
     ]

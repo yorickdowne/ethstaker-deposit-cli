@@ -32,7 +32,7 @@ def test_regeneration(monkeypatch) -> None:
 
     runner = CliRunner()
     # Create index 0 and 1
-    my_password = "MyPassword"
+    my_password = "MyPasswordIs"
     inputs = ['english', 'english', '2', 'mainnet', my_password, my_password, mock_mnemonic]
     data = '\n'.join(inputs)
     arguments = [
@@ -64,7 +64,7 @@ def test_regeneration(monkeypatch) -> None:
     inputs = [
         'english',
         mock_mnemonic,
-        '1', '1', '2', 'mainnet', 'MyPassword', 'MyPassword']
+        '1', '1', '2', 'mainnet', 'MyPasswordIs', 'MyPasswordIs']
     data = '\n'.join(inputs)
     arguments = [
         '--ignore_connectivity',

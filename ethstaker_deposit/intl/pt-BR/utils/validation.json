@@ -3,6 +3,6 @@
         "msg_deposit_verification": "Verificação dos seus depósitos:\t"
     },
     "validate_password_strength": {
-        "msg_password_length": "A senha deve ter pelo menos 8 caracteres. Por favor, digite-a novamente"
+        "msg_password_length": "A senha deve ter pelo menos 12 caracteres. Por favor, digite-a novamente"
     }
 }

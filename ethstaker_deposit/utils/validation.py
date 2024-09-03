@@ -137,7 +137,7 @@ def validate_deposit(deposit_data_dict: Dict[str, Any], credential: Credential =
 
 
 def validate_password_strength(password: str) -> str:
-    if len(password) < 8:
+    if len(password) < 12:
         raise ValidationError(load_text(['msg_password_length']))
 
     encoding = sys.stdin.encoding.lower()

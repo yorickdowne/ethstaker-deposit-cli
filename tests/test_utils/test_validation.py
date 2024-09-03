@@ -18,8 +18,8 @@ from ethstaker_deposit.utils.validation import (
 @pytest.mark.parametrize(
     'password, valid',
     [
-        ('12345678', True),
-        ('1234567', False),
+        ('MyPasswordIs', True),
+        ('MyPassword', False),
     ]
 )
 def test_validate_password_strength(password: str, valid: bool) -> None:

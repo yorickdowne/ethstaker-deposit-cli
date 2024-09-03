@@ -36,7 +36,7 @@ def test_partial_deposit(amount: str) -> None:
         os.mkdir(partial_deposit_folder)
 
     chain_settings = get_chain_setting()
-    password = "Password1"
+    password = "MyPasswordIs"
     withdrawal_address = "0xcd60A5f152724480c3a95E4Ff4dacEEf4074854d"
     mnemonic = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
 
@@ -82,7 +82,7 @@ def test_partial_deposit_matches_existing_mnemonic_deposit() -> None:
     if not os.path.exists(my_folder_path):
         os.mkdir(my_folder_path)
 
-    password = "Password1"
+    password = "MyPasswordIs"
     withdrawal_address = "0xcd60A5f152724480c3a95E4Ff4dacEEf4074854d"
 
     runner = CliRunner()
@@ -152,7 +152,7 @@ def test_partial_deposit_does_not_match_if_amount_differs() -> None:
     if not os.path.exists(my_folder_path):
         os.mkdir(my_folder_path)
 
-    password = "Password1"
+    password = "MyPasswordIs"
     withdrawal_address = "0xcd60A5f152724480c3a95E4Ff4dacEEf4074854d"
 
     runner = CliRunner()

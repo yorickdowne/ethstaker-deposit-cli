@@ -18,7 +18,7 @@ from ethstaker_deposit.utils.crypto import (
 def test_scrypt_invalid_params(n, r, valid):
     if valid:
         scrypt(
-            password="mypassword",
+            password="MyPasswordIs",
             salt="mysalt",
             n=n,
             r=r,
@@ -28,7 +28,7 @@ def test_scrypt_invalid_params(n, r, valid):
     else:
         with pytest.raises(ValueError):
             scrypt(
-                password="mypassword",
+                password="MyPasswordIs",
                 salt="mysalt",
                 n=n,
                 r=r,
@@ -47,7 +47,7 @@ def test_scrypt_invalid_params(n, r, valid):
 def test_PBKDF2_invalid_prf(prf, valid):
     if valid:
         PBKDF2(
-            password="mypassword",
+            password="MyPasswordIs",
             salt="mysalt",
             dklen=64,
             c=2048,
@@ -56,7 +56,7 @@ def test_PBKDF2_invalid_prf(prf, valid):
     else:
         with pytest.raises(ValueError):
             PBKDF2(
-                password="mypassword",
+                password="MyPasswordIs",
                 salt="mysalt",
                 dklen=64,
                 c=2048,
@@ -75,7 +75,7 @@ def test_PBKDF2_invalid_prf(prf, valid):
 def test_PBKDF2_invalid_count(count, prf, valid):
     if valid:
         PBKDF2(
-            password="mypassword",
+            password="MyPasswordIs",
             salt="mysalt",
             dklen=64,
             c=count,
@@ -84,7 +84,7 @@ def test_PBKDF2_invalid_count(count, prf, valid):
     else:
         with pytest.raises(ValueError):
             PBKDF2(
-                password="mypassword",
+                password="MyPasswordIs",
                 salt="mysalt",
                 dklen=64,
                 c=2048,

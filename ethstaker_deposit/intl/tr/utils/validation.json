@@ -3,7 +3,7 @@
         "msg_deposit_verification": "Depozitonuz doğrulanıyor:\t"
     },
     "validate_password_strength": {
-        "msg_password_length": "Şifre uzunluğu en az 8 olmalıdır. Lütfen tekrar girin."
+        "msg_password_length": "Şifre uzunluğu en az 12 olmalıdır. Lütfen tekrar girin."
     },
     "validate_int_range": {
         "err_not_positive_integer": "Pozitif tam sayı değil. Lütfen tekrar girin."

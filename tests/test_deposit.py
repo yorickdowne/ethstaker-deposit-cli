@@ -98,7 +98,7 @@ def test_should_check_connectivity_by_default(monkeypatch) -> None:
     runner = CliRunner()
     inputs = [
         'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about',
-        '0', '0', '1', 'mainnet', 'MyPassword', 'MyPassword']
+        '0', '0', '1', 'mainnet', 'MyPasswordIs', 'MyPasswordIs']
     data = '\n'.join(inputs)
     arguments = [
         '--language', 'english',
@@ -131,7 +131,7 @@ def test_should_not_check_connectivity_with_ignore_connectivity(monkeypatch) -> 
     runner = CliRunner()
     inputs = [
         'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about',
-        '0', '0', '1', 'mainnet', 'MyPassword', 'MyPassword']
+        '0', '0', '1', 'mainnet', 'MyPasswordIs', 'MyPasswordIs']
     data = '\n'.join(inputs)
     arguments = [
         '--language', 'english',
@@ -172,7 +172,7 @@ def test_should_not_check_connectivity_with_non_interactive(monkeypatch) -> None
         '--mnemonic', 'aban aban aban aban aban aban aban aban aban aban aban abou',
         '--validator_start_index', '0',
         '--chain', 'mainnet',
-        '--keystore_password', 'MyPassword',
+        '--keystore_password', 'MyPasswordIs',
         '--withdrawal_address', '',
         '--folder', my_folder_path,
     ]
@@ -209,7 +209,7 @@ def test_should_not_check_connectivity_with_both_non_interactive_or_ignore_conne
         '--mnemonic_password', 'TREZOR',
         '--validator_start_index', '0',
         '--chain', 'mainnet',
-        '--keystore_password', 'MyPassword',
+        '--keystore_password', 'MyPasswordIs',
         '--withdrawal_address', '',
         '--folder', my_folder_path,
     ]

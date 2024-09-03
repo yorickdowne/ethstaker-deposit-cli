@@ -3,7 +3,7 @@
         "msg_deposit_verification": "Verifying your deposit_data-*.json file(s):\t"
     },
     "validate_password_strength": {
-        "msg_password_length": "The password length should be at least 8. Please retype.",
+        "msg_password_length": "The password length should be at least 12. Please retype.",
         "msg_password_utf8_win32": "Your terminal is not UTF-8 encoded. To ensure the keystore file can be imported on Linux, the password should contain only English-language characters. Please retype.",
         "msg_password_utf8": "Your terminal is not UTF-8 encoded. To ensure the keystore file can be imported on Linux, the password should contain only English-language characters. Please retype.\nAlternatively, you can quit this program and relaunch it from a UTF-8 encoded terminal."
     },
