@@ -1,6 +1,5 @@
 import os
 import click
-import json
 import concurrent.futures
 from typing import (
     Any,
@@ -23,6 +22,7 @@ from ethstaker_deposit.utils.validation import (
     validate_int_range,
     verify_bls_to_execution_change_json,
     validate_validator_indices,
+    validate_devnet_chain_setting,
 )
 from ethstaker_deposit.utils.constants import (
     DEFAULT_BLS_TO_EXECUTION_CHANGES_FOLDER_NAME,
@@ -42,7 +42,7 @@ from ethstaker_deposit.settings import (
     MAINNET,
     ALL_CHAIN_KEYS,
     get_chain_setting,
-    get_devnet_chain_setting,
+    BaseChainSetting,
 )
 from .existing_mnemonic import (
     load_mnemonic_arguments_decorator,
@@ -79,14 +79,13 @@ FUNC_NAME = 'generate_bls_to_execution_change'
             lambda: load_text(['arg_chain', 'prompt'], func=FUNC_NAME),
             ALL_CHAIN_KEYS
         ),
+        prompt_if_other_is_none='devnet_chain_setting',
+        default=MAINNET,
     ),
     default=MAINNET,
     help=lambda: load_text(['arg_chain', 'help'], func=FUNC_NAME),
     param_decls='--chain',
-    prompt=choice_prompt_func(
-        lambda: load_text(['arg_chain', 'prompt'], func=FUNC_NAME),
-        ALL_CHAIN_KEYS
-    ),
+    prompt=False,  # the callback handles the prompt
 )
 @load_mnemonic_arguments_decorator
 @jit_option(
@@ -132,10 +131,11 @@ FUNC_NAME = 'generate_bls_to_execution_change'
     prompt=False,  # the callback handles the prompt
 )
 @jit_option(
-    # Only for devnet tests
+    callback=validate_devnet_chain_setting,
     default=None,
-    help="[DEVNET ONLY] Set specific GENESIS_FORK_VERSION value",
+    help=lambda: load_text(['arg_devnet_chain_setting', 'help'], func=FUNC_NAME),
     param_decls='--devnet_chain_setting',
+    is_eager=True,
 )
 @click.pass_context
 def generate_bls_to_execution_change(
@@ -148,7 +148,7 @@ def generate_bls_to_execution_change(
         validator_indices: Sequence[int],
         bls_withdrawal_credentials_list: Sequence[bytes],
         withdrawal_address: HexAddress,
-        devnet_chain_setting: str,
+        devnet_chain_setting: Optional[BaseChainSetting],
         **kwargs: Any) -> None:
     # Generate folder
     bls_to_execution_changes_folder = os.path.join(
@@ -159,17 +159,7 @@ def generate_bls_to_execution_change(
         os.mkdir(bls_to_execution_changes_folder)
 
     # Get chain setting
-    chain_setting = get_chain_setting(chain)
-
-    if devnet_chain_setting is not None:
-        click.echo('\n%s\n' % '**[Warning] Using devnet chain setting to generate the SignedBLSToExecutionChange.**\t')
-        devnet_chain_setting_dict = json.loads(devnet_chain_setting)
-        chain_setting = get_devnet_chain_setting(
-            network_name=devnet_chain_setting_dict['network_name'],
-            genesis_fork_version=devnet_chain_setting_dict['genesis_fork_version'],
-            exit_fork_version=devnet_chain_setting_dict['exit_fork_version'],
-            genesis_validator_root=devnet_chain_setting_dict['genesis_validator_root'],
-        )
+    chain_setting = devnet_chain_setting if devnet_chain_setting is not None else get_chain_setting(chain)
 
     if len(validator_indices) != len(bls_withdrawal_credentials_list):
         raise ValueError(

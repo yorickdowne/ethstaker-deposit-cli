@@ -3,7 +3,7 @@ import concurrent.futures
 import os
 import time
 
-from typing import Any, Sequence, Dict
+from typing import Any, Sequence, Dict, Optional
 from ethstaker_deposit.cli.existing_mnemonic import load_mnemonic_arguments_decorator
 from ethstaker_deposit.credentials import Credential
 from ethstaker_deposit.exceptions import ValidationError
@@ -11,6 +11,7 @@ from ethstaker_deposit.settings import (
     MAINNET,
     ALL_CHAIN_KEYS,
     get_chain_setting,
+    BaseChainSetting,
 )
 from ethstaker_deposit.utils.click import (
     captive_prompt_callback,
@@ -22,7 +23,12 @@ from ethstaker_deposit.utils.intl import (
     closest_match,
     load_text,
 )
-from ethstaker_deposit.utils.validation import validate_int_range, validate_validator_indices, verify_signed_exit_json
+from ethstaker_deposit.utils.validation import (
+    validate_int_range,
+    validate_validator_indices,
+    verify_signed_exit_json,
+    validate_devnet_chain_setting,
+)
 
 
 def _credential_builder(kwargs: Dict[str, Any]) -> Credential:
@@ -37,7 +43,7 @@ def _exit_exporter(kwargs: Dict[str, Any]) -> str:
 def _exit_verifier(kwargs: Dict[str, Any]) -> bool:
     credential: Credential = kwargs.pop('credential')
     kwargs['pubkey'] = credential.signing_pk.hex()
-    kwargs['chain_settings'] = credential.chain_setting
+    kwargs['chain_setting'] = credential.chain_setting
     return verify_signed_exit_json(**kwargs)
 
 
@@ -54,14 +60,13 @@ FUNC_NAME = 'exit_transaction_mnemonic'
             lambda: load_text(['arg_exit_transaction_mnemonic_chain', 'prompt'], func=FUNC_NAME),
             ALL_CHAIN_KEYS
         ),
+        prompt_if_other_is_none='devnet_chain_setting',
+        default=MAINNET,
     ),
     default=MAINNET,
     help=lambda: load_text(['arg_exit_transaction_mnemonic_chain', 'help'], func=FUNC_NAME),
     param_decls='--chain',
-    prompt=choice_prompt_func(
-        lambda: load_text(['arg_exit_transaction_mnemonic_chain', 'prompt'], func=FUNC_NAME),
-        ALL_CHAIN_KEYS
-    ),
+    prompt=False,  # the callback handles the prompt
 )
 @load_mnemonic_arguments_decorator
 @jit_option(
@@ -94,6 +99,13 @@ FUNC_NAME = 'exit_transaction_mnemonic'
     param_decls='--output_folder',
     type=click.Path(exists=True, file_okay=False, dir_okay=True),
 )
+@jit_option(
+    callback=validate_devnet_chain_setting,
+    default=None,
+    help=lambda: load_text(['arg_devnet_chain_setting', 'help'], func=FUNC_NAME),
+    param_decls='--devnet_chain_setting',
+    is_eager=True,
+)
 @click.pass_context
 def exit_transaction_mnemonic(
         ctx: click.Context,
@@ -104,10 +116,14 @@ def exit_transaction_mnemonic(
         validator_indices: Sequence[int],
         epoch: int,
         output_folder: str,
+        devnet_chain_setting: Optional[BaseChainSetting],
         **kwargs: Any) -> None:
 
     folder = os.path.join(output_folder, DEFAULT_EXIT_TRANSACTION_FOLDER_NAME)
-    chain_settings = get_chain_setting(chain)
+
+    # Get chain setting
+    chain_setting = devnet_chain_setting if devnet_chain_setting is not None else get_chain_setting(chain)
+
     num_keys = len(validator_indices)
     key_indices = range(validator_start_index, validator_start_index + num_keys)
 
@@ -121,7 +137,7 @@ def exit_transaction_mnemonic(
             'mnemonic_password': mnemonic_password,
             'index': index,
             'amount': 0,
-            'chain_setting': chain_settings,
+            'chain_setting': chain_setting,
             'hex_withdrawal_address': None,
         } for index in key_indices]
 

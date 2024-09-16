@@ -4,7 +4,7 @@ import json
 import re
 import sys
 import concurrent.futures
-from typing import Any, Dict, Sequence
+from typing import Any, Dict, Sequence, Optional
 
 from eth_typing import (
     BLSPubkey,
@@ -43,7 +43,7 @@ from ethstaker_deposit.utils.constants import (
     MAX_DEPOSIT_AMOUNT,
 )
 from ethstaker_deposit.utils.crypto import SHA256
-from ethstaker_deposit.settings import BaseChainSetting
+from ethstaker_deposit.settings import BaseChainSetting, get_devnet_chain_setting
 
 
 #
@@ -366,19 +366,19 @@ def validate_keystore_file(file_path: str) -> Keystore:
     return saved_keystore
 
 
-def verify_signed_exit_json(file_folder: str, pubkey: str, chain_settings: BaseChainSetting) -> bool:
+def verify_signed_exit_json(file_folder: str, pubkey: str, chain_setting: BaseChainSetting) -> bool:
     with open(file_folder, 'r', encoding='utf-8') as f:
         deposit_json: SignedVoluntaryExit = json.load(f)
         signature = deposit_json["signature"]
         message = deposit_json["message"]
-        return validate_signed_exit(message["validator_index"], message["epoch"], signature, pubkey, chain_settings)
+        return validate_signed_exit(message["validator_index"], message["epoch"], signature, pubkey, chain_setting)
 
 
 def validate_signed_exit(validator_index: str,
                          epoch: str,
                          signature: str,
                          pubkey: str,
-                         chain_settings: BaseChainSetting) -> bool:
+                         chain_setting: BaseChainSetting) -> bool:
     bls_pubkey = BLSPubkey(bytes.fromhex(pubkey))
     bls_signature = BLSSignature(decode_hex(signature))
     message = VoluntaryExit(  # type: ignore[no-untyped-call]
@@ -387,8 +387,8 @@ def validate_signed_exit(validator_index: str,
     )
 
     domain = compute_voluntary_exit_domain(
-        fork_version=chain_settings.EXIT_FORK_VERSION,
-        genesis_validators_root=chain_settings.GENESIS_VALIDATORS_ROOT
+        fork_version=chain_setting.EXIT_FORK_VERSION,
+        genesis_validators_root=chain_setting.GENESIS_VALIDATORS_ROOT
     )
 
     signing_root = compute_signing_root(message, domain)
@@ -402,7 +402,7 @@ def validate_signed_exit(validator_index: str,
 
 def verify_bls_to_execution_change_keystore_json(file_folder: str,
                                                  pubkey: str,
-                                                 chain_settings: BaseChainSetting) -> bool:
+                                                 chain_setting: BaseChainSetting) -> bool:
     with open(file_folder, 'r', encoding='utf-8') as f:
         deposit_json: SignedBLSToExecutionChangeKeystore = json.load(f)
         signature = deposit_json["signature"]
@@ -411,14 +411,14 @@ def verify_bls_to_execution_change_keystore_json(file_folder: str,
                                                          message["to_execution_address"],
                                                          signature,
                                                          pubkey,
-                                                         chain_settings)
+                                                         chain_setting)
 
 
 def validate_bls_to_execution_change_keystore(validator_index: str,
                                               to_execution_address: str,
                                               signature: str,
                                               pubkey: str,
-                                              chain_settings: BaseChainSetting) -> bool:
+                                              chain_setting: BaseChainSetting) -> bool:
     bls_pubkey = BLSPubkey(bytes.fromhex(pubkey))
     bls_signature = BLSSignature(decode_hex(signature))
     message = BLSToExecutionChangeKeystore(  # type: ignore[no-untyped-call]
@@ -427,9 +427,62 @@ def validate_bls_to_execution_change_keystore(validator_index: str,
     )
 
     domain = compute_bls_to_execution_change_keystore_domain(
-        fork_version=chain_settings.GENESIS_FORK_VERSION,
-        genesis_validators_root=chain_settings.GENESIS_VALIDATORS_ROOT
+        fork_version=chain_setting.GENESIS_FORK_VERSION,
+        genesis_validators_root=chain_setting.GENESIS_VALIDATORS_ROOT
     )
 
     signing_root = compute_signing_root(message, domain)
     return bls.Verify(bls_pubkey, signing_root, bls_signature)
+
+
+#
+# Devnet Chain Setting Validation
+#
+
+def validate_devnet_chain_setting(ctx: click.Context, param: Any, value: Optional[str]) -> Optional[BaseChainSetting]:
+    if value is None:
+        return None
+
+    # Trimming to protect against unnecessaryly large JSON payload, see https://docs.python.org/3/library/json.html
+    trimmed_value = value[:400]
+
+    if validate_devnet_chain_setting_json(trimmed_value):
+        click.echo('\n%s\n' % load_text(['arg_devnet_chain_setting_warning']))
+        devnet_chain_setting_dict = json.loads(trimmed_value)
+        chain_setting = get_devnet_chain_setting(
+            network_name=devnet_chain_setting_dict['network_name'],
+            genesis_fork_version=devnet_chain_setting_dict['genesis_fork_version'],
+            exit_fork_version=devnet_chain_setting_dict['exit_fork_version'],
+            genesis_validator_root=devnet_chain_setting_dict.get('genesis_validator_root', None),
+        )
+        click.echo(str(chain_setting) + '\n')
+        return chain_setting
+    else:
+        raise ValidationError(load_text(['err_invalid_devnet_chain_setting']) + '\n')
+
+
+def validate_devnet_chain_setting_json(json_value: str) -> bool:
+    try:
+        devnet_chain_setting_dict = json.loads(json_value)
+
+        if not isinstance(devnet_chain_setting_dict, dict):
+            raise ValidationError(load_text(['err_devnet_chain_setting_not_object']) + '\n')
+
+        required_keys = ('network_name', 'genesis_fork_version', 'exit_fork_version')
+
+        all_keys = all(key in devnet_chain_setting_dict for key in required_keys)
+
+        if not all_keys:
+            raise ValidationError(load_text(['err_devnet_chain_setting_missing_keys']) + '\n')
+
+        if len(devnet_chain_setting_dict) not in (3, 4):
+            raise ValidationError(load_text(['err_devnet_chain_setting_key_length']) + '\n')
+
+        if len(devnet_chain_setting_dict) == 4 and 'genesis_validator_root' not in devnet_chain_setting_dict:
+            raise ValidationError(load_text(['err_devnet_chain_setting_invalid_fourth_key']) + '\n')
+
+        return True
+    except json.JSONDecodeError:
+        raise ValidationError(load_text(['err_devnet_chain_setting_invalid_json']) + '\n')
+
+        return False
