@@ -23,11 +23,12 @@
         - [`exit-transaction-keystore` Arguments](#exit-transaction-keystore-arguments)
         - [`exit-transaction-mnemonic` Arguments](#exit-transaction-mnemonic-arguments)
         - [`partial-deposit` Arguments](#partial-deposit-arguments)
+        - [`test-keystore` Arguments](#test-keystore-arguments)
     - [Option 2. Build `deposit-cli` with native Python](#option-2-build-deposit-cli-with-native-python)
       - [Step 0. Python version checking](#step-0-python-version-checking)
       - [Step 1. Installation](#step-1-installation-1)
       - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-1)
-        - [Language Argument](#language-argument)
+        - [Language Argument](#language-argument-1)
         - [Commands](#commands-1)
         - [Arguments](#arguments)
         - [Successful message](#successful-message-1)
@@ -35,7 +36,7 @@
       - [Step 0. Python version checking](#step-0-python-version-checking-1)
       - [Step 1. Installation](#step-1-installation-2)
       - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-2)
-        - [Language Argument](#language-argument-1)
+        - [Language Argument](#language-argument-2)
         - [Commands](#commands-2)
         - [Arguments](#arguments-1)
     - [Option 4. Use published docker image](#option-4-use-published-docker-image)
@@ -50,21 +51,21 @@
     - [Option 1. Download binary executable file](#option-1-download-binary-executable-file-1)
       - [Step 1. Installation](#step-1-installation-3)
       - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-5)
-        - [Language Argument](#language-argument-2)
+        - [Language Argument](#language-argument-3)
         - [Commands](#commands-3)
         - [Arguments](#arguments-3)
     - [Option 2. Build `deposit-cli` with native Python](#option-2-build-deposit-cli-with-native-python-1)
       - [Step 0. Python version checking](#step-0-python-version-checking-2)
       - [Step 1. Installation](#step-1-installation-4)
       - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-6)
-        - [Language Argument](#language-argument-3)
+        - [Language Argument](#language-argument-4)
         - [Commands](#commands-4)
         - [Arguments](#arguments-4)
     - [Option 3. Build `deposit-cli` with `virtualenv`](#option-3-build-deposit-cli-with-virtualenv-1)
       - [Step 0. Python version checking](#step-0-python-version-checking-3)
       - [Step 1. Installation](#step-1-installation-5)
       - [Step 2. Create keys and `deposit_data-*.json`](#step-2-create-keys-and-deposit_data-json-7)
-        - [Language Argument](#language-argument-4)
+        - [Language Argument](#language-argument-5)
         - [Commands](#commands-5)
         - [Arguments](#arguments-5)
 - [Development](#development)
@@ -72,6 +73,7 @@
   - [Install testing requirements](#install-testing-requirements)
   - [Run tests](#run-tests)
   - [Run the app](#run-the-app)
+  - [Use pre-commit](#use-pre-commit)
   - [Building Binaries](#building-binaries)
 - [Canonical Deposit Contract and Launchpad](#canonical-deposit-contract-and-launchpad)
 
@@ -158,6 +160,7 @@ The CLI offers different commands depending on what you want to do with the tool
 | `exit-transaction-keystore` | This command is used to create an exit transaction using a keystore file. |
 | `exit-transaction-mnemonic` | This command is used to create an exit transaction using a mnemonic phrase. |
 | `partial-deposit` | This command is used to create a deposit file using a keystore file. |
+| `test-keystore` | This command is used to verify access to the provided keystore file by attempting to decrypt it with the provided keystore password. |
 
 ###### `new-mnemonic` Arguments
 
@@ -272,6 +275,15 @@ You can use `partial-deposit --help` to see all arguments. Note that if there ar
 | `--withdrawal_address` | String. Ethereum execution address in hexadecimal encoded form | The withdrawal address of the existing validator or the desired withdrawal address. |
 | `--output_folder` | String. Pointing to `./partial_deposit` by default | The folder path for the `deposit-*` JSON file |
 
+###### `test-keystore` Arguments
+
+You can use `test-keystore --help` to see all arguments. Note that if there are missing arguments that the CLI needs, it will ask you for them.
+
+| Argument | Type | Description |
+| -------- | -------- | -------- |
+| `--keystore` | File | The keystore file you wish to verify. |
+| `--keystore_password` | String | The password used to attempt decryption of the provided keystore file. Note: It is not your mnemonic password. |
+
 #### Option 2. Build `deposit-cli` with native Python
 
 ##### Step 0. Python version checking
@@ -335,7 +347,8 @@ See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-exe
 See [here](#generate-bls-to-execution-change-keystore-arguments) for `generate-bls-to-execution-change-keystore` arguments\
 See [here](#exit-transaction-keystore-arguments) for `exit-transaction-keystore` arguments\
 See [here](#exit-transaction-mnemonic-arguments) for `exit-transaction-mnemonic` arguments\
-See [here](#partial-deposit-arguments) for `partial-deposit` arguments
+See [here](#partial-deposit-arguments) for `partial-deposit` arguments\
+See [here](#test-keystore-arguments) for `test-keystore` arguments
 
 ###### Successful message
 See [here](#successful-message)
@@ -411,7 +424,8 @@ See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-exe
 See [here](#generate-bls-to-execution-change-keystore-arguments) for `generate-bls-to-execution-change-keystore` arguments\
 See [here](#exit-transaction-keystore-arguments) for `exit-transaction-keystore` arguments\
 See [here](#exit-transaction-mnemonic-arguments) for `exit-transaction-mnemonic` arguments\
-See [here](#partial-deposit-arguments) for `partial-deposit` arguments
+See [here](#partial-deposit-arguments) for `partial-deposit` arguments\
+See [here](#test-keystore-arguments) for `test-keystore` arguments
 
 #### Option 4. Use published docker image
 
@@ -529,7 +543,8 @@ See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-exe
 See [here](#generate-bls-to-execution-change-keystore-arguments) for `generate-bls-to-execution-change-keystore` arguments\
 See [here](#exit-transaction-keystore-arguments) for `exit-transaction-keystore` arguments\
 See [here](#exit-transaction-mnemonic-arguments) for `exit-transaction-mnemonic` arguments\
-See [here](#partial-deposit-arguments) for `partial-deposit` arguments
+See [here](#partial-deposit-arguments) for `partial-deposit` arguments\
+See [here](#test-keystore-arguments) for `test-keystore` arguments
 
 #### Option 2. Build `deposit-cli` with native Python
 
@@ -595,7 +610,8 @@ See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-exe
 See [here](#generate-bls-to-execution-change-keystore-arguments) for `generate-bls-to-execution-change-keystore` arguments\
 See [here](#exit-transaction-keystore-arguments) for `exit-transaction-keystore` arguments\
 See [here](#exit-transaction-mnemonic-arguments) for `exit-transaction-mnemonic` arguments\
-See [here](#partial-deposit-arguments) for `partial-deposit` arguments
+See [here](#partial-deposit-arguments) for `partial-deposit` arguments\
+See [here](#test-keystore-arguments) for `test-keystore` arguments
 
 #### Option 3. Build `deposit-cli` with `virtualenv`
 
@@ -662,7 +678,8 @@ See [here](#generate-bls-to-execution-change-arguments) for `generate-bls-to-exe
 See [here](#generate-bls-to-execution-change-keystore-arguments) for `generate-bls-to-execution-change-keystore` arguments\
 See [here](#exit-transaction-keystore-arguments) for `exit-transaction-keystore` arguments\
 See [here](#exit-transaction-mnemonic-arguments) for `exit-transaction-mnemonic` arguments\
-See [here](#partial-deposit-arguments) for `partial-deposit` arguments
+See [here](#partial-deposit-arguments) for `partial-deposit` arguments\
+See [here](#test-keystore-arguments) for `test-keystore` arguments
 
 ## Development
 
