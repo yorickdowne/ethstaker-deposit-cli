@@ -21,6 +21,7 @@ dependencies = [
     "eth-typing",
     "eth-utils",
     "pycryptodome",
+    "pyperclip",
     "py-ecc",
     "ssz"
 ]
