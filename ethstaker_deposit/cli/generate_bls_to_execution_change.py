@@ -38,6 +38,7 @@ from ethstaker_deposit.utils.intl import (
     closest_match,
     load_text,
 )
+from ethstaker_deposit.utils.terminal import clear_terminal
 from ethstaker_deposit.settings import (
     MAINNET,
     ALL_CHAIN_KEYS,
@@ -208,7 +209,7 @@ def generate_bls_to_execution_change(
     if not json_file_validation_result:
         raise ValidationError(load_text(['err_verify_btec']))
 
-    click.clear()
+    clear_terminal()
     click.echo(OWL_0)
     click.echo(load_text(['msg_creation_success']) + str(bls_to_execution_changes_folder))
 

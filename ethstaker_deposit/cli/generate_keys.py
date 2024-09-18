@@ -33,6 +33,7 @@ from ethstaker_deposit.utils.intl import (
     closest_match,
     load_text,
 )
+from ethstaker_deposit.utils.terminal import clear_terminal
 from ethstaker_deposit.settings import (
     MAINNET,
     ALL_CHAIN_KEYS,
@@ -140,7 +141,7 @@ def generate_keys(ctx: click.Context, validator_start_index: int,
 
     if not os.path.exists(folder):
         os.mkdir(folder)
-    click.clear()
+    clear_terminal()
     click.echo(RHINO_0)
     click.echo(load_text(['msg_key_creation']))
     credentials = CredentialList.from_mnemonic(

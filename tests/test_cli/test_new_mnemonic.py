@@ -4,6 +4,7 @@ import os
 import sys
 
 import pytest
+import inspect
 from click.testing import CliRunner
 
 from eth_utils import decode_hex
@@ -18,6 +19,14 @@ from ethstaker_deposit.utils.constants import (
 )
 from ethstaker_deposit.utils.intl import load_text
 from .helpers import clean_key_folder, get_permissions, get_uuid
+
+
+@pytest.fixture(autouse=True)
+def check_async(request):
+    if inspect.iscoroutinefunction(request.node.obj):
+        os.environ['IS_ASYNC_TEST'] = '1'
+    else:
+        os.environ['IS_ASYNC_TEST'] = '0'
 
 
 def test_new_mnemonic_bls_withdrawal(monkeypatch) -> None:

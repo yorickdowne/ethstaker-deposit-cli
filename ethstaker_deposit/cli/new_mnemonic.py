@@ -22,6 +22,7 @@ from ethstaker_deposit.utils.intl import (
     load_text,
     get_first_options,
 )
+from ethstaker_deposit.utils.terminal import clear_terminal
 
 from .generate_keys import (
     generate_keys,
@@ -51,14 +52,14 @@ def new_mnemonic(ctx: click.Context, mnemonic_language: str, **kwargs: Any) -> N
     mnemonic = get_mnemonic(language=mnemonic_language, words_path=WORD_LISTS_PATH)
     test_mnemonic = ''
     while mnemonic != reconstruct_mnemonic(test_mnemonic, WORD_LISTS_PATH):
-        click.clear()
+        clear_terminal()
         click.echo(load_text(['msg_mnemonic_presentation']))
         click.echo('\n\n%s\n\n' % mnemonic)
         click.pause(load_text(['msg_press_any_key']))
 
-        click.clear()
+        clear_terminal()
         test_mnemonic = click.prompt(load_text(['msg_mnemonic_retype_prompt']) + '\n\n')
-    click.clear()
+    clear_terminal()
     # Clear clipboard
     try:  # Failing this on headless Linux is expected
         pyperclip.copy(' ')
