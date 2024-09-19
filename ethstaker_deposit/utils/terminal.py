@@ -11,6 +11,9 @@ def clear_terminal() -> None:
     if sys.platform == 'linux':
         clean_env = os.environ.copy()
         clean_env.pop('LD_LIBRARY_PATH', None)
+    elif sys.platform == 'darwin':
+        clean_env = os.environ.copy()
+
     if sys.platform == 'win32':
         # Special-case for asyncio pytest on Windows
         if os.getenv("IS_ASYNC_TEST") == "1":
