@@ -6,7 +6,8 @@ build-backend = "setuptools.build_meta"
 where = ["."]
 
 [tool.setuptools.dynamic]
-version = {attr = "ethstaker_deposit.version.__version__"}
+version = { file = "ethstaker_deposit/_version.py" }
+#version = {attr = "ethstaker_deposit.version.__version__"}
 
 [tool.pip-tools]
 generate-hashes = true
