@@ -24,7 +24,7 @@ jobs:
         os: [ubuntu-22.04, ubuntu-22.04-arm, macos-15-intel, macos-latest, windows-latest, windows-11-arm]
         python-version: ["3.12"]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
@@ -107,7 +107,7 @@ jobs:
         with:
           subject-path: output/artifacts/*
       - name: Archive production artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: binary-${{ matrix.os }}-${{ github.sha }}-${{ github.run_id }}
           path: output/artifacts
@@ -123,7 +123,7 @@ jobs:
       metadata: ${{ steps.push.outputs.metadata }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       # Uses the `docker/login-action` action to log in to the Container registry registry using the account and password that will publish the packages. Once published, the packages are scoped to the account defined here.
       - name: Log in to the Container registry
         # This pinned action came from docker/login-action@v3, releases can be found on https://github.com/docker/login-action/releases
@@ -136,17 +136,17 @@ jobs:
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         # This pinned action came from docker/metadata-action@v5, releases can be found on https://github.com/docker/metadata-action/releases
-        uses: docker/metadata-action@c1e51972afc2121e065aed6d45c65596fe445f3f
+        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
       # Set up Qemu for multi-arch build
       - name: Set up Qemu
         # This pinned action came from docker/setup-qemu-action@v3, releases can be found on https://github.com/docker/setup-qemu-action/releases
-        uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392
+        uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130
       # Set up buildx for multi-arch build
       - name: Set up Docker Buildx
         # This pinned action came from docker/setup-buildx-action@v3, releases can be found on https://github.com/docker/setup-buildx-action/releases
-        uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f
       # This step uses the `docker/build-push-action` action to build the image, based on your repository's `Dockerfile`. If the build succeeds, it pushes the image to GitHub Packages.
       # It uses the `context` parameter to define the build's context as the set of files located in the specified path. For more information, see "[Usage](https://github.com/docker/build-push-action#usage)" in the README of the `docker/build-push-action` repository.
       # It uses the `tags` and `labels` parameters to tag and label the image with the output from the "meta" step.
@@ -174,9 +174,9 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Download build binaries
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           path: assets/
           pattern: binary-*
