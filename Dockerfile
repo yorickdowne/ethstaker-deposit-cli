@@ -1,5 +1,5 @@
 # This image is from python:3.12.9-slim-bookworm (https://hub.docker.com/_/python)
-FROM python@sha256:aaa3f8cb64dd64e5f8cb6e58346bdcfa410a108324b0f28f1a7cc5964355b211
+FROM python@sha256:5f1cdbcab9a50594a79502dd73e885456d2a2fc31f1a1fa18484815b37ee9152
 
 WORKDIR /app
 
