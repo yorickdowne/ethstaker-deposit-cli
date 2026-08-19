@@ -209,7 +209,7 @@
 <p>Each CLI command has a number of command options that can be provided:</p>
 <ul>
 <li>
-<p><strong><code>--language</code></strong>: The language you wish to use the CLI in. Options: العربية, ελληνικά, English, Français, Bahasa melayu, Italiano, 日本語, 한국어, Português do Brasil, român, 简体中文. Default to English.</p>
+<p><strong><code>--language</code></strong>: The language you wish to use the CLI in. Options: العربية, ελληνικά, English, Deutsch, Français, Bahasa melayu, Italiano, 日本語, 한국어, Português do Brasil, român, Türkçe, 简体中文. Default to English.</p>
 </li>
 <li>
 <p><strong><code>--non_interactive</code></strong>: Run CLI in non-interactive mode. This will skip all confirmation and internet connectivity checks.</p>
@@ -264,6 +264,14 @@ Please be sure that your ETH is deposited only to this deposit contract address,
 <ul>
 <li>Deposit address: <a href="https://hoodi.etherscan.io/address/0x00000000219ab540356cBB839Cbe05303d7705Fa">0x00000000219ab540356cBB839Cbe05303d7705Fa</a></li>
 <li><a href="https://hoodi.launchpad.ethereum.org/">Launchpad</a></li>
+</ul>
+</li>
+<li>
+<p>Plataberget testnet</p>
+<ul>
+<li>Deposit address: <a href="https://dora.plataberget.ethpandaops.io/address/0x00000000219ab540356cbb839cbe05303d7705fa">0x00000000219ab540356cBB839Cbe05303d7705Fa</a></li>
+<li><a href="https://dora.plataberget.ethpandaops.io/validators/deposits/submit">Validator deposits via Dora</a></li>
+<li>Plataberget is expected to be shut down by the end of 2026.</li>
 </ul>
 </li>
 <li>
@@ -552,7 +560,7 @@ Including sensitive arguments when executing CLI commands poses a security risk,
 <p><strong><code>--mnemonic_language</code></strong>: The language of the BIP-39 mnemonic. Options are: 'chinese_simplified', 'chinese_traditional', 'czech', 'english', 'french', 'italian', 'japanese', 'korean', 'portuguese', 'spanish'.</p>
 </li>
 <li>
-<p><strong><code>--chain</code></strong>: The chain to use for generating the deposit data. Options are: 'mainnet', 'sepolia', 'hoodi', 'ephemery', 'gnosis', or 'chiado'.</p>
+<p><strong><code>--chain</code></strong>: The chain to use for generating the deposit data. Options are: 'mainnet', 'sepolia', 'hoodi', 'plataberget', 'ephemery', 'gnosis', or 'chiado'.</p>
 </li>
 <li>
 <p><strong><code>--num_validators</code></strong>: Number of validators to create.</p>
@@ -596,7 +604,7 @@ Including sensitive arguments when executing CLI commands poses a security risk,
 <h2 id="optional-arguments-1"><a class="header" href="#optional-arguments-1">Optional Arguments</a></h2>
 <ul>
 <li>
-<p><strong><code>--chain</code></strong>: The chain to use for generating the deposit data. Options are: 'mainnet', 'sepolia', 'hoodi', 'ephemery', 'gnosis', or 'chiado'.</p>
+<p><strong><code>--chain</code></strong>: The chain to use for generating the deposit data. Options are: 'mainnet', 'sepolia', 'hoodi', 'plataberget', 'ephemery', 'gnosis', or 'chiado'.</p>
 </li>
 <li>
 <p><strong><code>--mnemonic</code></strong>: The mnemonic you used to create withdrawal credentials. <span class="warning"></span></p>
@@ -654,7 +662,7 @@ Including sensitive arguments when executing CLI commands poses a security risk,
 <p><strong><code>--bls_to_execution_changes_folder</code></strong>: The path to store the change JSON file.</p>
 </li>
 <li>
-<p><strong><code>--chain</code></strong>: The chain to use for generating the deposit data. Options are: 'mainnet', 'sepolia', 'hoodi', 'ephemery', 'gnosis', or 'chiado'.</p>
+<p><strong><code>--chain</code></strong>: The chain to use for generating the deposit data. Options are: 'mainnet', 'sepolia', 'hoodi', 'plataberget', 'ephemery', 'gnosis', or 'chiado'.</p>
 </li>
 <li>
 <p><strong><code>--mnemonic</code></strong>: The mnemonic you used to create withdrawal credentials. <span class="warning"></span></p>
@@ -696,7 +704,7 @@ This command is associated with the a proposed solution to update withdrawal cre
 <h2 id="optional-arguments-3"><a class="header" href="#optional-arguments-3">Optional Arguments</a></h2>
 <ul>
 <li>
-<p><strong><code>--chain</code></strong>: The chain to use for generating the deposit data. Options are: 'mainnet', 'sepolia', 'hoodi', 'ephemery', 'gnosis', or 'chiado'.</p>
+<p><strong><code>--chain</code></strong>: The chain to use for generating the deposit data. Options are: 'mainnet', 'sepolia', 'hoodi', 'plataberget', 'ephemery', 'gnosis', or 'chiado'.</p>
 </li>
 <li>
 <p><strong><code>--keystore</code></strong>: The keystore file associating with the validator you wish to sign with. This keystore file should match the provided validator index.</p>
@@ -731,7 +739,7 @@ Including sensitive arguments when executing CLI commands poses a security risk,
 <h2 id="optional-arguments-4"><a class="header" href="#optional-arguments-4">Optional Arguments</a></h2>
 <ul>
 <li>
-<p><strong><code>--chain</code></strong>: The chain to use for generating the deposit data. Options are: 'mainnet', 'sepolia', 'hoodi', 'ephemery', 'gnosis', or 'chiado'.</p>
+<p><strong><code>--chain</code></strong>: The chain to use for generating the deposit data. Options are: 'mainnet', 'sepolia', 'hoodi', 'plataberget', 'ephemery', 'gnosis', or 'chiado'.</p>
 </li>
 <li>
 <p><strong><code>--keystore</code></strong>: The keystore file associating with the validator you wish to exit.</p>
@@ -766,7 +774,7 @@ Including sensitive arguments when executing CLI commands poses a security risk,
 <h2 id="optional-arguments-5"><a class="header" href="#optional-arguments-5">Optional Arguments</a></h2>
 <ul>
 <li>
-<p><strong><code>--chain</code></strong>: The chain to use for generating the deposit data. Options are: 'mainnet', 'sepolia', 'hoodi', 'ephemery', 'gnosis', or 'chiado'.</p>
+<p><strong><code>--chain</code></strong>: The chain to use for generating the deposit data. Options are: 'mainnet', 'sepolia', 'hoodi', 'plataberget', 'ephemery', 'gnosis', or 'chiado'.</p>
 </li>
 <li>
 <p><strong><code>--mnemonic</code></strong>: The mnemonic you used during key generation. <span class="warning"></span></p>
@@ -808,7 +816,7 @@ If you wish to create a validator with 0x00 credentials, you must use the <stron
 <h2 id="optional-arguments-6"><a class="header" href="#optional-arguments-6">Optional Arguments</a></h2>
 <ul>
 <li>
-<p><strong><code>--chain</code></strong>: The chain to use for generating the deposit data. Options are: 'mainnet', 'sepolia', 'hoodi', 'ephemery', 'gnosis', or 'chiado'.</p>
+<p><strong><code>--chain</code></strong>: The chain to use for generating the deposit data. Options are: 'mainnet', 'sepolia', 'hoodi', 'plataberget', 'ephemery', 'gnosis', or 'chiado'.</p>
 </li>
 <li>
 <p><strong><code>--keystore</code></strong>: The keystore file associating with the validator you wish to deposit to.</p>
@@ -1031,19 +1039,19 @@ uv run pre-commit install
 python3 -m pytest tests
 </code></pre>
 <h2 id="building-local-binaries"><a class="header" href="#building-local-binaries">Building Local Binaries</a></h2>
-<p>The standalone binary targets use Python 3.12, matching the official release workflow and the Python version supported by the pinned PyInstaller toolchain.</p>
+<p>The standalone binary targets use Python 3.14, matching the official release workflow and the Python version supported by the pinned PyInstaller toolchain.</p>
 <p>Build a Linux or macOS binary with:</p>
 <pre><code class="language-sh">make build_linux
 make build_macos
 </code></pre>
-<p>These targets look for <code>python3.12</code>, create or reuse the <code>venv/</code> environment with that interpreter, and install the pinned build dependencies. If an existing <code>venv/</code> was created with another Python version, it is recreated automatically.</p>
-<p>If Python 3.12 is installed under a non-standard path, provide it explicitly:</p>
-<pre><code class="language-sh">make BUILD_PYTHON=/path/to/python3.12 build_linux
+<p>These targets look for <code>python3.14</code>, create or reuse the <code>venv/</code> environment with that interpreter, and install the pinned build dependencies. If an existing <code>venv/</code> was created with another Python version, it is recreated automatically.</p>
+<p>If Python 3.14 is installed under a non-standard path, provide it explicitly:</p>
+<pre><code class="language-sh">make BUILD_PYTHON=/path/to/python3.14 build_linux
 </code></pre>
 <p>The general development targets, such as <code>venv_test</code> and <code>venv_lint</code>, use <code>python3</code> by default. That interpreter must satisfy the <code>requires-python</code> range in <code>pyproject.toml</code>; override it with <code>PYTHON</code> when needed:</p>
-<pre><code class="language-sh">make PYTHON=python3.12 venv_test
+<pre><code class="language-sh">make PYTHON=python3.14 venv_test
 </code></pre>
-<p>The official release workflow builds binaries with Python 3.12. Windows binaries are currently built by GitHub Actions using <code>build_configs/windows/build.spec</code>.</p>
+<p>The official release workflow builds binaries with Python 3.14. Windows binaries are currently built by GitHub Actions using <code>build_configs/windows/build.spec</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="release-process-instructions"><a class="header" href="#release-process-instructions">Release Process Instructions</a></h1>
 <p>This document is meant as a guide on how to perform and publish a new release version of <a href="https://github.com/ethstaker/ethstaker-deposit-cli">ethstaker-deposit-cli</a>. It includes step by step instructions to complete the release process.</p>
 <ol>
