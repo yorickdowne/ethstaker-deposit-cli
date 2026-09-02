@@ -196,9 +196,9 @@ eth-typing==6.0.0 \
 eth-utils==6.0.0 \
     --hash=sha256:63cf48ee32c45541cb5748751909a8345c470432fb6f0fed4bd7c53fd6400469 \
     --hash=sha256:eb54b2f82dd300d3142c49a89da195e823f5e5284d43203593f87c67bad92a96
-hexbytes==1.3.1 \
-    --hash=sha256:a657eebebdfe27254336f98d8af6e2236f3f83aed164b87466b6cf6c5f5a4765 \
-    --hash=sha256:da01ff24a1a9a2b1881c4b85f0e9f9b0f51b526b379ffa23832ae7899d29c2c7
+hexbytes==2.0.0 \
+    --hash=sha256:01312fcd5c57e8a8d2d7dd3274dcf84ea50422aff2abcc2d9fd89ad6a32498e5 \
+    --hash=sha256:5425bd7ac83cdd9791c13a5bf97cfe9b9609a304b1ef3ab146adfd50de06cf0e
 jsonschema==4.26.0 \
     --hash=sha256:0c26707e2efad8aa1bfc5b7ce170f3fccc2e4918ff85989ba9ffa9facb2be326 \
     --hash=sha256:d489f15263b8d200f8387e64b4c3a75f06629559fb73deb8fdfb525f2dab50ce
