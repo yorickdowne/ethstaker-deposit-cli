@@ -1,5 +1,5 @@
 # This image is from python:3.14-slim-trixie (https://hub.docker.com/_/python)
-FROM python@sha256:ce40764625a4ff50df3548277632e7f96c4e77fe75fa848aae9885476e7df5a4
+FROM python@sha256:8edbf9e42c7fb168b9c523718ed907117e6d2e60f5889c0c499bbda3a787da53
 
 WORKDIR /app
 
