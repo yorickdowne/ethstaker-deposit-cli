@@ -59,26 +59,16 @@ dependencies = [
     "typing-extensions>=4.15.0",
     "typing-inspection>=0.4.2",
 ]
-requires-python = ">=3.10,<4"
+requires-python = ">=3.11,<4"
 dynamic = ["version"]
 
 [project.optional-dependencies]
 test = [
-    "exceptiongroup==1.3.1",
     "mypy==2.3.1",
     "pytest==9.1.1",
     "pytest-asyncio==1.4.0",
-    "backports-asyncio-runner==1.2.0 ; python_version < '3.11'",
     "coverage==7.16.1",
-    "tomli==2.4.1",
-    "iniconfig==2.3.0",
-    "mypy-extensions==1.1.0",
-    "packaging==26.3",
-    "pluggy==1.6.0",
-    "typing-extensions==4.16.0",
     "ruff==0.16.8",
-    "Pygments==2.20.0",
-    "pathspec==1.1.1",
     "pip-audit==2.10.1",
     # Transitive dependencies, listed so Dependabot updates them in uv.lock,
     # pinned to the locked version. pip (via pip-api) is omitted because it
@@ -92,20 +82,27 @@ test = [
     "defusedxml==0.7.1",
     "filelock==4.0.8",
     "idna==3.20",
+    "iniconfig==2.3.0",
     "librt==0.16.0 ; platform_python_implementation != 'PyPy'",
     "license-expression==30.4.4",
     "markdown-it-py==4.2.0",
     "mdurl==0.1.2",
     "msgpack==1.2.3",
+    "mypy-extensions==1.1.0",
     "packageurl-python==0.17.6",
+    "packaging==26.3",
+    "pathspec==1.1.1",
     "pip-api==0.0.35",
     "pip-requirements-parser==32.0.1",
     "platformdirs==4.12.2",
+    "pluggy==1.6.0",
     "py-serializable==2.1.0",
+    "pygments==2.21.0",
     "pyparsing==3.3.3",
     "requests==2.34.2",
     "rich==15.0.0",
     "sortedcontainers==2.4.0",
+    "tomli==2.4.1",
     "tomli-w==1.2.0",
     "urllib3==2.8.0",
 ]
