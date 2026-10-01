@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify that pyproject.toml dependency constraints are satisfied by the pip lockfiles.
+"""Verify that the pip lockfiles match uv.lock and satisfy pyproject.toml.
 
 The runtime/executable path installs from the pinned, hashed lockfiles
 (requirements.txt, requirements_test.txt), while the library metadata lives in
@@ -11,6 +11,18 @@ silently diverge:
   2. Every pin in those lockfiles must satisfy the range declared in
      pyproject.toml (so the locked set is always installable given the
      declared ranges).
+  3. Each lockfile must be byte-identical to the `uv export` output for
+     uv.lock, so transitive pins cannot drift between uv.lock and the
+     requirements files. `--locked` also fails if uv.lock is stale relative
+     to pyproject.toml.
+
+Run with --write to regenerate both lockfiles from uv.lock, --lock to run
+`uv lock` first, or --upgrade [PKG ...] to run `uv lock --upgrade` (or
+--upgrade-package for each PKG) first. --upgrade ignores Dependabot's
+cooldown and takes the newest releases.
+
+If uv is not installed, check 3 is skipped with a warning, unless the CI
+environment variable is set, in which case it is an error.
 
 Build-only requirements under build_configs/* are intentionally not checked,
 as they are independent of pyproject.toml.
@@ -18,7 +30,12 @@ as they are independent of pyproject.toml.
 
 from __future__ import annotations
 
+import argparse
+import difflib
+import os
 import re
+import shutil
+import subprocess  # noqa: S404
 import sys
 import tomllib
 from pathlib import Path
@@ -28,6 +45,23 @@ ROOT = Path(__file__).resolve().parent.parent
 MARKER_RE = re.compile(r"\s*;\s*.*$")
 CONSTRAINT_RE = re.compile(r"^([^<>=!~;]+)\s*(.*)$")
 VERSION_OP_RE = re.compile(r"^(==|!=|<=|>=|<|>|~=|===)?\s*([0-9][A-Za-z0-9._*+-]*)$")
+
+UV_EXPORT = [
+    "uv",
+    "export",
+    "--locked",
+    "--no-dev",
+    "--no-emit-project",
+    "--no-header",
+    "--no-annotate",
+    "--format",
+    "requirements.txt",
+]
+# pip is pulled in by pip-audit; pinning it would make `pip install -r` try to replace itself.
+EXPORTS = {
+    "requirements.txt": [],
+    "requirements_test.txt": ["--extra", "test", "--no-emit-package", "pip"],
+}
 
 
 def normalize(name: str) -> str:
@@ -131,17 +165,95 @@ def check(declared: dict[str, list[tuple[str, str]]], pins: dict[str, str], labe
     return errors
 
 
+def uv_export(extra_args: list[str]) -> str:
+    result = subprocess.run(  # noqa: S603
+        UV_EXPORT + extra_args, cwd=ROOT, capture_output=True, text=True, check=False
+    )
+    if result.returncode != 0:
+        raise RuntimeError(f"`{' '.join(UV_EXPORT + extra_args)}` failed:\n{result.stderr.strip()}")
+    return result.stdout
+
+
+def pin_lines(text: str) -> list[str]:
+    return [line.split()[0].rstrip(";") for line in text.splitlines() if line[:1].isalnum()]
+
+
+def check_export(name: str, extra_args: list[str]) -> list[str]:
+    expected = uv_export(extra_args)
+    actual = (ROOT / name).read_text()
+    if actual == expected:
+        return []
+    diff = difflib.unified_diff(pin_lines(actual), pin_lines(expected), name, "uv export", lineterm="", n=0)
+    detail = "\n".join(diff) or "(pins match; hashes or markers differ)"
+    return [f"{name}: does not match `uv export` output for uv.lock\n{detail}"]
+
+
+def uv_lock(extra_args: list[str]) -> None:
+    cmd = ["uv", "lock", *extra_args]
+    result = subprocess.run(cmd, cwd=ROOT, check=False)  # noqa: S603
+    if result.returncode != 0:
+        raise RuntimeError(f"`{' '.join(cmd)}` failed")
+
+
+def write_exports() -> int:
+    for name, extra_args in EXPORTS.items():
+        (ROOT / name).write_text(uv_export(extra_args))
+        print(f"Wrote {name}")
+    return 0
+
+
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--write", action="store_true", help="regenerate the lockfiles from uv.lock")
+    mode.add_argument("--lock", action="store_true", help="run `uv lock`, then --write")
+    mode.add_argument(
+        "--upgrade",
+        nargs="*",
+        metavar="PKG",
+        help="run `uv lock --upgrade` (or --upgrade-package for each PKG), then --write; ignores Dependabot's cooldown",
+    )
+    args = parser.parse_args()
+
+    have_uv = shutil.which("uv") is not None
+    if args.write or args.lock or args.upgrade is not None:
+        if not have_uv:
+            print("error: uv is required for --write, --lock and --upgrade", file=sys.stderr)
+            return 1
+        try:
+            if args.lock:
+                uv_lock([])
+            elif args.upgrade is not None:
+                uv_lock([arg for pkg in args.upgrade for arg in ("--upgrade-package", pkg)] or ["--upgrade"])
+            return write_exports()
+        except RuntimeError as err:
+            print(f"error: {err}", file=sys.stderr)
+            return 1
+
     runtime, test = parse_pyproject_deps()
     errors: list[str] = []
+    if have_uv:
+        for name, extra_args in EXPORTS.items():
+            try:
+                errors.extend(check_export(name, extra_args))
+            except RuntimeError as err:
+                errors.append(str(err))
+    elif os.environ.get("CI"):
+        errors.append("uv is not installed; cannot compare the lockfiles against uv.lock")
+    else:
+        print("warning: uv is not installed; skipping comparison against uv.lock", file=sys.stderr)
     errors.extend(check(runtime, parse_lockfile(ROOT / "requirements.txt"), "requirements.txt"))
     errors.extend(check(test, parse_lockfile(ROOT / "requirements_test.txt"), "requirements_test.txt"))
     if errors:
         for err in errors:
             print(f"error: {err}", file=sys.stderr)
-        print("\nRegenerate the lockfile and update pyproject.toml in sync.", file=sys.stderr)
+        print(
+            "\nUpdate uv.lock (uv lock) and regenerate the lockfiles with "
+            "`python scripts/check_dependencies_sync.py --write`.",
+            file=sys.stderr,
+        )
         return 1
-    print("OK: pyproject.toml constraints are satisfied by the lockfiles.")
+    print("OK: lockfiles match uv.lock and satisfy pyproject.toml.")
     return 0
 
 
