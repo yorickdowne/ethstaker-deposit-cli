@@ -11,9 +11,12 @@ silently diverge:
   2. Every pin in those lockfiles must satisfy the range declared in
      pyproject.toml (so the locked set is always installable given the
      declared ranges).
-  3. Each lockfile must be byte-identical to the `uv export` output for
-     uv.lock, so transitive pins cannot drift between uv.lock and the
-     requirements files. `--locked` also fails if uv.lock is stale relative
+  3. Each lockfile must list the same packages, pins and markers as the
+     `uv export` output for uv.lock, and its hashes must be a superset of
+     that output's, so transitive pins cannot drift between uv.lock and the
+     requirements files. Extra hashes are allowed because Dependabot adds
+     hashes for wheels that uv.lock omits (e.g. Python versions excluded by
+     requires-python). `--locked` also fails if uv.lock is stale relative
      to pyproject.toml.
 
 Run with --write to regenerate both lockfiles from uv.lock, --lock to run
@@ -31,7 +34,6 @@ as they are independent of pyproject.toml.
 from __future__ import annotations
 
 import argparse
-import difflib
 import os
 import re
 import shutil
@@ -174,18 +176,43 @@ def uv_export(extra_args: list[str]) -> str:
     return result.stdout
 
 
-def pin_lines(text: str) -> list[str]:
-    return [line.split()[0].rstrip(";") for line in text.splitlines() if line[:1].isalnum()]
+def parse_requirements(text: str) -> dict[str, tuple[str, str, set[str]]]:
+    """Return {dep_name: (version, marker, hashes)} from hashed requirements text."""
+    reqs: dict[str, tuple[str, str, set[str]]] = {}
+    hashes: set[str] = set()
+    for line in text.splitlines():
+        if line[:1].isalnum():
+            spec, _, marker = line.split("--hash=")[0].rstrip(" \\").partition(";")
+            dep, _, version = spec.partition("==")
+            hashes = set()
+            reqs[normalize(dep.strip())] = (version.strip(), marker.strip(), hashes)
+        hashes.update(tok.removeprefix("--hash=") for tok in line.split() if tok.startswith("--hash="))
+    return reqs
 
 
 def check_export(name: str, extra_args: list[str]) -> list[str]:
-    expected = uv_export(extra_args)
-    actual = (ROOT / name).read_text()
-    if actual == expected:
-        return []
-    diff = difflib.unified_diff(pin_lines(actual), pin_lines(expected), name, "uv export", lineterm="", n=0)
-    detail = "\n".join(diff) or "(pins match; hashes or markers differ)"
-    return [f"{name}: does not match `uv export` output for uv.lock\n{detail}"]
+    expected = parse_requirements(uv_export(extra_args))
+    actual = parse_requirements((ROOT / name).read_text())
+    errors: list[str] = []
+    for dep in sorted(expected.keys() | actual.keys()):
+        if dep not in actual:
+            errors.append(f"{name}: {dep} is in uv.lock but missing from the lockfile")
+            continue
+        if dep not in expected:
+            errors.append(f"{name}: {dep} is in the lockfile but not in uv.lock")
+            continue
+        version, marker, hashes = actual[dep]
+        want_version, want_marker, want_hashes = expected[dep]
+        if version != want_version:
+            errors.append(f"{name}: {dep} pinned {version}, uv.lock has {want_version}")
+            continue
+        if marker != want_marker:
+            errors.append(f"{name}: {dep}=={version} marker {marker!r}, uv.lock has {want_marker!r}")
+        if missing := want_hashes - hashes:
+            errors.append(f"{name}: {dep}=={version} is missing {len(missing)} hash(es) from uv.lock")
+        if extra := hashes - want_hashes:
+            print(f"note: {name}: {dep}=={version} has {len(extra)} hash(es) not in uv.lock (allowed)", file=sys.stderr)
+    return errors
 
 
 def uv_lock(extra_args: list[str]) -> None:
