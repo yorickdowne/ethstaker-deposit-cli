@@ -1,4 +1,4 @@
-from typing import NamedTuple
+from typing import NamedTuple, override
 from eth_utils import decode_hex
 
 from ethstaker_deposit import __version__
@@ -15,6 +15,7 @@ class BaseChainSetting(NamedTuple):
     MIN_ACTIVATION_AMOUNT: float = 32
     MIN_DEPOSIT_AMOUNT: float = 1
 
+    @override
     def __str__(self) -> str:
         gvr_value = self.GENESIS_VALIDATORS_ROOT.hex() if self.GENESIS_VALIDATORS_ROOT is not None else 'None'
         return (f'Network {self.NETWORK_NAME}\n'

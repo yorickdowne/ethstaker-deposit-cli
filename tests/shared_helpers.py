@@ -2,7 +2,6 @@ import json
 import os
 import shutil
 import stat
-import sys
 
 from ethstaker_deposit.credentials import Credential
 from ethstaker_deposit.key_handling.keystore import Keystore
@@ -11,27 +10,20 @@ from ethstaker_deposit.utils.constants import ETH2GWEI
 from ethstaker_deposit.utils.validation import verify_bls_to_execution_change_json
 
 
-def remove_readonly(func, path, exc_info_or_exc):
+def remove_readonly(func, path, exc):
     # Used on Windows to force deleting directories with read-only files in them
     # created by our sensitive_opener.
     os.chmod(path, stat.S_IWRITE)
     func(path)
 
 
-rmtree_kwargs = {}
-if sys.version_info >= (3, 12):
-    rmtree_kwargs['onexc'] = remove_readonly
-else:
-    rmtree_kwargs['onerror'] = remove_readonly
-
-
 def clean_folder(primary_folder_path: str, sub_folder_path: str, ignore_primary: bool = False) -> None:
     if not os.path.exists(sub_folder_path):
         return
 
-    shutil.rmtree(sub_folder_path, **rmtree_kwargs)
+    shutil.rmtree(sub_folder_path, onexc=remove_readonly)
     if not ignore_primary:
-        shutil.rmtree(primary_folder_path, **rmtree_kwargs)
+        shutil.rmtree(primary_folder_path, onexc=remove_readonly)
 
 
 def get_uuid(key_file: str) -> str:

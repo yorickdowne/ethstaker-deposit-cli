@@ -2,6 +2,7 @@ import click
 import socket
 import sys
 from multiprocessing import freeze_support
+from typing import override
 
 from ethstaker_deposit.cli.builder import builder
 from ethstaker_deposit.cli.existing_mnemonic import existing_mnemonic
@@ -64,9 +65,11 @@ commands = [
 
 class SortedGroup(click.Group):
 
+    @override
     def list_commands(self, ctx: click.Context) -> list[str]:
         return [x.name for x in commands if x.name is not None]
 
+    @override
     def format_commands(self, ctx: click.Context, formatter: click.HelpFormatter) -> None:
         # click truncates each description to fit beside the longest command name, which leaves
         # about 31 characters here. Wrap the first sentence instead of cutting it off.

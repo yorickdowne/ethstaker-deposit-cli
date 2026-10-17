@@ -1,6 +1,6 @@
 import click
 import re
-from typing import Any
+from typing import Any, override
 from collections.abc import Callable, Sequence
 
 from ethstaker_deposit.exceptions import ValidationError
@@ -68,14 +68,17 @@ class JITOption(click.Option):
             **kwargs,
         )
 
+    @override
     def prompt_for_value(self, ctx: click.Context) -> Any:
         self.prompt = _value_of(self.callable_prompt)
         return super().prompt_for_value(ctx)
 
+    @override
     def get_help_record(self, ctx: click.Context) -> tuple[str, str] | None:
         self.help = _value_of(self.callable_help)
         return super().get_help_record(ctx)
 
+    @override
     def get_default(self, ctx: click.Context, call: bool = True) -> Any:
         self.default = _value_of(self.callable_default)
         if self.name == "amount":
