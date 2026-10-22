@@ -40,8 +40,7 @@ def PBKDF2(*, password: bytes, salt: bytes, dklen: int, c: int, prf: str) -> byt
         '''
         raise ValueError("The PBKDF2 parameters chosen are not secure.")
     _hash = _sha256 if 'sha256' in prf else _sha512
-    # PyCryptodome's KDF.pyi types `password` as str; the runtime accepts bytes too.
-    res = _PBKDF2(password=password, salt=salt, dkLen=dklen, count=c, hmac_hash_module=_hash)  # type: ignore[arg-type]
+    res = _PBKDF2(password=password, salt=salt, dkLen=dklen, count=c, hmac_hash_module=_hash)
     return res if isinstance(res, bytes) else res[0]  # PyCryptodome can return Tuple[bytes]
 
 
